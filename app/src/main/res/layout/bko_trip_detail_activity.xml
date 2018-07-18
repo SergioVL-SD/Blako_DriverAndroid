@@ -1,0 +1,466 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blako_white">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/tool_bar_title" />
+
+    <TextView
+        android:id="@+id/tvNoConnection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/c_connection_red"
+        android:padding="6dp"
+        android:gravity="center_horizontal"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textAllCaps="true"
+        android:text="@string/text_no_connection"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/addressOfferLl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvNoConnection"
+        android:background="@color/blako_white"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@color/blako_white"
+            android:orientation="vertical"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp">
+
+            <TextView
+                android:id="@+id/aliasOfferTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:maxLines="1"
+                android:textColor="@color/blako_background"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/addressOfferTv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="top"
+                android:ellipsize="end"
+                android:gravity="top"
+                android:lineSpacingExtra="0dp"
+                android:maxLines="6"
+                android:textColor="@color/blako_background"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:background="@color/blako_white" />
+
+        <LinearLayout
+            android:id="@+id/offerNavV"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/offerNavIv"
+                android:layout_width="45dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/blako_image_description"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/navbtn"
+                android:tint="@color/blako_green" />
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:gravity="center|top"
+                android:maxLines="1"
+                android:text="NAVEGAR"
+                android:textColor="@color/blako_gray"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/seekLl"
+        android:layout_below="@+id/addressOfferLl"
+        android:background="@color/blako_white"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/mapaLl"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <fragment
+                android:id="@+id/mapaFt"
+                class="com.blako.mensajero.Custom.BkoWorkaroundMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/timeTripTv"
+                android:layout_width="90dp"
+                android:layout_height="35dp"
+                android:ellipsize="end"
+                android:layout_margin="5dp"
+                android:layout_alignParentTop="true"
+                android:background="@color/blako_green"
+                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_marginTop="5dp"
+                android:text="00:00"
+                android:singleLine="true"
+                android:textColor="@color/blako_white"
+                android:textSize="15sp"/>
+
+            <Button
+                android:id="@+id/btnNotifyProblem"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/btn_phone_alert_bckg"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="8dp"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/confirmLl"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@color/blako_white"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <TextView
+                    android:id="@+id/pickDeliveryTitleTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:maxLines="2"
+                    android:textColor="@color/blako_gray"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pickDeliveryAddresTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:textColor="@color/blako_background"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/phoneDeliveryTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:autoLink="phone"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:textColor="@color/blako_red_two"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/phoneDeliveryIv"
+                    android:layout_width="45dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:contentDescription="@string/blako_image_description"
+                    android:padding="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/phone" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/phoneRestaurantIv"
+                    android:layout_width="45dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:contentDescription="@string/blako_image_description"
+                    android:padding="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/phone"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/blako_white" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blako_white"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/okComfirmTv"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:clickable="false"
+                    android:contentDescription="@string/blako_image_description"
+                    android:padding="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/circle_checkin_ok"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/confirmTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/okComfirmTv"
+                    android:gravity="start|center_vertical"
+                    android:maxLines="2"
+                    android:text="Confirmar Orden"
+                    android:textColor="@color/blako_green"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/showItemsTv"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="end|center_vertical"
+                    android:maxLines="2"
+                    android:text="VER"
+                    android:textColor="@color/blako_background"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/arrowComfirmTv"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginStart="15dp"
+                    android:clickable="false"
+                    android:contentDescription="@string/blako_image_description"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/seekLl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="5dp">
+
+
+        <com.blako.mensajero.Custom.BkoSeekBar
+            android:id="@+id/startSB"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/grey_button"
+            android:longClickable="true"
+            android:max="100"
+            android:maxHeight="1000dp"
+            android:progress="10"
+            android:progressDrawable="@android:color/transparent"
+            android:thumb="@drawable/thumb_custom" />
+
+        <TextView
+            android:id="@+id/seekTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/blako_destino_detalle_iniciar"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/seekFLl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:paddingTop="5dp">
+
+        <com.blako.mensajero.Custom.BkoSeekBar
+            android:id="@+id/completeSB"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/red_button"
+            android:enabled="false"
+            android:longClickable="true"
+            android:max="100"
+            android:maxHeight="1000dp"
+            android:progress="10"
+            android:progressDrawable="@android:color/transparent"
+            android:thumb="@drawable/thumb_custom" />
+
+        <TextView
+            android:id="@+id/seekFTv"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingEnd="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="5dp"
+            android:paddingStart="20dp"
+            android:text="@string/blako_completar"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/seekALl"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:background="@color/blako_white"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:paddingTop="5dp"
+        >
+
+        <com.blako.mensajero.Custom.BkoSeekBar
+            android:id="@+id/arriveSB"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/blue_btn"
+            android:enabled="false"
+            android:layout_alignParentBottom="true"
+            android:longClickable="true"
+            android:max="100"
+            android:maxHeight="1000dp"
+            android:progress="10"
+            android:progressDrawable="@android:color/transparent"
+            android:thumb="@drawable/thumb_custom" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:ellipsize="end"
+            android:layout_marginBottom="12dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingEnd="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="5dp"
+            android:paddingStart="20dp"
+            android:text="@string/blako_llegue"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+</RelativeLayout>

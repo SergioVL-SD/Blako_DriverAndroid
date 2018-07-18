@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="160dp"
+    android:layout_height="90dp"
+    android:background="@color/blako_white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="160dp"
+        android:layout_height="90dp"
+        android:background="@color/blako_white"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/orderTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:textColor="@color/blako_background"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/addresTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/blako_background"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/dateTv"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:visibility="gone"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/blako_background"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/startBt"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:background="@drawable/green_button"
+            android:gravity="center"
+            android:text="@string/blako_destino_detalle_iniciar"
+            android:textColor="#FFF"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_top"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@color/blako_background"
+    android:minHeight="?attr/actionBarSize"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+    <ImageView
+        android:id="@+id/logoIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="15dp"
+        android:src="@drawable/blako_logo"
+        android:visibility="gone" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+    <LinearLayout
+        android:id="@+id/statusLl"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:gravity="start"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/statusTV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:gravity="start|center_vertical"
+            android:maxLines="2"
+            android:maxWidth="130dp"
+            android:maxLength="35"
+            android:text="@string/blako_conectado"
+            android:textColor="@color/blako_white"
+            android:textSize="17sp" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="end"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+
+
+        <Switch
+            android:id="@+id/statusSw"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"
+            android:checked="false"
+            android:minWidth="?attr/actionBarSize"
+            android:gravity="center_vertical"
+            android:thumbTextPadding="5dp"
+            android:switchMinWidth="70dp"
+            android:layout_centerInParent="true"
+            android:textColor="@color/blako_gray"
+
+            android:theme="@style/SCBSwitch"
+            />
+
+
+
+
+
+    </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.Toolbar>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="blako_background">#17202d</color>
+    <color name="blako_white">#FFFFFF</color>
+    <color name="blako_white_medium">#66a7ff</color>
+    <color name="blako_green">#3CCB78</color>
+
+    <color name="blako_black">#000000</color>
+    <color name="blako_gray">#999999</color>
+    <color name="blako_gray_medium">#EBEBEB</color>
+    <color name="blako_gray_low">#ECECEC</color>
+    <color name="blako_purple">#7878FF</color>
+    <color name="blako_red">#B10707</color>
+    <color name="c_connection_red">#e91d1d</color>
+    <color name="blako_red_two">#fd4659</color>
+    <color name="blako_blue_disabled">#54697F</color>
+    <color name="blako_yellow">#FAF7CB</color>
+    <color name="blako_blue_dark">#17202d</color>
+    <color name="primary">#009688</color>
+    <color name="primaryDark">#00796b</color>
+    <color name="accent">#eeff41</color>
+    <color name="accentLight">#F4FF81</color>
+    <color name="blako_blue_light_font">#839bbc</color>
+    <color name="blako_purple_offer">#9012fe</color>
+    <color name="blako_nude">#dfdfdf</color>
+    <color name="blako_yellow_low">#f8d61c</color>
+    <color name="blako_blue_offer_light">#637693</color>
+    <color name="blako_gray_checkin">#344050</color>
+    <color name="blako_orange">#f49d20</color>
+
+</resources>

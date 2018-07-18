@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:background="@color/blako_background"
+        android:gravity="center_vertical|start"
+        android:paddingStart="25dp"
+        android:paddingLeft="25dp"
+
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:text="@string/blako_checkout_salir_confirmar"
+        android:textColor="@color/blako_white" />
+
+    <TextView
+        android:id="@+id/checkoutClientTv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|start"
+        android:padding="25dp"
+        android:textSize="15sp"
+        android:text="@string/blako_checkout_salir_checkout_error_client"
+        android:textColor="@color/blako_background" />
+
+    <TextView
+        android:id="@+id/checkoutTimeTv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|start"
+        android:padding="25dp"
+        android:textSize="15sp"
+        android:text="@string/blako_checkout_salir_checkout_error"
+        android:textColor="@color/blako_red" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:text="Cancelar"
+            android:textAllCaps="false"
+            android:background="@color/blako_white"
+            android:textColor="@color/blako_background"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/checkoutBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:scaleType="fitCenter"
+            android:text="Si, Finalizar"
+            android:background="@color/blako_background"
+            android:textColor="@color/blako_white"
+            android:textSize="18sp" />
+    </LinearLayout>
+</LinearLayout>

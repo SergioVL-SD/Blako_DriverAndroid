@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bko_list_selector"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/placeNameTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:maxLines="2"
+                    android:singleLine="true"
+                    android:textColor="@color/blako_background"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/ordetTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    android:textColor="@color/blako_background"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:minHeight="70dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="5dp"
+                >
+
+                <TextView
+                    android:id="@+id/newTv"
+                    android:layout_width="120dp"
+                    android:layout_height="25dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:maxWidth="130dp"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="5dp"
+                    android:text="@string/blako_trips_status_cero"
+                    android:textColor="@color/blako_white"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/statusTv"
+                    android:layout_width="120dp"
+                    android:layout_height="25dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:maxWidth="130dp"
+                    android:paddingEnd="5dp"
+                    android:paddingLeft="5dp"
+                    android:minHeight="70dp"
+                    android:background="@color/blako_green"
+                    android:paddingRight="5dp"
+                    android:paddingStart="5dp"
+                    android:text="@string/blako_trips_status_dos"
+                    android:textColor="@color/blako_white"
+                    android:textSize="12sp" />
+
+
+
+
+                <TextView
+                    android:id="@+id/timeBackTv"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:ellipsize="end"
+                    android:layout_alignRight="@+id/statusTv"
+                    android:layout_below="@+id/statusTv"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/blako_green"
+                    android:singleLine="true"
+                    android:textColor="@color/blako_white"
+                    android:textSize="12sp"
+                    />
+                <TextView
+                    android:id="@+id/timeTripTv"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:ellipsize="end"
+                    android:layout_alignRight="@+id/statusTv"
+                    android:layout_below="@+id/statusTv"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:layout_marginTop="5dp"
+                    android:text="00:00"
+                    android:singleLine="true"
+                    android:textColor="@color/blako_white"
+                    android:textSize="12sp"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

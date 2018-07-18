@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/touchAreaView"
+        android:background="@drawable/rounded_edges" />
+
+    <!--todo Activar botón de rechazar orden-->
+    <Button
+        android:id="@+id/btnRejectOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:background="@drawable/btn_reject_order_bckg"
+        android:textColor="#FFF"
+        android:text="@string/btn_reject_order"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/touchAreaView"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="@color/blako_background"
+        android:layout_height="170dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:focusable="false"
+                android:id="@+id/tvTripDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/blako_background"
+                android:textSize="22sp" />
+
+            <TextView
+                android:focusable="false"
+                android:id="@+id/aliasBt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/blako_white"
+                android:textSize="22sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/addressBt"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:gravity="top|center"
+            android:textColor="@color/blako_blue_disabled"
+            android:textSize="17sp"
+         />
+
+        <TextView
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TOCA PARA ACEPTAR"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/blako_white"
+            android:textSize="19sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBarPb"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/blako_white"
+            />
+    </LinearLayout>
+</RelativeLayout>

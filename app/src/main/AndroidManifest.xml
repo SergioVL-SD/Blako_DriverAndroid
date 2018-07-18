@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.blako.mensajero">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Blako">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDobDbKpbEH_BxWajHcT0KDa7NMSJCyDQ4" />
+
+        <activity android:name=".Views.BkoConfigActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Views.BkoRequestActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Views.BkoLoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".Views.BkoVehiclesActivity" />
+        <activity android:name=".Views.BkoTripDetailActivity" />
+        <activity
+            android:name=".Views.BkoTicketActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".Views.BkoConfirmItemsActivity" />
+        <activity
+            android:name=".Views.BkoMainActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".Views.BkoOfferDetailActivity" />
+        <activity android:name=".Views.BkoOwnOffersActivity" />
+        <activity android:name=".Views.BkoCompletedTripsActivity" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity android:name=".Views.BkoOffersActivity" />
+        <activity android:name=".Views.BkoOffersByDateActivity" />
+        <activity android:name=".Views.BkoOffersByDayActivity" />
+        <activity android:name=".Views.BkoOffersListActivity" />
+        <activity android:name=".Views.BkoPolicyActivity" />
+        <activity android:name=".Views.BkoServicesNoOfferActivity" />
+
+        <receiver
+            android:name=".Services.BkoGpsTrackerAlarmReceiver"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".Services.BkoSendLocationToServer"
+            android:exported="false" />
+
+        <receiver android:name=".Services.BkoHeartBeatPushAliveReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".accesibility.CustomAccessibilityService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/service_configuration" />
+        </service>
+        <service android:name=".Services.LocationService"
+            android:enabled="true"
+            android:exported="true"/>
+        <service android:name=".firebase.BkoFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Services.RegistrationIntentService"></service>
+        <service android:name=".firebase.BkoFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".Services.OverlayButtonService"
+            android:exported="false"/>
+    </application>
+
+</manifest>

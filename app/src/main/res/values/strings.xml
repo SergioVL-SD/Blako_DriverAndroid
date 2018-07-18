@@ -1,0 +1,246 @@
+<resources>
+    <string name="app_name">Blako Mensajero</string>
+    <string name="app_vacio"></string>
+    <string name="blako_validar_digits">VALIDAR</string>
+    <string name="blako_si">Si</string>
+    <string name="blako_no">No</string>
+    <string name="blako_aceptar">ACEPTAR</string>
+    <string name="blako_cancelar">CANCELAR</string>
+    <string name="blako_rechazar">CANCELAR</string>
+    <string name="blako_image_description"></string>
+    <string name="blako_advertencia">Advertencia</string>
+    <string name="blako_error">Error al conectar. Intente de nuevo.</string>
+    <string name="blako_correo_invalido">Porfavor ingresa un correo válido.</string>
+    <string name="blako_contrasenia_invalido">Porfavor ingresa tu contraseña</string>
+    <string name="blako_datos_invalidos">Verifica los campos faltantes y/o marcados en rojo.</string>
+    <string name="blako_llena_campos">Llena los campos faltantes.</string>
+    <string name="blako_salir_aplicacion">¿Realmente desea salir de Blako?.</string>
+    <string name="blako_sin_definir">Sin definir</string>
+    <string name="blako_sin_internet_titulo">SIN INTERNET</string>
+    <string name="blako_sin_enviar">SIN CONEXIÓN</string>
+    <string name="blako_reintentar">REINTENTAR</string>
+    <string name="blako_sin_internet_mensaje">Estamos teniendo problemas de acceso a internet. Por favor checa tu conexión</string>
+    <string name="blako_internet_connection_error_mensaje">No podemos conectarnos con Blako</string>
+    <string name="blako_sin_gps_mensaje">Por favor active sus servicios de geolocalización</string>
+    <string name="blako_sin_gps_titulo">GPS desactivado</string>
+    <string name="blako_sin_resultados">Sin Resultados</string>
+
+    <string name="blako_actualizar_app">Actualizar App!</string>
+    <string name="blako_mock_location">Por favor desactive ubicaciones simuladas</string>
+    <string name="blako_mock_location_titulo">Ubicaciones simuladas</string>
+
+    <string name="blako_privacy">REGLAMENTO</string>
+    <!-- Login -->
+    <string name="blako_iniciar_sesion">Iniciar Sesión</string>
+    <string name="blako_inicia_sesion">Inicia Sesión</string>
+    <string name="blako_correo">Correo Electrónico</string>
+    <string name="blako_cotrasenia">Contraseña</string>
+    <string name="blako_entrar">INICIAR SESIÓN</string>
+
+    <string name="blako_registrar"><a href="https://materiales.sindelantal.mx/afiliacion-repartidores">REGISTRARME</a></string>
+    <!-- VEHICLES -->
+    <string name="blako_vehiculos_titulos">VEHICULOS</string>
+    <string name="blako_vehiculos_selecciona">Seleccione Un Vehículo</string>
+
+    <!-- STATUS -->
+    <string name="blako_estatus_titulo">IR A VISIBLE</string>
+    <string name="blako_estatus_almacen">SEL. ALMACEN</string>
+    <string name="blako_estatus_visible">ESTATUS</string>
+    <string name="blako_estatus_vehiculo">Cambiar vehiculo</string>
+    <string name="blako_estatus_cerrar_sesion">CERRAR SESIÓN</string>
+    <string name="blako_estatus_foto_perfil">Foto de Perfil</string>
+    <string name="blako_estatus_confirma_foto">¿Desea establecer esta foto cómo perfil?</string>
+    <string name="blako_estatus_foto_cargada">Foto cargada correctamente.</string>
+    <string name="blako_estatus_cambiar_fecha_mensaje">La fecha esta incorrecta. Seleccione hora/fecha/zona automatica</string>
+    <string name="blako_estatus_cambiar_fecha">CAMBIAR FECHA</string>
+    <string name="blako_estatus_foto_perfil_cambiar">Debes cambiar tu foto de perfil para poder continuar</string>
+    <string name="blako_estatus_permisos">Por favor active los permisos necesarios de la aplicación para poder trabajar correctamente!</string>
+    <string name="blako_estatus_cambiar_permisos">ir a permisos</string>
+    <!-- HOME -->
+    <string name="blako_menu_home">HOME</string>
+    <string name="blako_menu_pedir_perfil">Mi Perfil</string>
+    <string name="blako_menu_pedir_metodo_pago">Método de Pago</string>
+    <string name="blako_menu_ofertas">Historial de Ofertas</string>
+    <string name="blako_menu_historial">Historial Servicios</string>
+    <string name="blako_menu_ofertas_agregar">Ofertas</string>
+    <string name="blako_menu_reglamento">Reglamento</string>
+    <string name="blako_servicios_sin_oferta">Servicios OnDemand</string>
+    <string name="blako_menu_notificaciones">Validar notificaciones</string>
+    <string name="blako_menu_salir">Salir</string>
+    <string name="blako_desconectar">¿Realmente desea desconectarse?</string>
+    <string name="blako_cancelar_orden">¿Desea cancelar esta orden?</string>
+    <string name="blako_otra_sesion_activa">Has iniciado sesión en otro dispositivo. Solo puedes tener una sesion abierta.</string>
+    <string name="blako_llegando">LLEGANDO</string>
+    <string name="blako_llegue">LLEGUE</string>
+    <string name="blako_iniciar">INICIAR</string>
+    <string name="blako_completar">COMPLETAR</string>
+    <string name="blako_servicio_cancelado">Servicio cancelado correctamente.</string>
+    <string name="blako_trips">TAREAS</string>
+    <string name="blako_sin_destino">SIN TAREA SELECCIONADA</string>
+    <string name="blako_orden_cancelada">El cliente cancelo el servicio.</string>
+    <string name="blako_privado">PRIVADO</string>
+    <string name="blako_publico">PÚBLICO</string>
+    <string name="blako_error_tareas_encoladas">No se pudo obterner las tareas. Intente de nuevo </string>
+    <string name="blako_en_servicio_no_logout">Antes de salir debes completar tus servicios activos. y/o desconectarse O.D.</string>
+    <string name="blako_en_servicio_activos">Antes de salir debes completar tus servicios activos.</string>
+    <string name="blako_conectado">OnDemand</string>
+    <string name="blako_desconectado">DESCONECTADO OD</string>
+    <string name="blako_privado_selec_warehouse">Elegir ubicación de inicio</string>
+    <string name="blako_privado_registrarse">REGISTRAR LLEGADA</string>
+    <string name="blako_checkout_salir">SALIR</string>
+    <string name="blako_checkout_salir_confirmar">¿Desea Registrar su Salida?</string>
+    <string name="blako_checkout_salir_registro">Registro de salida:</string>
+    <string name="blako_checkout_salir_registrar">REGISTRAR SALIDA</string>
+    <string name="blako_checkout_salir_terminar_turno">%s PARA TERMINAR TURNO</string>
+    <string name="blako_checkout_salir_checkout_error_client">Al registrar su salida no podra recibir mas ordenes de %s</string>
+    <string name="blako_checkout_salir_checkout_error">Faltan %s para concluir su oferta</string>
+    <!-- ORDER DETAIL -->
+    <string name="blako_detalle_orden_titulo">DETALLE DE ORDEN</string>
+    <string name="blako_detalle_orden_entrega_titulo">Instrucciones para el destino</string>
+    <string name="blako_detalle_orden_recoleccion_titulo">Te Solicitan</string>
+
+    <!-- TRIPS STATUS-->
+    <string name="blako_trips_status_cero">Nueva</string>
+    <string name="blako_trips_status_uno">Esperando Aceptación</string>
+    <string name="blako_trips_status_dos">En Camino Etapa 1</string>
+    <string name="blako_trips_status_tres">Checkin Etapa 1</string>
+    <string name="blako_trips_status_cuatro">En Camino Etapa 2</string>
+    <string name="blako_trips_status_cinco">Checkin Etapa 2</string>
+
+    <string name="blako_trips_status_seis">Completada</string>
+
+    <!-- TRIPS -->
+    <string name="blako_destinos_titulo">TAREAS</string>
+    <string name="blako_tareas_asignadas">TAREAS ASIGNADAS</string>
+    <string name="blako_tarea_iniciada">Ya existe una tarea iniciada. Por favor complete antes la tarea en curso.</string>
+    <string name="blako_destinos_terminados">No hay mas tareas por iniciar.</string>
+    <string name="blako_destinos_rechazar">RECHAZAR</string>
+    <string name="blako_sin_tareas">El cliente no le ha asignado Tareas.</string>
+    <string name="blako_tarea_manual">¿Desea agregar una tarea manualmente?</string>
+    <string name="blako_tarea_manual_ingrese">Ingrese una descripción breve de la tarea</string>
+    <string name="blako_tarea_manual_ingrese_descripcion_larga">Por favor ingrese una descripción válida</string>
+    <string name="blako_tareas_completadas">TAREAS COMPLETADAS</string>
+    <!-- TRIPS DETAIL -->
+    <string name="blako_destino_recoleccion">LUGAR DE RECOLECCIÓN</string>
+    <string name="blako_destino_detalle_titulo">TAREA</string>
+    <string name="blako_destino_detalle_iniciar">INICIAR VIAJE</string>
+    <string name="blako_cancelar_tarea">¿Desea cancelar esta tarea?</string>
+    <string name="blako_destino_tarea_cancelada">Tarea cancelada correctamente.</string>
+    <string name="blako_destino_notas">Instrucciones</string>
+    <string name="blako_destino_valor_estimado">Valor Estimado del Paquete</string>
+    <string name="blako_destino_cliente_compra">CLIENTE QUE COMPRA</string>
+    <string name="blako_destino_productos">Productos</string>
+    <string name="blako_destino_calles">Entre calles</string>
+    <string name="blako_confirmar_ir_orden">Ir Por La Orden</string>
+    <string name="blako_confirmar_orden">Confirmar Orden</string>
+    <string name="blako_confirmar_tarea">Confirmar Entrega</string>
+    <string name="blako_destino_orden_confirmada">Orden Confirmada</string>
+    <string name="blako_destino_entrega_confirmada">Entrega Confirmada</string>
+    <string name="blako_destino_orden_camino">En Camino</string>
+    <string name="blako_destino_entregar">Entregar a:</string>
+    <string name="blako_origen_recoger">Recoger en:</string>
+    <!-- TRIPS DETAIL CONFIRM-->
+
+    <string name="blako_confirmar_steps">Instrucciones de la orden:</string>
+    <string name="blako_confirmar_orden_a">Entregar a:</string>
+    <string name="blako_confirmar_orden_oorigen">Ir Por La Orden:</string>
+    <!-- PUSH -->
+    <string name="blako_push_nuevo_servicio">Nuevo Servicio</string>
+    <string name="blako_push_nuevo_destino">Nuevas tareas asignadas</string>
+    <string name="blako_push_order_cancelada">Su orden fue cancelada</string>
+    <string name="blako_push_otra_sesion_activa">Has iniciado sesión en otro dispositivo</string>
+    <string name="blako_push_tareas_encoladas">Se le asignarón nuevas tareas</string>
+    <string name="blako_push_servicio_completado">Su servicio fue completado</string>
+    <string name="blako_push_tarea_completada">Tarea completada</string>
+    <string name="blako_push_nuevo_oferta">Nuevas Ofertas</string>
+    <string name="blako_push_nuevo_oferta_impuesta">Nuevas Oferta Impuesta</string>
+    <string name="blako_push_checkout">Oferta terminada</string>
+    <string name="blako_push_ofer_actualizada">Oferta actualizada</string>
+    <!-- TICKET -->
+    <string name="blako_ticket">Completar Tarea</string>
+    <string name="blako_ticket_nueva_hoja">¿Crear hoja una nueva?</string>
+    <string name="blako_ticket_quien_recibe">¿Quién Recibe?</string>
+    <string name="blako_ticket_comentarios">Comentarios</string>
+    <string name="blako_ticket_falta_quien_recibe">Falta el nombre de quien recibe</string>
+    <string name="blako_ticket_falta_foto">Falta agregar foto</string>
+    <string name="blako_ticket_falta_firma">Falta agregar firma</string>
+    <string name="blako_ticket_enviar">¿Desea completar esta tarea?</string>
+    <string name="blako_ticket_exitoso">EXITOSA</string>
+    <string name="blako_ticket_no_exitoso">FALLIDA</string>
+    <string name="blako_ticket_attach">Datos adjuntos</string>
+    <string name="blako_ticket_nombre">NOMBRE</string>
+    <string name="blako_ticket_notas">Notas:</string>
+    <string name="blako_ticket_listo">Listo</string>
+    <string name="blako_ticket_foto">Foto</string>
+    <string name="blako_ticket_firma">Firma</string>
+    <string name="blako_ticket_ver_detalle">VER DETALLE</string>
+
+    <!-- SIGNATURE -->
+    <string name="blako_firma_titulo">FIRMA</string>
+    <!-- PAYMENT -->
+    <string name="blako_pago_titulo">PAGO</string>
+
+    <!-- TRIPS ON MAP -->
+    <string name="blako_destino_mis_tareas">TAREAS</string>
+
+    <!-- OFFER -->
+    <string name="blako_agregar_tolerancia">Apresurate, puedes llegar max</string>
+    <string name="blako_agregar_tiempo">Estas a tiempo!</string>
+    <string name="blako_agregar_tarde">Muy Tarde!!!</string>
+    <string name="blako_agregar_oferta">AGREGAR OFERTA</string>
+    <string name="blako_buscar_oferta">BUSCAR OFERTA</string>
+    <string name="blako_cancelar_oferta">¿Desea cancelar esta oferta?</string>
+    <string name="blako_offers_trabajos">Ofertas</string>
+    <string name="blako_oferta">Ofertas</string>
+    <string name="blako_offers_hoy">Hoy</string>
+    <string name="blako_offers_ordenes">ORDENES(0)</string>
+    <string name="blako_offers_mapa">MAPA</string>
+    <string name="blako_offers_registrarse_llegar">REGISTRAR LLEGADA</string>
+    <string name="blako_offers_registrarse_llegada">REGISTRAR LLEGADA</string>
+    <string name="blako_offers_aproximarse">Necesita Aproximarse</string>
+    <string name="blako_offers_sin_ofertas">SIN OFERTAS</string>
+    <string name="blako_offers_en_camino">Debe dirigirse al almacen!</string>
+
+    <string name="blako_offers_contrato_cancelacion">1.- Se generara un cargo por $200 pesos si se cancela la oferta una vez tomada, con menos de 3 Hrs. de anticipación</string>
+    <string name="blako_offers_no_ofertas">No hay ofertas disponibles</string>
+    <string name="blako_offers_detalle">DETALLE DE LA OFERTA</string>
+    <!-- OFFER DETAIL-->
+    <string name="blako_detalle_oferta_titulo">DETALLE DE ORDEN</string>
+    <string name="blako_detalle_oferta_mapa">UBICACIÓN</string>
+    <string name="blako_detalle_oferta_cargos">CARGOS X CANCELACIÓN</string>
+    <!-- WARE HOUSE -->
+    <string name="blako_ware_house_title">Ubicaciones</string>
+    <!-- BALANCE -->
+    <string-array name="blako_date_filter">
+        <item>Seleccione</item>
+        <item>Hoy</item>
+        <item>Ayer</item>
+        <item>Lunes - Hoy</item>
+        <item>Semana Anterior</item>
+        <item>En el mes</item>
+        <item>Mes Anterior</item>
+
+    </string-array>
+
+
+
+    <!-- HISTORIAL-->
+    <string name="blako_historial">HISTORIAL DE OFERTAS</string>
+    <!-- SERVICIOS SIN OFFER-->
+    <string name="blako_servicios_sin_offer">SERVICIOS ONDEMAND</string>
+    <!-- OFFER DETAIL-->
+    <string name="blako_checkout_offer_payment">Genial, Buen Trabajo!!!</string>
+    <string name="blako_checkout_offer_payment_gracias">Gracias</string>
+    <string name="blako_checkout_offer_payment_agregado">Hemos agregado a tu cuenta</string>
+    <string name="blako_mis_ofertas_titulo">OFERTAS RESERVADAS</string>
+    <string name="blako_mis_ofertas_llegada_tiempo">LLEGADA A TIEMPO</string>
+    <string name="blako_mis_ofertas_llegada_tolerancia">LLEGADA EN TOLERANCIA</string>
+    <string name="blako_mis_ofertas_llegada_tarde">LLEGADA TARDE</string>
+    <string name="blako_mis_ofertas_salida">SALIDA EN</string>
+
+    <string name="text_no_orders">Sin Ordenes</string>
+    <string name="notification_dead">No te hemos podido localizar, ¿Deseas seguir conectado?</string>
+    <string name="text_no_connection">Sin Conexión GPS</string>
+    <string name="unknown_area">Fuera de cobertura</string>
+    <string name="btn_reject_order">Rechazar</string>
+</resources>

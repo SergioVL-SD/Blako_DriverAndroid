@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".9"
+        android:background="@color/blako_black"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <TextView
+            android:id="@+id/logoutTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="40dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:text="@string/blako_checkout_salir"
+            android:textColor="@color/blako_white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logoutTv"
+            android:layout_marginTop="40dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/blako_checkout_salir_confirmar"
+            android:textColor="@color/blako_blue_offer_light"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginStart="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:visibility="gone"
+                android:text="@string/blako_checkout_salir_registro"
+                android:textColor="@color/blako_blue_offer_light"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/timeCheckoutTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="5"
+                android:textColor="@color/blako_white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/timeToFinish"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text=""
+            android:textColor="@color/blako_white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/timeToFinish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/seekOfferLl"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text=""
+            android:textColor="@color/blako_white"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:id="@+id/seekOfferLl"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5dp">
+
+            <com.blako.mensajero.Custom.BkoSeekBar
+                android:id="@+id/checktoutSB"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/red_button"
+                android:clickable="true"
+                android:longClickable="true"
+                android:max="100"
+                android:maxHeight="1000dp"
+                android:padding="5dp"
+                android:progress="10"
+                android:progressDrawable="@android:color/transparent"
+                android:thumb="@drawable/thumb_custom" />
+
+
+            <TextView
+                android:id="@+id/checkoutTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/blako_checkout_salir_registrar"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,148 @@
+{
+  "project_info": {
+    "project_number": "1085301298808",
+    "firebase_url": "https://blako-produccion.firebaseio.com",
+    "project_id": "blako-produccion",
+    "storage_bucket": "blako-produccion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085301298808:android:908394bccc52b944",
+        "android_client_info": {
+          "package_name": "com.blako.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085301298808-46jneiqdtinargtf5ksmokn3rtldf77f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpfHuuDPVKXBe6VsNAY_ArZV7w3HCUQt4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085301298808:android:da214e827a182162",
+        "android_client_info": {
+          "package_name": "com.blako.mensajero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085301298808-q0ceas0pu10rkq50pv5o747sos2spqup.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blako.mensajero",
+            "certificate_hash": "794c87ccab3fd5aff223fdcc2f59cd7a430a7966"
+          }
+        },
+        {
+          "client_id": "1085301298808-46jneiqdtinargtf5ksmokn3rtldf77f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpfHuuDPVKXBe6VsNAY_ArZV7w3HCUQt4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1085301298808-gdcrk9ils3ukrve057k1dkvafmpopt0c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085301298808:android:367b8f4bcd3b5629",
+        "android_client_info": {
+          "package_name": "com.enviodivino.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085301298808-46jneiqdtinargtf5ksmokn3rtldf77f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpfHuuDPVKXBe6VsNAY_ArZV7w3HCUQt4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085301298808:android:677c3f6579766108",
+        "android_client_info": {
+          "package_name": "com.enviodivino.mensajero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085301298808-46jneiqdtinargtf5ksmokn3rtldf77f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpfHuuDPVKXBe6VsNAY_ArZV7w3HCUQt4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
