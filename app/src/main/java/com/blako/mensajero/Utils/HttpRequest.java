@@ -21,6 +21,8 @@
  */
 package com.blako.mensajero.Utils;
 
+import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -973,6 +975,7 @@ public class HttpRequest {
 	 * @throws HttpRequestException
 	 */
 	public static HttpRequest get(final CharSequence url) throws HttpRequestException {
+		Log.d("WS_Url",url.toString());
 
 		return new HttpRequest(url, METHOD_GET);
 	}
@@ -985,6 +988,7 @@ public class HttpRequest {
 	 * @throws HttpRequestException
 	 */
 	public static HttpRequest get(final URL url) throws HttpRequestException {
+		Log.d("WS_Url",url.toString());
 		return new HttpRequest(url, METHOD_GET);
 	}
 
@@ -1004,6 +1008,7 @@ public class HttpRequest {
 	 */
 	public static HttpRequest get(final CharSequence baseUrl, final Map<?, ?> params, final boolean encode) {
 		String url = append(baseUrl, params);
+		Log.d("WS_Url",url);
 		return get(encode ? encode(url) : url);
 	}
 
@@ -1024,6 +1029,7 @@ public class HttpRequest {
 	 */
 	public static HttpRequest get(final CharSequence baseUrl, final boolean encode, final Object... params) {
 		String url = append(baseUrl, params);
+		Log.d("WS_Url",url);
 		return get(encode ? encode(url) : url);
 	}
 
