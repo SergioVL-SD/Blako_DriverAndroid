@@ -134,9 +134,9 @@ public class BkoVehiclesActivity extends BaseActivity {
             public void onClick(View arg0) {
                 try {
 
-
-                    if (!checkPermissions())
+                    if (!checkPermissions()){
                         return;
+                    }
 
                     BkoUser user = BkoUserDao.Consultar(BkoVehiclesActivity.this);
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

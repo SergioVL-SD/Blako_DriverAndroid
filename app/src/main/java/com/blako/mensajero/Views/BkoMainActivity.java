@@ -14,8 +14,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
@@ -58,6 +63,7 @@ import com.blako.mensajero.Services.LocationService;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.DeliveryZoneCheck;
 import com.blako.mensajero.Utils.HttpRequest;
+import com.blako.mensajero.Utils.KmlColorTempUtil;
 import com.blako.mensajero.VO.BkoCheckInResponse;
 import com.blako.mensajero.VO.BkoChildTripVO;
 import com.blako.mensajero.VO.BkoOffer;
@@ -85,8 +91,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -95,10 +105,14 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.maps.android.data.kml.KmlLayer;
 import com.google.maps.android.data.kml.KmlPlacemark;
+import com.google.maps.android.data.kml.KmlPolygon;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -134,8 +148,12 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private int status=0;
     private int checkEvery= 10;
 
-    private KmlLayer kmlLayer;
-    private List<KmlPlacemark> placemarkList;
+    /*private KmlLayer kmlLayer;
+    private List<KmlPlacemark> placemarkList;*/
+
+    private ArrayList<PolygonOptions> kmlHubs;
+    private ArrayList<MarkerOptions> kmlLabels;
+    private ArrayList<String> kmlLabelsString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +166,11 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         display.getSize(size);
         setupTabs();
         mLayout.setTouchEnabled(false);
-        placemarkList= new ArrayList<>();
+        //placemarkList= new ArrayList<>();
+
+        kmlHubs= new ArrayList<>();
+        kmlLabels= new ArrayList<>();
+        kmlLabelsString= new ArrayList<>();
 
         //firebaseDatabase= BkoFirebaseDatabase.getDatabase();
         firebaseStorage= BkoFirebaseStorage.getStorage();
@@ -413,6 +435,111 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             Intent intentOverlayButton= new Intent(BkoMainActivity.this, OverlayButtonService.class);
             startService(intentOverlayButton);
         }*/
+    }
+
+    private class GetKmlJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject>{
+
+        @Override
+        protected void onPreExecute() {
+            map.clear();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... voids) {
+            try{
+                String kmlResponse = HttpRequest
+                        .get("https://zones-dot-blako-support.appspot.com/zones/0")
+                        .connectTimeout(5000).readTimeout(5000).body();
+
+                if (kmlResponse!=null){
+                    Log.d("Kml_Response",kmlResponse);
+                    return new JSONObject(kmlResponse);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            if (jsonObject!=null){
+                new GetKmlFromJSONTask().execute(jsonObject);
+            }
+        }
+    }
+
+    private class GetKmlFromJSONTask extends AsyncTask<JSONObject,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            kmlHubs.clear();
+            kmlLabelsString.clear();
+        }
+
+        @Override
+        protected Void doInBackground(JSONObject... jsonObjects) {
+            try {
+                if (jsonObjects[0].getBoolean("success")){
+                    JSONArray fencesArray= jsonObjects[0].getJSONObject("zones").getJSONArray("fences");
+                    for (int i=0;i<fencesArray.length();i++){
+                        JSONObject kmlObject= fencesArray.getJSONObject(i);
+                        Log.d("Kml_label",kmlObject.getString("label")+"-----------");
+                        JSONArray latArray= kmlObject.getJSONArray("lats");
+                        JSONArray longArray= kmlObject.getJSONArray("lons");
+                        PolygonOptions kmlHub= new PolygonOptions();
+                        int colorAlpha= 100; //< 0 - 255 >
+                        int temp= kmlObject.getInt("value");
+                        int colorStroke= KmlColorTempUtil.getColorByTempValue(BkoMainActivity.this,temp);
+                        int colorFill= Color.argb(colorAlpha,Color.red(colorStroke),Color.green(colorStroke),Color.blue(colorStroke));
+                        kmlHub.strokeColor(colorStroke).fillColor(colorFill);
+                        kmlHub.strokeWidth(3);
+                        for (int j=0;j<latArray.length();j++){
+                            Log.d("Kml_point",String.format("%s, %s",latArray.getDouble(j),longArray.getDouble(j)));
+                            kmlHub.add(new LatLng(latArray.getDouble(j),longArray.getDouble(j)));
+                        }
+                        kmlHubs.add(kmlHub);
+                        kmlLabelsString.add(kmlObject.getString("label"));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            new GetTextMarkerFromJSONTask().execute(kmlHubs);
+            for (PolygonOptions kml:kmlHubs){
+                map.addPolygon(kml);
+            }
+        }
+    }
+
+    private class GetTextMarkerFromJSONTask extends AsyncTask<ArrayList<PolygonOptions>,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            kmlLabels.clear();
+        }
+
+        @Override
+        protected Void doInBackground(ArrayList<PolygonOptions>... arrayLists) {
+            for (int i=0;i<arrayLists[0].size();i++){
+                PolygonOptions hub= arrayLists[0].get(i);
+                LatLng labelLocation= KmlColorTempUtil.getCenterOfPolygon(hub.getPoints());
+                kmlLabels.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,labelLocation,kmlLabelsString.get(i),2,16));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            for (MarkerOptions marker:kmlLabels){
+                map.addMarker(marker);
+            }
+        }
     }
 
     private void onSwitchChecked(boolean checked) {
@@ -775,7 +902,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 }
             }
             map.clear();
-            if (kmlLayer!=null && map!=null){
+            /*if (kmlLayer!=null && map!=null){
                 try {
                     kmlLayer.addLayerToMap();
                 } catch (IOException e) {
@@ -783,7 +910,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
         } catch (Exception e) {
 
         }
@@ -1703,7 +1830,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap arg0) {
         map = arg0;
+        map.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
         if (map != null) {
+
             mapReady = true;
             setLocationsAlarms();
             //////////////////////////// INITIAL DATA AND CONFIG ////////////////////////////
@@ -1770,7 +1899,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             }
             recoverAppStateifService();
 
-            StorageReference kmlReference= firebaseStorage.getReference().child("kml-produccion/delivery-zones.kml");
+            /*StorageReference kmlReference= firebaseStorage.getReference().child("kml-produccion/delivery-zones.kml");
             try {
                 final File kmlFile= File.createTempFile("delivery-zones","kml");
                 kmlReference.getFile(kmlFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
@@ -1802,7 +1931,14 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 });
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new GetKmlJSONFromServiceTask().execute();
+                }
+            },4000);
         }
     }
 
@@ -2021,7 +2157,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         }
     }
 
-    private class GetActualAreaTask extends AsyncTask<LatLng,Void,KmlPlacemark> {
+    /*private class GetActualAreaTask extends AsyncTask<LatLng,Void,KmlPlacemark> {
 
         @Override
         protected KmlPlacemark doInBackground(LatLng... latLngs) {
@@ -2033,12 +2169,12 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             if (placemark!=null){
                 Log.d("Actual_Zone",placemark.getProperty("name"));
                 BkoDataMaganer.setActualDeliveryZone(BkoMainActivity.this,placemark.getProperty("name"));
-                /*if (locationDatabaseReference!=null){
+                *//*if (locationDatabaseReference!=null){
                     locationDatabaseReference.child("currentLocation").child("zone").setValue(placemark.getProperty("name"));
-                }*/
+                }*//*
             }
         }
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -2059,15 +2195,29 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private void setData() {
         if (mTabHost.getVisibility() == View.VISIBLE)
             map.clear();
-        if (kmlLayer!=null && map!=null){
-            try {
+
+        if (map!=null){
+            for (PolygonOptions polygon:kmlHubs){
+                map.addPolygon(polygon);
+            }
+            for (MarkerOptions marker:kmlLabels){
+                map.addMarker(marker);
+            }
+            /*try {
                 kmlLayer.addLayerToMap();
+                for (PolygonOptions polygon:kmlHubs){
+                    map.addPolygon(polygon);
+                }
+                for (MarkerOptions marker:kmlLabels){
+                    map.addMarker(marker);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
+
         BkoTrips trips = BkoDataMaganer.getCurrentTrips(this);
         if (trips != null && trips.getTrips() != null) {
             ArrayList<LatLng> locations = new ArrayList<>();
@@ -2146,7 +2296,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                         Location zoneLocation= BkoDataMaganer.getCurrentUserLocation(this);
                         if (zoneLocation!=null){
                             LatLng latLngLocation= new LatLng(zoneLocation.getLatitude(),zoneLocation.getLongitude());
-                            new GetActualAreaTask().execute(latLngLocation);
+                            //new GetActualAreaTask().execute(latLngLocation);
                         }
                     }
                 }

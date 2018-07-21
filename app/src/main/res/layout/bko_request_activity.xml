@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <fragment
@@ -23,6 +24,7 @@
         android:paddingEnd="8dp"
         android:background="@drawable/btn_reject_order_bckg"
         android:textColor="#FFF"
+        android:textAllCaps="false"
         android:text="@string/btn_reject_order"
         android:visibility="gone"/>
 
@@ -32,7 +34,30 @@
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:background="@color/blako_background"
-        android:layout_height="170dp">
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/s_zone_fee_label"
+                android:text="@string/label_base_fee"/>
+
+            <TextView
+                android:id="@+id/tvBaseFee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/s_zone_fee_text"
+                android:text="@string/text_default_fee"/>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -44,7 +69,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="10dp"
                 android:textStyle="bold"
                 android:textColor="@color/blako_background"
                 android:textSize="22sp" />
@@ -57,9 +81,7 @@
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:textStyle="bold"
-                android:textColor="@color/blako_white"
-                android:textSize="22sp" />
+                style="@style/s_zone_fee_label"/>
 
         </RelativeLayout>
 
@@ -82,12 +104,11 @@
             android:focusable="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="TOCA PARA ACEPTAR"
-            android:textStyle="bold"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:textColor="@color/blako_white"
-            android:textSize="19sp" />
+            android:gravity="center"
+            style="@style/s_zone_fee_label"
+            android:text="TOCA PARA ACEPTAR" />
 
         <ProgressBar
             android:id="@+id/progressBarPb"
@@ -96,7 +117,7 @@
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:indeterminateTintMode="src_atop"
-            android:indeterminateTint="@color/blako_white"
+            android:indeterminateTint="@color/blako_green"
             />
     </LinearLayout>
 </RelativeLayout>

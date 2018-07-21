@@ -23,6 +23,7 @@ import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
 import com.blako.mensajero.VO.BkoChildTripVO;
 import com.blako.mensajero.VO.BkoOffer;
+import com.blako.mensajero.VO.BkoOrderVO;
 import com.blako.mensajero.VO.BkoPushRequest;
 import com.blako.mensajero.VO.BkoRecoverStatusVO;
 import com.blako.mensajero.VO.BkoTripVO;
@@ -59,6 +60,7 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
     // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.d("Geofence_Trigger","Ok");
         sound = false;
         synchronized (this) {
             String data = "";//data.getString("Notice");
@@ -146,6 +148,8 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
 
                         } else if (pushNotificationType.equals("variablesdb")) {
 
+                        }else if (pushNotificationType.equals("geofences")) {
+                            Log.d("Geofence_Push","OK");
                         } else if (pushNotificationType.equals("consulttrips")) {
                             if (!worker.isAvailable())
                                 return;
@@ -161,6 +165,7 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                                 vib.vibrate(8000);
 
                                 if(BkoDataMaganer.getOnDemand(this)){
+                                    // TODO: 19/07/2018 If onDemand -> Present order to RequestActivity
                                     onDisconectedOnDemand();
                                 }
 

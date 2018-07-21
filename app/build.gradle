@@ -6,9 +6,9 @@ android {
     defaultConfig {
         applicationId "com.blako.mensajero"
         minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 73
-        versionName "2.0.5"
+        targetSdkVersion 23
+        versionCode 74
+        versionName "2.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

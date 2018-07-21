@@ -5,9 +5,20 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="blako_background">#17202d</color>
+    <color name="blako_background_translucid">#28384e</color>
     <color name="blako_white">#FFFFFF</color>
     <color name="blako_white_medium">#66a7ff</color>
     <color name="blako_green">#3CCB78</color>
+
+    <color name="c_white">#ffffff</color>
+    <color name="c_black">#323232</color>
+
+    <!--Kml Zone Temps-->
+    <color name="c_kml_temp_1">#3CCB78</color>
+    <color name="c_kml_temp_2">#42be76</color>
+    <color name="c_kml_temp_3">#FFA726</color>
+    <color name="c_kml_temp_4">#f44336</color>
+    <color name="c_kml_temp_5">#d50000</color>
 
     <color name="blako_black">#000000</color>
     <color name="blako_gray">#999999</color>

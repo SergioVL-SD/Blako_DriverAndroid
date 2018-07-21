@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -29,8 +30,10 @@ import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
 import com.blako.mensajero.VO.BkoCheckoutResponse;
 import com.blako.mensajero.VO.BkoChildTripVO;
+import com.blako.mensajero.VO.BkoOrderVO;
 import com.blako.mensajero.VO.BkoRequestResponse;
 import com.blako.mensajero.VO.BkoTripVO;
+import com.blako.mensajero.VO.BkoTrips;
 import com.blako.mensajero.VO.BkoUser;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -48,8 +51,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,13 +65,14 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
     boolean  loaded = false;
     float actVolume, maxVolume, volume;
     AudioManager audioManager;
-    private TextView aliasBt, addressBt, tvTripDistance;
+    private TextView aliasBt, addressBt, tvTripDistance, tvBaseFee;
     private SoundPool soundPool;
     private View touchAreaView;
     private int soundID;
     private SupportMapFragment map;
     private ProgressBar progressBarPb;
     private long mLastClickTime = 0;
+    public static BkoOrderVO order;
     public static BkoTripVO tripP;
     public static BkoChildTripVO trip;
     public static BkoChildTripVO tripDelivery;
@@ -75,6 +81,8 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
     protected GoogleMap gMap = null;
     private String polylineResponse = null;
     Handler spriteHandler;
+    private DecimalFormat decimalFormat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,10 +95,13 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
         aliasBt = (TextView) findViewById(R.id.aliasBt);
         addressBt = (TextView) findViewById(R.id.addressBt);
         tvTripDistance = (TextView) findViewById(R.id.tvTripDistance);
+        tvBaseFee = (TextView) findViewById(R.id.tvBaseFee);
         progressBarPb = (ProgressBar) findViewById(R.id.progressBarPb);
         touchAreaView= (View) findViewById(R.id.touchAreaView);
         map = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         map.getMapAsync(this);
+
+        decimalFormat= new DecimalFormat("#.##");
 
         progressBarPb.setIndeterminate(true);
 /**-----------------------sound-----------------------**/
@@ -180,6 +191,7 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
                 numberIntExt = numberIntExt + " Int." + trip.getBko_customeraddress_numinterior();
             }
             addressBt.setText(BkoUtilities.ensureNotNullString(trip.getBko_customeraddress_street() + numberIntExt + ", " + trip.getBko_customeraddress_colony() + ", " + trip.getBko_customeraddress_delegation()));
+            new GetCostFromOrderTask().execute();
             //aliasOfferTv.setText(BkoUtilities.ensureNotNullString(trip.getBko_customeraddress_alias()));
             //addressBt.setText(statusRequest.getStreet() + ", " + statusRequest.getColony() + ", " + statusRequest.getDelegation());
 
@@ -188,9 +200,42 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
             Toast.makeText(BkoRequestActivity.this, getString(R.string.blako_error), Toast.LENGTH_SHORT).show();
         }
 
+    }
 
+    private class GetCostFromOrderTask extends AsyncTask<Void,Void,JSONObject>{
 
+        @Override
+        protected JSONObject doInBackground(Void... voids) {
+            try{
+                String orderResponse = HttpRequest
+                        .get(Constants.GET_TRIPS_ACTIVE(BkoRequestActivity.this) + "workerId=" + BkoDataMaganer.getWorkerId(BkoRequestActivity.this))
+                        .connectTimeout(4000).readTimeout(4000).body();
 
+                if (orderResponse!=null){
+                    Log.d("Order_Response",orderResponse);
+                    return new JSONObject(orderResponse);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            if (jsonObject!=null){
+                try {
+                    if (jsonObject.getBoolean("response")){
+                        String cost= "$ "+decimalFormat.format(Double.parseDouble(jsonObject.getJSONArray("order").getJSONObject(0).getString("bko_orders_cost")));
+                        tvBaseFee.setText(cost);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (NumberFormatException e){
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override

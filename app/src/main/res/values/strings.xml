@@ -242,5 +242,9 @@
     <string name="notification_dead">No te hemos podido localizar, ¿Deseas seguir conectado?</string>
     <string name="text_no_connection">Sin Conexión GPS</string>
     <string name="unknown_area">Fuera de cobertura</string>
-    <string name="btn_reject_order">Rechazar</string>
+    <string name="btn_reject_order">No lo quiero</string>
+
+    <!--Request Activity (Zone Fee)-->
+    <string name="label_base_fee">Tarifa</string>
+    <string name="text_default_fee">$</string>
 </resources>
