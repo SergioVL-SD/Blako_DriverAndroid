@@ -3,10 +3,14 @@ package com.blako.mensajero.repositories;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.location.Location;
 import android.os.Handler;
 
+import com.blako.mensajero.App;
 import com.blako.mensajero.Services.api.ZonesServiceImplementation;
+import com.blako.mensajero.Services.location.FusedLocationService;
 import com.blako.mensajero.Utils.DateTimeUtils;
+import com.blako.mensajero.Utils.LocationUtils;
 import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.models.Fence;
 import com.blako.mensajero.models.inbound.ZonesResponse;
@@ -22,6 +26,9 @@ import retrofit2.Response;
 
 public class Repository {
     private static final String LOG_SOURCE = Repository.class.getName();
+
+    //  dependencies
+    FusedLocationService fusedLocationService = App.getInstance().getLocationService();
 
     public void setUp()
     {
@@ -63,6 +70,21 @@ public class Repository {
         return fences;
     }
 
+    private MutableLiveData<Location> currentLocation;
+    public LiveData<Location> getCurrentLocation()
+    {
+        if(currentLocation == null)
+        {
+            currentLocation = new MutableLiveData<>();
+        }
+        return currentLocation;
+    }
+    public void postCurrentLocation(Location location)
+    {
+        getCurrentLocation();
+        currentLocation.postValue(location);
+    }
+
 
 
 
@@ -79,24 +101,31 @@ public class Repository {
         @Override
         public void run() {
             LogUtils.debug(LOG_SOURCE, "(fetch) fetching zones...");
-            fetchZones("0");
+            fetchZones();
         }
     };
     public void fetchZonesDelayed(int jitter)
     {
         int delayValue = ThreadLocalRandom.current().nextInt(0, jitter + 1);
-        LogUtils.debug(LOG_SOURCE, "(fetch) delayed zones fetch of " + String.valueOf(delayValue) + "s");
+        LogUtils.debug(LOG_SOURCE, "(fetch) delayed zones fetch for " + String.valueOf(delayValue) + "s");
 
         timeHandler.postDelayed(timeRunnable, delayValue*1000);
     }
 
-    public void fetchZones(String wid)
+    public void fetchZones()
     {
-        LogUtils.debug(LOG_SOURCE, "(fetch) fetching zones for wid: " + wid + "...");
+        String wid = "nn";
+        String geohash = "d0000";
+
+        Location location = getCurrentLocation().getValue();
+        if(location != null)
+            geohash = LocationUtils.getGeoHash(location, 9);
+
+        LogUtils.debug(LOG_SOURCE, "(fetch) fetching zones for wid: " + wid + " and geohash: " + geohash + " ...");
 
         final long rtt_stamp = DateTimeUtils.getFullMillis();
 
-        Call<ZonesResponse> call = ZonesServiceImplementation.create().zones("/zones/" + wid);
+        Call<ZonesResponse> call = ZonesServiceImplementation.create().zones("/zones/" + wid + "/" + geohash);
         call.enqueue(new Callback<ZonesResponse>() {
             @Override
             public void onResponse(Call<ZonesResponse> call, Response<ZonesResponse> response) {

@@ -38,6 +38,7 @@ import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.VO.BkoUser;
 import com.blako.mensajero.Views.BkoMainActivity;
 import com.blako.mensajero.firebase.BkoFirebaseDatabase;
+import com.blako.mensajero.repositories.Repository;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,6 +56,7 @@ import java.util.TimeZone;
 
 public class LocationService extends Service implements GpsStatus.Listener {
 
+    Repository repository = App.getInstance().getRepository();
     private FusedLocationService fusedLocationService = App.getInstance().getLocationService();
     private LocationManager locationManager;
 
@@ -94,7 +96,7 @@ public class LocationService extends Service implements GpsStatus.Listener {
         fusedLocationService.setOnLocationServiceListener(new OnLocationServiceListener() {
             @Override
             public void onLocationUpdate(Location location) {
-                //repository.setCurrentLocation(location);
+                repository.postCurrentLocation(location);
 
                 if (location != null) {
 

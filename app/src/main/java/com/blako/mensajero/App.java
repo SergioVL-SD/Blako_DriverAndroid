@@ -31,6 +31,11 @@ public class App extends Application {
     }
 
 
+
+
+
+
+
     public FusedLocationService getLocationService() {
         LogUtils.debug(LOG_SOURCE, "fetching location service...");
 

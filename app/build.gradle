@@ -74,6 +74,9 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:15.0.1"
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
 
+    //  geohash
+    implementation 'ch.hsr:geohash:1.3.0'
+
     //  firebase
     implementation "com.google.firebase:firebase-core:15.0.2"
     implementation "com.google.firebase:firebase-crash:15.0.2"
