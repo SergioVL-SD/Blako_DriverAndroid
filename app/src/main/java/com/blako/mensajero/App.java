@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.blako.mensajero.Services.location.FusedLocationService;
 import com.blako.mensajero.Utils.LogUtils;
+import com.blako.mensajero.repositories.Repository;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class App extends Application {
 
@@ -19,6 +21,9 @@ public class App extends Application {
 
         LogUtils.debug(LOG_SOURCE, "onCreate()");
         instance= this;
+
+        //  TODO: place elsewhere
+        FirebaseMessaging.getInstance().subscribeToTopic("remote");
     }
 
     public static App getInstance(){
@@ -34,5 +39,26 @@ public class App extends Application {
         }
 
         return fusedLocationService;
+    }
+
+
+
+
+
+
+
+
+
+    private Repository repository;
+    public Repository getRepository()
+    {
+        LogUtils.debug(LOG_SOURCE, "fetching repository...");
+
+        if (repository == null) {
+            repository = Repository.create(this);
+            repository.setUp();
+        }
+
+        return repository;
     }
 }

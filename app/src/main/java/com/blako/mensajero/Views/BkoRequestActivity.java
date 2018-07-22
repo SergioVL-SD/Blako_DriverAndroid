@@ -1,6 +1,7 @@
 package com.blako.mensajero.Views;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blako.mensajero.Adapters.BkoTripsAdapter;
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
 import com.blako.mensajero.Dao.BkoUserDao;
@@ -28,6 +31,7 @@ import com.blako.mensajero.R;
 import com.blako.mensajero.Services.BkoSendLocationToServer;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
+import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.VO.BkoCheckoutResponse;
 import com.blako.mensajero.VO.BkoChildTripVO;
 import com.blako.mensajero.VO.BkoOrderVO;
@@ -35,6 +39,8 @@ import com.blako.mensajero.VO.BkoRequestResponse;
 import com.blako.mensajero.VO.BkoTripVO;
 import com.blako.mensajero.VO.BkoTrips;
 import com.blako.mensajero.VO.BkoUser;
+import com.blako.mensajero.models.Fence;
+import com.blako.mensajero.repositories.Repository;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -62,6 +68,9 @@ import java.util.List;
  * Created by franciscotrinidad on 12/28/15.
  */
 public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallback {
+
+    Repository repository = App.getInstance().getRepository();
+
     boolean  loaded = false;
     float actVolume, maxVolume, volume;
     AudioManager audioManager;
@@ -167,6 +176,22 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
                 }
             }, 1000);
 
+
+
+
+
+
+        //  -------------------------------------
+        repository.getFences().observe(this, new Observer<List<Fence>>() {
+            @Override
+            public void onChanged(@Nullable List<Fence> fences) {
+                if(fences != null)
+                {
+                    LogUtils.debug(this.getClass().getSimpleName(), String.valueOf(fences.size()) + " were loaded");
+                }
+            }
+        });
+        //  -------------------------------------
 
     }
     protected void onDestroy(){

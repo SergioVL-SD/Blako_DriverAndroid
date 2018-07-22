@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.arch.lifecycle.Observer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,6 +35,7 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -52,6 +54,7 @@ import android.widget.Toast;
 import com.blako.mensajero.Adapters.BkoOffersAdapter;
 import com.blako.mensajero.Adapters.BkoOffersListAdapter;
 import com.blako.mensajero.Adapters.BkoTripsAdapter;
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoCore;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
@@ -64,6 +67,7 @@ import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.DeliveryZoneCheck;
 import com.blako.mensajero.Utils.HttpRequest;
 import com.blako.mensajero.Utils.KmlColorTempUtil;
+import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.VO.BkoCheckInResponse;
 import com.blako.mensajero.VO.BkoChildTripVO;
 import com.blako.mensajero.VO.BkoOffer;
@@ -78,6 +82,8 @@ import com.blako.mensajero.VO.BkoUserStatusResponse;
 import com.blako.mensajero.VO.BkoVehicleVO;
 import com.blako.mensajero.firebase.BkoFirebaseDatabase;
 import com.blako.mensajero.firebase.BkoFirebaseStorage;
+import com.blako.mensajero.models.Fence;
+import com.blako.mensajero.repositories.Repository;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -133,6 +139,8 @@ import java.util.Properties;
 
 public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, BkoCore.OffersListener, BkoOffersListAdapter.OffersListListener, GpsStatus.Listener {
+
+    Repository repository = App.getInstance().getRepository();
 
     protected BkoMainActivity.InternetBroadCast internetBroadCast = new BkoMainActivity.InternetBroadCast();
     private BkoTrips tripsRespone;
@@ -435,6 +443,19 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             Intent intentOverlayButton= new Intent(BkoMainActivity.this, OverlayButtonService.class);
             startService(intentOverlayButton);
         }*/
+
+
+        //  -------------------------------------
+        repository.getFences().observe(this, new Observer<List<Fence>>() {
+            @Override
+            public void onChanged(@Nullable List<Fence> fences) {
+                if(fences != null)
+                {
+                    LogUtils.debug(this.getClass().getSimpleName(), String.valueOf(fences.size()) + " were loaded");
+                }
+            }
+        });
+        //  -------------------------------------
     }
 
     private class GetKmlJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject>{

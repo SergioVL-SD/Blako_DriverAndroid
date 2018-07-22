@@ -15,12 +15,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.blako.mensajero.Adapters.BkoTripsAdapter;
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
 import com.blako.mensajero.Dao.BkoUserDao;
 import com.blako.mensajero.R;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
+import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.VO.BkoChildTripVO;
 import com.blako.mensajero.VO.BkoOffer;
 import com.blako.mensajero.VO.BkoOrderVO;
@@ -34,6 +36,7 @@ import com.blako.mensajero.Views.BkoMainActivity;
 import com.blako.mensajero.Views.BkoOffersByDateActivity;
 import com.blako.mensajero.Views.BkoRequestActivity;
 import com.blako.mensajero.Views.BkoTripDetailActivity;
+import com.blako.mensajero.repositories.Repository;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -49,6 +52,9 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
 
+    //  dependencies
+    private Repository repository = App.getInstance().getRepository();
+
 
     private boolean sound;
 
@@ -60,19 +66,27 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
     // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d("Geofence_Trigger","Ok");
+//        LogUtils.debug(TAG, "(fcm) message received");
+//        Log.d("Geofence_Trigger","keys: " + remoteMessage.getData().size());
         sound = false;
         synchronized (this) {
             String data = "";//data.getString("Notice");
             String body = "";
             String title="";
 
-            for (Map.Entry<String, String> entry : remoteMessage.getData().entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                if (key.equals("notification"))
-                    data = value;
+//            for (Map.Entry<String, String> entry : remoteMessage.getData().entrySet()) {
+//                String key = entry.getKey();
+//                String value = entry.getValue();
+//                if (key.equals("notification"))
+//                    data = value;
+//
+//            }
 
+            Map<String, String> messageData = remoteMessage.getData();
+            if(messageData.get("notification") != null)
+            {
+                data = messageData.get("notification");
+//                LogUtils.debug("Geofence_Trigger","(fcm) notification: " + data);
             }
 
             if (data == null || data.length() == 0)
@@ -103,10 +117,13 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                 JSONObject jsonPushNotification = null;
 
                 if(contentData.has("message"))
+                {
                     jsonPushNotification = contentData.getJSONObject("message");
+//                    LogUtils.debug("Geofence_Trigger","(fcm) message: " + jsonPushNotification.toString());
+                }
 
 
-                if(jsonPushNotification==null)
+                if(jsonPushNotification == null)
                     return;
 
 
@@ -114,6 +131,7 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                 if (jsonPushNotification.has("typepush")) {
                     Gson gson = new Gson();
                     pushNotificationType = jsonPushNotification.getString("typepush");
+//                    LogUtils.debug("Geofence_Trigger","(fcm) typepush: " + pushNotificationType);
                     if (pushNotificationType != null) {
 
                         if (pushNotificationType.equals("requestworker")) {
@@ -149,7 +167,10 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                         } else if (pushNotificationType.equals("variablesdb")) {
 
                         }else if (pushNotificationType.equals("geofences")) {
-                            Log.d("Geofence_Push","OK");
+                            LogUtils.debug("Geofence_Push","(fcm) OK");
+                            Integer jitter = Integer.valueOf((String) jsonPushNotification.get("jitter"));
+                            LogUtils.debug("Geofence_Push","(fcm) apply jitter: " + String.valueOf(jitter));
+                            repository.fetchZonesDelayed(jitter);
                         } else if (pushNotificationType.equals("consulttrips")) {
                             if (!worker.isAvailable())
                                 return;

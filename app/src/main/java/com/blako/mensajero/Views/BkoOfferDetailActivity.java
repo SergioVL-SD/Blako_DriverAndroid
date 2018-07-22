@@ -3,11 +3,13 @@ package com.blako.mensajero.Views;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blako.mensajero.Adapters.BkoServicesAdapter;
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
 import com.blako.mensajero.Custom.BkoMapFragment;
@@ -33,12 +36,15 @@ import com.blako.mensajero.Dao.BkoUserDao;
 import com.blako.mensajero.R;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
+import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.VO.BkoOffer;
 import com.blako.mensajero.VO.BkoPushRequest;
 import com.blako.mensajero.VO.BkoRequestResponse;
 import com.blako.mensajero.VO.BkoUser;
 import com.blako.mensajero.VO.BkoVehicleVO;
 import com.blako.mensajero.VO.BkoVehiclesResponse;
+import com.blako.mensajero.models.Fence;
+import com.blako.mensajero.repositories.Repository;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -56,12 +62,16 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by franciscotrinidad on 1/11/16.
  */
 public class BkoOfferDetailActivity extends BaseActivity implements OnMapReadyCallback, ObservableScrollViewCallbacks {
+
+    Repository repository = App.getInstance().getRepository();
+
     private AlertDialog dialogPending;
     private BkoPushRequest statusRequest;
     private ImageButton wazeBt, googlemapsBt;
@@ -240,7 +250,17 @@ public class BkoOfferDetailActivity extends BaseActivity implements OnMapReadyCa
 
         }
 
-
+//  -------------------------------------
+        repository.getFences().observe(this, new Observer<List<Fence>>() {
+            @Override
+            public void onChanged(@Nullable List<Fence> fences) {
+                if(fences != null)
+                {
+                    LogUtils.debug(this.getClass().getSimpleName(), String.valueOf(fences.size()) + " were loaded");
+                }
+            }
+        });
+        //  -------------------------------------
     }
 
 
