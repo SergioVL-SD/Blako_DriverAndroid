@@ -51,6 +51,7 @@ public class KmlColorTempUtil {
         textView.setText(text);
         textView.setTextSize(fontSize);
         textView.setTypeface(null, Typeface.BOLD);
+        textView.setShadowLayer(6,2,2,context.getResources().getColor(R.color.c_rate_shadow));
 
         final Paint paintText = textView.getPaint();
 
@@ -63,7 +64,7 @@ public class KmlColorTempUtil {
                 * padding, boundsText.height() + 2 * padding, conf);
 
         final Canvas canvasText = new Canvas(bmpText);
-        paintText.setColor(Color.parseColor("#37474F"));
+        paintText.setColor(context.getResources().getColor(R.color.c_rate));
 
         canvasText.drawText(text, canvasText.getWidth() / 2,
                 canvasText.getHeight() - padding - boundsText.bottom, paintText);

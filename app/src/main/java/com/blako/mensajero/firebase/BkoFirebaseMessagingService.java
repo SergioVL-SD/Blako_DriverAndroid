@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -150,6 +151,11 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
 
                         }else if (pushNotificationType.equals("geofences")) {
                             Log.d("Geofence_Push","OK");
+                            Integer jitter = Integer.valueOf((String) jsonPushNotification.get("jitter"));
+                            Intent localIntent= new Intent(Constants.ACTION_SERVICE_ZONES);
+                            localIntent.putExtra("jitter",jitter);
+                            LocalBroadcastManager.getInstance(BkoFirebaseMessagingService.this).sendBroadcast(localIntent);
+
                         } else if (pushNotificationType.equals("consulttrips")) {
                             if (!worker.isAvailable())
                                 return;

@@ -7,6 +7,9 @@ public class Constants {
     public static final String ACTION_SERVICE_LOCATION = "com.blako.mensajero.action.LOCATION";
     public static final String EXTRA_SERVICE_LOCATION = "com.blako.mensajero.extra.LOCATION";
 
+    public static final String ACTION_SERVICE_ZONES = "com.blako.mensajero.action.ZONES";
+    public static final String EXTRA_SERVICE_ZONES = "com.blako.mensajero.extra.ZONES";
+
     public static final float DEFAULT_MAP_TRIPS = 15f;
     public static final float TRTP_DETAIL_MAP_ZOOM = 17f;
     public static final float DEFAULT_MAP_ZOOM = 16.5f;

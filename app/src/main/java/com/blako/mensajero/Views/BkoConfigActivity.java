@@ -26,10 +26,12 @@ public class BkoConfigActivity extends BaseActivity {
 
         try {
             BkoUser user = BkoUserDao.Consultar(BkoConfigActivity.this);
-            if (user != null)
+            if (user != null){
+                BkoDataMaganer.setWorkerId(this,user.getWorkerId());
                 startAppActivity();
-            else
+            } else{
                 startLoginActivity();
+            }
 
         } catch (Exception e) {
             e.fillInStackTrace();

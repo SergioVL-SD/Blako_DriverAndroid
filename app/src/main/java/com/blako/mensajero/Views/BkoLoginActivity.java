@@ -354,6 +354,7 @@ public class BkoLoginActivity extends BaseActivity {
                                                         userLoginResponse.setEmail(emailEt.getText().toString().trim());
                                                         setData(userLoginResponse, recoverStatusVO, BkoLoginActivity.this);
 
+                                                        BkoDataMaganer.setWorkerId(BkoLoginActivity.this,userLoginResponse.getWorkerId());
 
                                                         BkoUser user = BkoUserDao.Consultar(BkoLoginActivity.this);
 

@@ -4,7 +4,23 @@
       "elementType":"all",
       "stylers":[
          {
-            "saturation":-70
+            "saturation":-75
+         }
+      ]
+   },
+   {
+      "elementType":"labels",
+      "stylers":[
+         {
+            "lightness":25
+         }
+      ]
+   },
+   {
+      "elementType":"labels.icon",
+      "stylers":[
+         {
+            "visibility": "off"
          }
       ]
    }

@@ -20,6 +20,10 @@
     <color name="c_kml_temp_4">#f44336</color>
     <color name="c_kml_temp_5">#d50000</color>
 
+    <!--Rate Zone-->
+    <color name="c_rate">#37474F</color>
+    <color name="c_rate_shadow">#ffffff</color>
+
     <color name="blako_black">#000000</color>
     <color name="blako_gray">#999999</color>
     <color name="blako_gray_medium">#EBEBEB</color>
