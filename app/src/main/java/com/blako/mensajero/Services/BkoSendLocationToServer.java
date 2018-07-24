@@ -294,6 +294,7 @@ public class BkoSendLocationToServer extends IntentService {
                     mapComplete.put("partnerId", partnerId);
                     mapComplete.put("visibilityType", user.getVisibilitytype());
                     mapComplete.put("dateTimeGPS", ts);
+                    mapComplete.put("city_id",String.valueOf(BkoDataMaganer.getActualDeliveryZoneId(this)));
 
                     if (LatitudCustomer != null) {
                         mapComplete.put("LatitudCustomer", LatitudCustomer);
@@ -563,7 +564,7 @@ public class BkoSendLocationToServer extends IntentService {
                     mapComplete.put("partnerId", partnerId);
                     mapComplete.put("visibilityType", user.getVisibilitytype());
                     mapComplete.put("dateTimeGPS", ts);
-
+                    mapComplete.put("city_id",String.valueOf(BkoDataMaganer.getActualDeliveryZoneId(context)));
 
                     if(BkoDataMaganer.getCurrentOffer(context)!=null){
                         schema_id = "1";

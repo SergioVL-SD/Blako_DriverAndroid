@@ -1,6 +1,5 @@
 package com.blako.mensajero.firebase;
 
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -155,7 +154,6 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                             Intent localIntent= new Intent(Constants.ACTION_SERVICE_ZONES);
                             localIntent.putExtra("jitter",jitter);
                             LocalBroadcastManager.getInstance(BkoFirebaseMessagingService.this).sendBroadcast(localIntent);
-
                         } else if (pushNotificationType.equals("consulttrips")) {
                             if (!worker.isAvailable())
                                 return;

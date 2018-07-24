@@ -438,7 +438,7 @@ public class BkoDataMaganer {
             editor.putString("mock", "");
         }
 
-
+        // TODO: 23/07/2018 Trying apply insted of commit to resolve problem
         editor.commit();
         BkoDataMaganer.currentUserLocation = currentUserLocation;
 
@@ -466,9 +466,14 @@ public class BkoDataMaganer {
         if (BkoDataMaganer.statusService != null)
             return BkoDataMaganer.statusService;
 
-        SharedPreferences sp = context.getSharedPreferences("blakoPreferences", Activity.MODE_PRIVATE);
-        int status = sp.getInt("statusService", 0);
-        return status;
+        try{
+            SharedPreferences sp = context.getSharedPreferences("blakoPreferences", Activity.MODE_PRIVATE);
+            int status = sp.getInt("statusService", 0);
+            return status;
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     public static void setStatusService(int statusService, Context context) {
@@ -578,15 +583,15 @@ public class BkoDataMaganer {
         editor.apply();
     }
 
-    public static String getActualDeliveryZoneId(Context context) {
+    public static int getActualDeliveryZoneId(Context context) {
         SharedPreferences sp = context.getSharedPreferences("blakoPreferences", Activity.MODE_PRIVATE);
-        return sp.getString("actualDeliveryZoneId", "");
+        return sp.getInt("actualDeliveryZoneId", 1);
     }
 
-    public static void setActualDeliveryZoneId(Context context, String zoneId) {
+    public static void setActualDeliveryZoneId(Context context, int zoneId) {
         SharedPreferences sp = context.getSharedPreferences("blakoPreferences", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("actualDeliveryZoneId", zoneId);
+        editor.putInt("actualDeliveryZoneId", zoneId);
         editor.apply();
     }
 

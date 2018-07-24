@@ -12,7 +12,7 @@ public class Constants {
 
     public static final float DEFAULT_MAP_TRIPS = 15f;
     public static final float TRTP_DETAIL_MAP_ZOOM = 17f;
-    public static final float DEFAULT_MAP_ZOOM = 16.5f;
+    public static final float DEFAULT_MAP_ZOOM = 12.5f;
     public static final float DEFAULT_OFFER_LOCATION_ZOOM = 15f;
     public static final String CORREO_EXPRESION = "^[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]{2,4})$";
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";

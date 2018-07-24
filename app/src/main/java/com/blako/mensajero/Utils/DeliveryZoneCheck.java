@@ -6,6 +6,7 @@ import android.util.Log;
 import com.blako.mensajero.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.maps.android.PolyUtil;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
@@ -63,7 +64,6 @@ public class DeliveryZoneCheck {
     }
 
     public static String getActualAreaFromLocation(Context context, List<KmlPlacemark> placemarks, LatLng location){
-        Log.d("Kml_init","Ok");
         for (KmlPlacemark placemark:placemarks){
             Log.d("Kml_placemark",placemark.getProperty("name"));
             KmlPolygon polygon= (KmlPolygon) placemark.getGeometry();
@@ -77,10 +77,19 @@ public class DeliveryZoneCheck {
         return context.getString(R.string.unknown_area);
     }
 
+    public static Integer getActualHubFromLocation(ArrayList<Polygon> hubs,ArrayList<Integer> hubIds, LatLng location){
+        for (int i=0;i<hubs.size();i++){
+            Polygon hub= hubs.get(i);
+            List<LatLng> boundaryCoordinates = hub.getPoints();
+            if (PolyUtil.containsLocation(location,boundaryCoordinates,true)){
+                return hubIds.get(i);
+            }
+        }
+        return 1;
+    }
+
     public static KmlPlacemark getActualPlacemarkFromLocation(Context context, List<KmlPlacemark> placemarks, LatLng location){
-        Log.d("Kml_init","Ok");
         for (KmlPlacemark placemark:placemarks){
-            Log.d("Kml_placemark",placemark.getProperty("name"));
             KmlPolygon polygon= (KmlPolygon) placemark.getGeometry();
             if (polygon!=null){
                 List<LatLng> boundaryCoordinates = polygon.getOuterBoundaryCoordinates();

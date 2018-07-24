@@ -55,7 +55,7 @@ import java.util.TimeZone;
 
 public class LocationService extends Service implements GpsStatus.Listener {
 
-    private FusedLocationService fusedLocationService = App.getInstance().getLocationService();
+    private FusedLocationService fusedLocationService;
     private LocationManager locationManager;
 
     //private static final int REFRESH_RATE = 3;
@@ -74,7 +74,7 @@ public class LocationService extends Service implements GpsStatus.Listener {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        fusedLocationService = App.getInstance().getLocationService();
         /*firebaseDatabase= BkoFirebaseDatabase.getDatabase();
         locationDatabaseReference= firebaseDatabase.getReference().child("workers").child(BkoDataMaganer.getWorkerId(this));
         locationDatabaseReference.keepSynced(true);*/
