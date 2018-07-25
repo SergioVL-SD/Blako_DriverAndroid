@@ -154,7 +154,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     private static final long NO_CONECTION_TIME = 1000 * 60 * 4; //--> Minutes
     private int status=0;
-    private int checkEvery= 20;
+    private int checkEvery= 15;
     private DecimalFormat decimalFormat;
 
     /*private KmlLayer kmlLayer;
@@ -172,6 +172,11 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     private Handler zoneHandler;
     private Runnable zoneRunnable;
+
+    private Handler syncHandler;
+    private Runnable syncRunnable;
+
+    private Long sync;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,6 +218,21 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             public void run() {
                 if (map!=null){
                     new GetKmlJSONFromServiceTask().execute();
+                }
+            }
+        };
+
+        syncHandler= new Handler();
+        syncRunnable= new Runnable() {
+            @Override
+            public void run() {
+                if (map!=null){
+                    Log.d("Kml_Shown","OK");
+                    map.clear();
+                    new GetTextMarkerFromJSONTask().execute(kmlHubs);
+                    for (PolygonOptions kml:kmlHubs){
+                        kmlHubPolygons.add(map.addPolygon(kml));
+                    }
                 }
             }
         };
@@ -485,13 +505,16 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent!=null){
-                int jitter= 90;
+                int jitter= 50;
+                sync= System.currentTimeMillis() + (1000*60*5);
                 try{
                     jitter= intent.getExtras().getInt("jitter");
+                    sync= intent.getExtras().getLong("sync");
                 }catch (NullPointerException e){
                     e.printStackTrace();
                 }
                 Log.d("Kml_Jitter",String.valueOf(jitter));
+                Log.d("Kml_Sync",String.valueOf(sync));
                 int delayValue= ThreadLocalRandom.current().nextInt(0, jitter + 1);
                 zoneHandler.postDelayed(zoneRunnable,delayValue*1000);
             }
@@ -499,11 +522,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     }
 
     private class GetKmlJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject>{
-
-        @Override
-        protected void onPreExecute() {
-            map.clear();
-        }
 
         @Override
         protected JSONObject doInBackground(Void... voids) {
@@ -587,15 +605,13 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            new GetTextMarkerFromJSONTask().execute(kmlHubs);
-            for (PolygonOptions kml:kmlHubs){
-                kmlHubPolygons.add(map.addPolygon(kml));
+            syncHandler.removeCallbacks(syncRunnable);
+            if (sync==null){
+                Log.d("Kml_Sync","500");
+                syncHandler.postDelayed(syncRunnable,500);
+            }else {
+                syncHandler.postDelayed(syncRunnable,ZoneUpdate.delay(sync));
             }
-            /*Location zoneLocation= BkoDataMaganer.getCurrentUserLocation(BkoMainActivity.this);
-            if (zoneLocation!=null){
-                LatLng latLngLocation= new LatLng(zoneLocation.getLatitude(),zoneLocation.getLongitude());
-                new GetActualHubFromLocationTask().execute(latLngLocation);
-            }*/
         }
     }
 
@@ -621,20 +637,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             for (MarkerOptions marker:kmlLabels){
                 map.addMarker(marker);
             }
-        }
-    }
-
-    private class GetActualHubFromLocationTask extends AsyncTask<LatLng,Void,Integer>{
-
-        @Override
-        protected Integer doInBackground(LatLng... latLngs) {
-            return DeliveryZoneCheck.getActualHubFromLocation(kmlHubPolygons,kmlHubIds,latLngs[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            Log.d("Actual_Hub_Id",String.valueOf(integer));
-            BkoDataMaganer.setActualDeliveryZoneId(BkoMainActivity.this,integer);
         }
     }
 
@@ -2087,6 +2089,8 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     @Override
     protected void onPause() {
+        zoneHandler.removeCallbacks(zoneRunnable);
+        syncHandler.removeCallbacks(syncRunnable);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiveZoneUpdate);
         if (mGoogleApiClient != null)
             if (mGoogleApiClient.isConnected()) {

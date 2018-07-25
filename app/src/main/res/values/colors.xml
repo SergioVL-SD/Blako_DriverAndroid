@@ -14,11 +14,26 @@
     <color name="c_black">#323232</color>
 
     <!--Kml Zone Temps-->
-    <color name="c_kml_temp_1">#3CCB78</color>
-    <color name="c_kml_temp_2">#42be76</color>
-    <color name="c_kml_temp_3">#FFA726</color>
-    <color name="c_kml_temp_4">#f44336</color>
-    <color name="c_kml_temp_5">#d50000</color>
+    <color name="c_kml_temp_1">#64f7a1</color>
+    <color name="c_kml_temp_2">#5cf49b</color>
+    <color name="c_kml_temp_3">#53ef94</color>
+    <color name="c_kml_temp_4">#4bec8e</color>
+    <color name="c_kml_temp_5">#3ce482</color>
+    <color name="c_kml_temp_6">#2cd171</color>
+    <color name="c_kml_temp_7">#20cc68</color>
+    <color name="c_kml_temp_8">#f7c172</color>
+    <color name="c_kml_temp_9">#fdbe64</color>
+    <color name="c_kml_temp_10">#fcb958</color>
+    <color name="c_kml_temp_11">#ffb850</color>
+    <color name="c_kml_temp_12">#f9ae40</color>
+    <color name="c_kml_temp_13">#f4a737</color>
+    <color name="c_kml_temp_14">#fda82b</color>
+    <color name="c_kml_temp_15">#f75050</color>
+    <color name="c_kml_temp_16">#fd4b4b</color>
+    <color name="c_kml_temp_17">#ed4040</color>
+    <color name="c_kml_temp_18">#f53838</color>
+    <color name="c_kml_temp_19">#dc2d2d</color>
+    <color name="c_kml_temp_20">#d50000</color>
 
     <!--Rate Zone-->
     <color name="c_rate">#37474F</color>

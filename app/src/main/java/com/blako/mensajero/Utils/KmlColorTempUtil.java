@@ -23,13 +23,43 @@ public class KmlColorTempUtil {
 
     public static int getColorByTempValue(Context context, int value){
         int color;
-        if (value>80){
-            color= context.getResources().getColor(R.color.c_kml_temp_5);
+        if (value>95){
+            color= context.getResources().getColor(R.color.c_kml_temp_20);
+        }else if (value>90){
+            color= context.getResources().getColor(R.color.c_kml_temp_19);
+        }else if (value>85){
+            color= context.getResources().getColor(R.color.c_kml_temp_18);
+        }else if (value>80){
+            color= context.getResources().getColor(R.color.c_kml_temp_17);
+        }else if (value>75){
+            color= context.getResources().getColor(R.color.c_kml_temp_16);
+        }else if (value>70){
+            color= context.getResources().getColor(R.color.c_kml_temp_15);
+        }else if (value>65){
+            color= context.getResources().getColor(R.color.c_kml_temp_14);
         }else if (value>60){
-            color= context.getResources().getColor(R.color.c_kml_temp_4);
+            color= context.getResources().getColor(R.color.c_kml_temp_13);
+        }else if (value>55){
+            color= context.getResources().getColor(R.color.c_kml_temp_12);
+        }else if (value>50){
+            color= context.getResources().getColor(R.color.c_kml_temp_11);
+        }else if (value>45){
+            color= context.getResources().getColor(R.color.c_kml_temp_10);
         }else if (value>40){
-            color= context.getResources().getColor(R.color.c_kml_temp_3);
+            color= context.getResources().getColor(R.color.c_kml_temp_9);
+        }else if (value>35){
+            color= context.getResources().getColor(R.color.c_kml_temp_8);
+        }else if (value>30){
+            color= context.getResources().getColor(R.color.c_kml_temp_7);
+        }else if (value>25){
+            color= context.getResources().getColor(R.color.c_kml_temp_6);
         }else if (value>20){
+            color= context.getResources().getColor(R.color.c_kml_temp_5);
+        }else if (value>15){
+            color= context.getResources().getColor(R.color.c_kml_temp_4);
+        }else if (value>10){
+            color= context.getResources().getColor(R.color.c_kml_temp_3);
+        }else if (value>5){
             color= context.getResources().getColor(R.color.c_kml_temp_2);
         }else {
             color= context.getResources().getColor(R.color.c_kml_temp_1);

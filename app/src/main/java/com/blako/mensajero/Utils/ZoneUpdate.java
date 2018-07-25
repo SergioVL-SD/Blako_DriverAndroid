@@ -14,4 +14,9 @@ public class ZoneUpdate {
 
         return Math.abs(calendar.getTimeInMillis()-actualTime);
     }
+
+    public static Long delay(long syncTime){
+        Long actualTime= System.currentTimeMillis();
+        return Math.abs(syncTime-actualTime);
+    }
 }

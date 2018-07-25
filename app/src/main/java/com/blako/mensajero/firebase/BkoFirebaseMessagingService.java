@@ -150,9 +150,16 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
 
                         }else if (pushNotificationType.equals("geofences")) {
                             Log.d("Geofence_Push","OK");
-                            Integer jitter = Integer.valueOf((String) jsonPushNotification.get("jitter"));
+                            Log.d("Geofence_JSON", jsonPushNotification.toString());
                             Intent localIntent= new Intent(Constants.ACTION_SERVICE_ZONES);
-                            localIntent.putExtra("jitter",jitter);
+                            try{
+                                Integer jitter = Integer.valueOf((String) jsonPushNotification.get("jitter"));
+                                Long sync= jsonPushNotification.getLong("sync");
+                                localIntent.putExtra("jitter",jitter);
+                                localIntent.putExtra("sync",sync);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                             LocalBroadcastManager.getInstance(BkoFirebaseMessagingService.this).sendBroadcast(localIntent);
                         } else if (pushNotificationType.equals("consulttrips")) {
                             if (!worker.isAvailable())
