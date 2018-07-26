@@ -597,7 +597,7 @@ public class BkoDataMaganer {
 
     public static String getWorkerId(Context context) {
         SharedPreferences sp = context.getSharedPreferences("blakoPreferences", Activity.MODE_PRIVATE);
-        return sp.getString("workerId", "");
+        return sp.getString("workerId", "85");
     }
 
     public static void setWorkerId(Context context, String workerId) {

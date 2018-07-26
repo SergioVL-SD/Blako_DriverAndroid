@@ -1,5 +1,7 @@
 package com.blako.mensajero.Utils;
 
+import android.util.Log;
+
 import java.util.Calendar;
 
 public class ZoneUpdate {

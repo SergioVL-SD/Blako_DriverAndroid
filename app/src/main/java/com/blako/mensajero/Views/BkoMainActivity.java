@@ -14,13 +14,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
@@ -32,8 +28,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -53,9 +47,14 @@ import android.widget.Toast;
 import com.blako.mensajero.Adapters.BkoOffersAdapter;
 import com.blako.mensajero.Adapters.BkoOffersListAdapter;
 import com.blako.mensajero.Adapters.BkoTripsAdapter;
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoCore;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
+import com.blako.mensajero.DB.AppDbHelper;
+import com.blako.mensajero.DB.models.Hub;
+import com.blako.mensajero.DB.models.HubDefaultValue;
+import com.blako.mensajero.DB.models.HubPoints;
 import com.blako.mensajero.Dao.BkoUserDao;
 import com.blako.mensajero.R;
 import com.blako.mensajero.Services.BkoGpsTrackerAlarmReceiver;
@@ -63,7 +62,9 @@ import com.blako.mensajero.Services.BkoSendLocationToServer;
 import com.blako.mensajero.Services.LocationService;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.DeliveryZoneCheck;
+import com.blako.mensajero.Utils.FormatUtils;
 import com.blako.mensajero.Utils.HttpRequest;
+import com.blako.mensajero.Utils.HubUtils;
 import com.blako.mensajero.Utils.KmlColorTempUtil;
 import com.blako.mensajero.Utils.LocationUtils;
 import com.blako.mensajero.Utils.ZoneUpdate;
@@ -81,6 +82,7 @@ import com.blako.mensajero.VO.BkoUserStatusResponse;
 import com.blako.mensajero.VO.BkoVehicleVO;
 import com.blako.mensajero.firebase.BkoFirebaseDatabase;
 import com.blako.mensajero.firebase.BkoFirebaseStorage;
+import com.blako.mensajero.models.HubConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -94,36 +96,26 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.maps.android.data.kml.KmlLayer;
-import com.google.maps.android.data.kml.KmlPlacemark;
-import com.google.maps.android.data.kml.KmlPolygon;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -134,10 +126,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
-
-import ch.hsr.geohash.GeoHash;
 
 public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, BkoCore.OffersListener, BkoOffersListAdapter.OffersListListener, GpsStatus.Listener {
@@ -147,10 +136,11 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private BkoPushRequest statusRequest;
     private String responseOrderStatus;
     private boolean disconecting = false;
-    //private FirebaseDatabase firebaseDatabase;
+    private FirebaseDatabase firebaseDatabase;
     private FirebaseStorage firebaseStorage;
 
-    //private DatabaseReference locationDatabaseReference;
+    private DatabaseReference emergencyDatabaseReference;
+    private ValueEventListener emergencyListener;
 
     private static final long NO_CONECTION_TIME = 1000 * 60 * 4; //--> Minutes
     private int status=0;
@@ -159,6 +149,10 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     /*private KmlLayer kmlLayer;
     private List<KmlPlacemark> placemarkList;*/
+
+    private AppDbHelper dbHelper;
+
+    private ArrayList<HubConfig> hubConfigs;
 
     private ArrayList<PolygonOptions> kmlHubs;
     private ArrayList<MarkerOptions> kmlLabels;
@@ -178,6 +172,8 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     private Long sync;
 
+    private boolean doomsday= false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,7 +186,10 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         setupTabs();
         mLayout.setTouchEnabled(false);
         decimalFormat= new DecimalFormat("#.##");
+        dbHelper= App.getInstance().getDbHelper();
         //placemarkList= new ArrayList<>();
+
+        hubConfigs= new ArrayList<>();
 
         kmlHubs= new ArrayList<>();
         kmlLabels= new ArrayList<>();
@@ -199,15 +198,20 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         kmlHubIds= new ArrayList<>();
         kmlHubPolygons= new ArrayList<>();
 
-        //firebaseDatabase= BkoFirebaseDatabase.getDatabase();
+        firebaseDatabase= BkoFirebaseDatabase.getDatabase();
         firebaseStorage= BkoFirebaseStorage.getStorage();
+
+        emergencyDatabaseReference= firebaseDatabase.getReference().child("doomsday").child("activate");
+        emergencyDatabaseReference.keepSynced(true);
+
+        emergencyDatabaseReference.setValue(false);
 
         registerGpsStatusListener();
 
-        FirebaseMessaging.getInstance().subscribeToTopic("highScores");
+        /*FirebaseMessaging.getInstance().subscribeToTopic("highScores");
         FirebaseMessaging.getInstance().subscribeToTopic("use_cases");
         FirebaseMessaging.getInstance().subscribeToTopic("config");
-        FirebaseMessaging.getInstance().subscribeToTopic("remote");
+        FirebaseMessaging.getInstance().subscribeToTopic("remote");*/
 
         filterZones= new IntentFilter(Constants.ACTION_SERVICE_ZONES);
         receiveZoneUpdate= new ReceiveZoneUpdate();
@@ -217,7 +221,14 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             @Override
             public void run() {
                 if (map!=null){
-                    new GetKmlJSONFromServiceTask().execute();
+                    if (hubConfigs.size()==0){
+                        new GetKmlFromDbTask().execute();
+                    }else {
+                        if (!doomsday){
+                            new GetKmlValuesFromServerTask().execute();
+                        }
+                    }
+                    //new GetKmlJSONFromServiceTask().execute();
                 }
             }
         };
@@ -229,10 +240,14 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 if (map!=null){
                     Log.d("Kml_Shown","OK");
                     map.clear();
-                    new GetTextMarkerFromJSONTask().execute(kmlHubs);
-                    for (PolygonOptions kml:kmlHubs){
-                        kmlHubPolygons.add(map.addPolygon(kml));
+                    //new GetTextMarkerFromJSONTask().execute(kmlHubs);
+                    new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
+                    for (HubConfig hubConfig:hubConfigs){
+                        map.addPolygon(hubConfig.getPolygonOptions());
                     }
+                    /*for (PolygonOptions kml:kmlHubs){
+                        kmlHubPolygons.add(map.addPolygon(kml));
+                    }*/
                 }
             }
         };
@@ -506,7 +521,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         public void onReceive(Context context, Intent intent) {
             if (intent!=null){
                 int jitter= 50;
-                sync= System.currentTimeMillis() + (1000*60*5);
+                sync= System.currentTimeMillis() + (1000*60*3);
                 try{
                     jitter= intent.getExtras().getInt("jitter");
                     sync= intent.getExtras().getLong("sync");
@@ -521,7 +536,131 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         }
     }
 
-    private class GetKmlJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject>{
+    private class GetKmlFromDbTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            hubConfigs.clear();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ArrayList<Hub> hubs= dbHelper.getAllHubs();
+            ArrayList<HubPoints> points= new ArrayList<>();
+            for (Hub hub:hubs){
+                points.clear();
+                HubDefaultValue defaultValue= dbHelper.getHubDefaultValueByHubId(hub.getHubId());
+                PolygonOptions kmlHubDefault= HubUtils.getDefaultPolygonOptions(BkoMainActivity.this,defaultValue.getValue());
+                points= dbHelper.getAllPointsByHubId(hub.getHubId());
+                for (HubPoints point:points){
+                    kmlHubDefault.add(new LatLng(point.getLat(),point.getLon()));
+                }
+                hubConfigs.add(new HubConfig(Integer.parseInt(hub.getHubId()),hub.getLabel(),defaultValue.getRate(),0,kmlHubDefault));
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (doomsday){
+                if (map!=null){
+                    Log.d("Kml_Shown","OK");
+                    map.clear();
+                    new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
+                    for (HubConfig hubConfig:hubConfigs){
+                        map.addPolygon(hubConfig.getPolygonOptions());
+                    }
+                }
+            }else {
+                new GetKmlValuesFromServerTask().execute();
+            }
+        }
+    }
+
+    private class GetKmlValuesFromServerTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try{
+                String geoHash= "9g3qw";
+                Location actualLocation= BkoDataMaganer.getCurrentUserLocation(BkoMainActivity.this);
+                if (actualLocation!=null){
+                    geoHash= LocationUtils.getGeoHash(actualLocation, 9);
+                }
+                String endpointValues= "/"+BkoDataMaganer.getWorkerId(BkoMainActivity.this)+"/"+geoHash;
+                Log.d("Kml_Url","https://zones-dot-blako-support.appspot.com/rates"+endpointValues);
+                String kmlResponse = HttpRequest
+                        .get("https://zones-dot-blako-support.appspot.com/rates"+endpointValues)
+                        .connectTimeout(5000).readTimeout(5000).body();
+
+                if (kmlResponse!=null){
+                    Log.d("Kml_Response",kmlResponse);
+                    JSONObject responseObject= new JSONObject(kmlResponse);
+                    if (responseObject.getBoolean("success")){
+                        JSONObject zonesObject= responseObject.getJSONObject("zones");
+                        JSONArray ratesArray= zonesObject.getJSONArray("rates");
+                        for (int i=0;i<ratesArray.length();i++){
+                            JSONObject rateObject= ratesArray.getJSONObject(i);
+                            for (HubConfig hub:hubConfigs){
+                                if (hub.getHubId()==rateObject.getInt("id")){
+                                    PolygonOptions options= hub.getPolygonOptions();
+                                    HubUtils.changePolygonOptionsValues(BkoMainActivity.this,options,rateObject.getInt("value"));
+                                    hub.setRate(rateObject.getDouble("base"));
+                                    hub.setRateExtra(rateObject.getDouble("diff"));
+                                    hub.setPolygonOptions(options);
+                                }
+                            }
+                        }
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            syncHandler.removeCallbacks(syncRunnable);
+            if (sync==null){
+                /*Log.d("Kml_Sync","500");
+                syncHandler.postDelayed(syncRunnable,500);*/
+                if (map!=null){
+                    Log.d("Kml_Shown","OK");
+                    map.clear();
+                    new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
+                    for (HubConfig hubConfig:hubConfigs){
+                        map.addPolygon(hubConfig.getPolygonOptions());
+                    }
+                }
+            }else {
+                syncHandler.postDelayed(syncRunnable,ZoneUpdate.delay(sync));
+            }
+        }
+    }
+
+    private class GetTextMarkerFromHubConfigTask extends AsyncTask<ArrayList<HubConfig>,Void,ArrayList<MarkerOptions>>{
+
+        @Override
+        protected ArrayList<MarkerOptions> doInBackground(ArrayList<HubConfig>... hubs) {
+            ArrayList<MarkerOptions> markerOptions= new ArrayList<>();
+            for (HubConfig hub:hubs[0]){
+                PolygonOptions options= hub.getPolygonOptions();
+                LatLng markerLocation= KmlColorTempUtil.getCenterOfPolygon(options.getPoints());
+                markerOptions.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,markerLocation, FormatUtils.moneyFormat(hub.getRate()+hub.getRateExtra()),3,19));
+            }
+            return markerOptions;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<MarkerOptions> markerOptions) {
+            for (MarkerOptions marker:markerOptions){
+                map.addMarker(marker);
+            }
+        }
+    }
+
+    /*private class GetKmlJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject>{
 
         @Override
         protected JSONObject doInBackground(Void... voids) {
@@ -553,9 +692,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 new GetKmlFromJSONTask().execute(jsonObject);
             }
         }
-    }
+    }*/
 
-    private class GetKmlFromJSONTask extends AsyncTask<JSONObject,Void,Void>{
+    /*private class GetKmlFromJSONTask extends AsyncTask<JSONObject,Void,Void>{
 
         @Override
         protected void onPreExecute() {
@@ -613,9 +752,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 syncHandler.postDelayed(syncRunnable,ZoneUpdate.delay(sync));
             }
         }
-    }
+    }*/
 
-    private class GetTextMarkerFromJSONTask extends AsyncTask<ArrayList<PolygonOptions>,Void,Void>{
+    /*private class GetTextMarkerFromJSONTask extends AsyncTask<ArrayList<PolygonOptions>,Void,Void>{
 
         @Override
         protected void onPreExecute() {
@@ -638,7 +777,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 map.addMarker(marker);
             }
         }
-    }
+    }*/
 
     private void onSwitchChecked(boolean checked) {
         if(disconecting)
@@ -693,6 +832,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     protected void onResume() {
         super.onResume();
         Log.d("GeneralFlux","Activity: "+BkoMainActivity.this.getLocalClassName());
+        attachEmergencyListener();
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveZoneUpdate,filterZones);
         BkoCore.setoffersInterfaceListener(this);
         if (mGoogleApiClient == null)
@@ -1000,6 +1140,10 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 }
             }
             map.clear();
+            new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
+            for (HubConfig hubConfig:hubConfigs){
+                map.addPolygon(hubConfig.getPolygonOptions());
+            }
             /*if (kmlLayer!=null && map!=null){
                 try {
                     kmlLayer.addLayerToMap();
@@ -2034,7 +2178,8 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new GetKmlJSONFromServiceTask().execute();
+                    //new GetKmlJSONFromServiceTask().execute();
+                    new GetKmlFromDbTask().execute();
                 }
             },4000);
         }
@@ -2089,6 +2234,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     @Override
     protected void onPause() {
+        detachEmergencyListener();
         zoneHandler.removeCallbacks(zoneRunnable);
         syncHandler.removeCallbacks(syncRunnable);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiveZoneUpdate);
@@ -2297,11 +2443,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             map.clear();
 
         if (map!=null){
-            for (PolygonOptions polygon:kmlHubs){
-                map.addPolygon(polygon);
-            }
-            for (MarkerOptions marker:kmlLabels){
-                map.addMarker(marker);
+            new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
+            for (HubConfig hubConfig:hubConfigs){
+                map.addPolygon(hubConfig.getPolygonOptions());
             }
             /*try {
                 kmlLayer.addLayerToMap();
@@ -2420,5 +2564,33 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             }
         }
         return false;
+    }
+
+    private void attachEmergencyListener(){
+        if (emergencyListener==null){
+            emergencyListener= new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    doomsday= (boolean) dataSnapshot.getValue();
+                    if (doomsday){
+                        new GetKmlFromDbTask().execute();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+
+            emergencyDatabaseReference.addValueEventListener(emergencyListener);
+        }
+    }
+
+    private void detachEmergencyListener(){
+        if (emergencyListener!=null){
+            emergencyDatabaseReference.removeEventListener(emergencyListener);
+            emergencyListener= null;
+        }
     }
 }

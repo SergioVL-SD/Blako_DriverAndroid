@@ -37,6 +37,7 @@
 
     <!--Rate Zone-->
     <color name="c_rate">#37474F</color>
+    <color name="c_rate_extra">#1f61cc</color>
     <color name="c_rate_shadow">#ffffff</color>
 
     <color name="blako_black">#000000</color>
