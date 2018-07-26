@@ -60,6 +60,7 @@ import com.blako.mensajero.R;
 import com.blako.mensajero.Services.BkoGpsTrackerAlarmReceiver;
 import com.blako.mensajero.Services.BkoSendLocationToServer;
 import com.blako.mensajero.Services.LocationService;
+import com.blako.mensajero.Utils.AppPreferences;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.DeliveryZoneCheck;
 import com.blako.mensajero.Utils.FormatUtils;
@@ -137,7 +138,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private String responseOrderStatus;
     private boolean disconecting = false;
     private FirebaseDatabase firebaseDatabase;
-    private FirebaseStorage firebaseStorage;
+    //private FirebaseStorage firebaseStorage;
 
     private DatabaseReference emergencyDatabaseReference;
     private ValueEventListener emergencyListener;
@@ -151,6 +152,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private List<KmlPlacemark> placemarkList;*/
 
     private AppDbHelper dbHelper;
+    private AppPreferences preferences;
 
     private ArrayList<HubConfig> hubConfigs;
 
@@ -187,6 +189,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         mLayout.setTouchEnabled(false);
         decimalFormat= new DecimalFormat("#.##");
         dbHelper= App.getInstance().getDbHelper();
+        preferences= App.getInstance().getPreferences();
         //placemarkList= new ArrayList<>();
 
         hubConfigs= new ArrayList<>();
@@ -198,8 +201,10 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         kmlHubIds= new ArrayList<>();
         kmlHubPolygons= new ArrayList<>();
 
+        new SendNewTokenTask().execute(preferences.getFirebaseToken());
+
         firebaseDatabase= BkoFirebaseDatabase.getDatabase();
-        firebaseStorage= BkoFirebaseStorage.getStorage();
+        //firebaseStorage= BkoFirebaseStorage.getStorage();
 
         emergencyDatabaseReference= firebaseDatabase.getReference().child("doomsday").child("activate");
         emergencyDatabaseReference.keepSynced(true);
@@ -512,6 +517,20 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         }*/
     }
 
+    private class SendNewTokenTask extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            Map<String, String> mapVisible = new HashMap<String, String>();
+            mapVisible.put("workerId", BkoDataMaganer.getWorkerId(BkoMainActivity.this));
+            mapVisible.put("token", strings[0]);
+            String tokenServiceResponse = HttpRequest.post(Constants.GET_UPDATE_TOKEN(BkoMainActivity.this), mapVisible, true).connectTimeout(5000).readTimeout(5000).body();
+            Log.d("Token_Refreshed", tokenServiceResponse);
+            Log.d("Token_String", strings[0]);
+            return null;
+        }
+    }
+
     private class ReceiveZoneUpdate extends BroadcastReceiver {
 
         public ReceiveZoneUpdate() {
@@ -521,7 +540,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         public void onReceive(Context context, Intent intent) {
             if (intent!=null){
                 int jitter= 50;
-                sync= System.currentTimeMillis() + (1000*60*3);
+                sync= (System.currentTimeMillis() + (1000*60*3))/1000;
                 try{
                     jitter= intent.getExtras().getInt("jitter");
                     sync= intent.getExtras().getLong("sync");
@@ -832,6 +851,15 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     protected void onResume() {
         super.onResume();
         Log.d("GeneralFlux","Activity: "+BkoMainActivity.this.getLocalClassName());
+        if (mapReady && preferences.getSycTime()!=0 && System.currentTimeMillis()>(preferences.getSycTime()*1000)){
+            preferences.setSycTime(0);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new GetKmlValuesFromServerTask().execute();
+                }
+            },800);
+        }
         attachEmergencyListener();
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveZoneUpdate,filterZones);
         BkoCore.setoffersInterfaceListener(this);
@@ -2071,6 +2099,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     @Override
     public void onMapReady(GoogleMap arg0) {
+        Log.d("MapReady","Ok");
         map = arg0;
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
         if (map != null) {
@@ -2244,6 +2273,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 mGoogleApiClient.disconnect();
             }
         sendOneLodation();
+        sync= null;
         super.onPause();
     }
 

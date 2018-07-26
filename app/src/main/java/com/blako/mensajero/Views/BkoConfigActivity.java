@@ -141,7 +141,7 @@ public class BkoConfigActivity extends BaseActivity {
             try{
                 Log.d("Hubs_Values_Url","http://sandbox.manager.blako.com/api/v1/hubs");
                 String defaultValuesResponse = HttpRequest
-                        .post("http://sandbox.manager.blako.com/api/v1/hubs")
+                        .post("http://manager.blako.com/api/v1/hubs")
                         .connectTimeout(5000).readTimeout(5000).body();
 
                 if (defaultValuesResponse!=null){

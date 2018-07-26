@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,10 +26,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blako.mensajero.Adapters.BkoServicesAdapter;
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
 import com.blako.mensajero.Dao.BkoUserDao;
 import com.blako.mensajero.R;
+import com.blako.mensajero.Utils.AppPreferences;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
 import com.blako.mensajero.VO.BkoRecoverStatusVO;
@@ -72,12 +75,16 @@ public class BkoVehiclesActivity extends BaseActivity {
     private String uploadPhotoResponse;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private   Uri takenPhotoUri;
+
+    private AppPreferences preferences= App.getInstance().getPreferences();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bko_vehicles_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        new SendNewTokenTask().execute(preferences.getFirebaseToken());
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -230,6 +237,19 @@ public class BkoVehiclesActivity extends BaseActivity {
         });
         setInfo();
         setData();
+    }
+
+    private class SendNewTokenTask extends AsyncTask<String,Void,Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            Map<String, String> mapVisible = new HashMap<String, String>();
+            mapVisible.put("workerId", BkoDataMaganer.getWorkerId(BkoVehiclesActivity.this));
+            mapVisible.put("token", strings[0]);
+            String tokenServiceResponse = HttpRequest.post(Constants.GET_UPDATE_TOKEN(BkoVehiclesActivity.this), mapVisible, true).connectTimeout(5000).readTimeout(5000).body();
+            Log.d("Token_Refreshed", tokenServiceResponse);
+            return null;
+        }
     }
 
 

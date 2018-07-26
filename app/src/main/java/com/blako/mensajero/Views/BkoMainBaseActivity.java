@@ -37,6 +37,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoCore;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
@@ -47,6 +48,7 @@ import com.blako.mensajero.R;
 import com.blako.mensajero.Services.BkoHeartBeatPushAliveReceiver;
 import com.blako.mensajero.Services.BkoSendLocationToServer;
 import com.blako.mensajero.Services.RegistrationIntentService;
+import com.blako.mensajero.Utils.AppPreferences;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
 import com.blako.mensajero.VO.BkoOffer;
@@ -136,7 +138,7 @@ public class BkoMainBaseActivity extends BaseActivity {
     protected View offerNavV;
     protected TextView timeRemainginTv;
     protected View searchOffer;
-    protected Boolean mapReady;
+    protected Boolean mapReady= false;
     protected Boolean onOfferToChekin = null;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected ImageView refreshIv;
@@ -172,6 +174,9 @@ public class BkoMainBaseActivity extends BaseActivity {
     protected List<BkoPenaltyResponse> penaltys;
     protected boolean internetProblem;
     protected android.app.AlertDialog dialogNotAnnouncements;
+
+    private AppPreferences preferences;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -272,6 +277,8 @@ public class BkoMainBaseActivity extends BaseActivity {
         okComfirmTv = (AppCompatImageView) findViewById(R.id.okComfirmTv);
         arrowComfirmTv = (AppCompatImageView) findViewById(R.id.arrowComfirmTv);
         phoneDeliveryTv = (TextView) findViewById(R.id.phoneDeliveryTv);
+
+        preferences= App.getInstance().getPreferences();
 
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -519,7 +526,7 @@ public class BkoMainBaseActivity extends BaseActivity {
 
                     BkoUser user = BkoUserDao.Consultar(BkoMainBaseActivity.this);
                     tokenServiceResponse = null;
-                    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                    String refreshedToken = preferences.getFirebaseToken();
 
 
                     if (user != null) {

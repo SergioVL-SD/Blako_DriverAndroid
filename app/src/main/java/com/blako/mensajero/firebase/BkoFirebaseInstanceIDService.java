@@ -1,14 +1,24 @@
 package com.blako.mensajero.firebase;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
+import com.blako.mensajero.App;
+import com.blako.mensajero.BkoDataMaganer;
+import com.blako.mensajero.Constants;
+import com.blako.mensajero.Utils.AppPreferences;
+import com.blako.mensajero.Utils.HttpRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class BkoFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyFirebaseIIDService";
+    private AppPreferences preferences= App.getInstance().getPreferences();
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -20,24 +30,10 @@ public class BkoFirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(refreshedToken);
-    }
-    // [END refresh_token]
-
-    /**
-     * Persist token to third-party servers.
-     *
-     * Modify this method to associate the user's FCM InstanceID token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+        preferences.setFirebaseToken(refreshedToken);
     }
 }

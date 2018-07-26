@@ -23,9 +23,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
 import com.blako.mensajero.Dao.BkoUserDao;
+import com.blako.mensajero.Utils.AppPreferences;
 import com.blako.mensajero.Utils.HttpRequest;
 import com.blako.mensajero.VO.BkoUser;
 import com.blako.mensajero.Views.BkoTicketActivity;
@@ -42,6 +44,8 @@ public class RegistrationIntentService extends IntentService {
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
 
+    private AppPreferences preferences;
+
     public RegistrationIntentService() {
         super(TAG);
     }
@@ -49,10 +53,9 @@ public class RegistrationIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        preferences= App.getInstance().getPreferences();
         try {
-
-            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            String refreshedToken = preferences.getFirebaseToken();
             BkoUser user = BkoUserDao.Consultar(RegistrationIntentService.this);
 
             if (user != null) {

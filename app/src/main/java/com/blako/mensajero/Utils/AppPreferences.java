@@ -9,6 +9,8 @@ public class AppPreferences {
 
     private final String HUBS_LAST_CHECK  = "hubsLastCheck";
     private final String HUBS_REVISION  = "hubsRevision";
+    private final String SYNC_TIME  = "syncTime";
+    private final String FIREBASE_TOKEN  = "firebaseToken";
 
     public AppPreferences(Context context) {
         sharedPreferences = context.getSharedPreferences("sharedData",Context.MODE_PRIVATE);
@@ -28,5 +30,21 @@ public class AppPreferences {
 
     public int getHubsRevision(){
         return sharedPreferences.getInt(HUBS_REVISION,0);
+    }
+
+    public void setSycTime(long value){
+        sharedPreferences.edit().putLong(SYNC_TIME,value).apply();
+    }
+
+    public long getSycTime(){
+        return sharedPreferences.getLong(SYNC_TIME,0);
+    }
+
+    public void setFirebaseToken(String token){
+        sharedPreferences.edit().putString(FIREBASE_TOKEN,token).apply();
+    }
+
+    public String getFirebaseToken(){
+        return sharedPreferences.getString(FIREBASE_TOKEN,"");
     }
 }

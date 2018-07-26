@@ -15,10 +15,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.blako.mensajero.Adapters.BkoTripsAdapter;
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
 import com.blako.mensajero.Dao.BkoUserDao;
 import com.blako.mensajero.R;
+import com.blako.mensajero.Utils.AppPreferences;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
 import com.blako.mensajero.VO.BkoChildTripVO;
@@ -51,6 +53,7 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
 
 
     private boolean sound;
+    private AppPreferences preferences;
 
     /**
      * Called when message is received.
@@ -62,6 +65,7 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d("Geofence_Trigger","Ok");
         sound = false;
+        preferences= App.getInstance().getPreferences();
         synchronized (this) {
             String data = "";//data.getString("Notice");
             String body = "";
@@ -157,6 +161,7 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                                 Long sync= jsonPushNotification.getLong("sync");
                                 localIntent.putExtra("jitter",jitter);
                                 localIntent.putExtra("sync",sync);
+                                preferences.setSycTime(sync);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }

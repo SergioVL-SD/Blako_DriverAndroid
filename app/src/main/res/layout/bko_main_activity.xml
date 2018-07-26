@@ -11,7 +11,8 @@
     sothree:umanoOverlay="true"
     sothree:umanoParallaxOffset="0dp"
     sothree:umanoScrollableView="@+id/offersRv"
-    sothree:umanoShadowHeight="0dp">
+    sothree:umanoShadowHeight="0dp"
+    android:keepScreenOn="true">
 
     <!-- MAIN CONTENT -->
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

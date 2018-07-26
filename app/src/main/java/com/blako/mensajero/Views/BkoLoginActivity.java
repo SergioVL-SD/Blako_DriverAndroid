@@ -19,10 +19,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blako.mensajero.App;
 import com.blako.mensajero.BkoDataMaganer;
 import com.blako.mensajero.Constants;
 import com.blako.mensajero.Dao.BkoUserDao;
 import com.blako.mensajero.R;
+import com.blako.mensajero.Utils.AppPreferences;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
 import com.blako.mensajero.VO.BkoChildTripVO;
@@ -54,11 +56,15 @@ public class BkoLoginActivity extends BaseActivity {
     private BkoRecoverStatusVO recoverStatusVO;
     private String visibilityResponse;
 
+    private AppPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bko_login_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        preferences= App.getInstance().getPreferences();
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -172,7 +178,7 @@ public class BkoLoginActivity extends BaseActivity {
                                         return;
 
 
-                                    String token = FirebaseInstanceId.getInstance().getToken();
+                                    String token = preferences.getFirebaseToken();
 
                                     if (token == null || token.length() == 0)
                                         return;
