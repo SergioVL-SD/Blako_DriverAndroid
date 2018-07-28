@@ -156,13 +156,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     private ArrayList<HubConfig> hubConfigs;
 
-    private ArrayList<PolygonOptions> kmlHubs;
-    private ArrayList<MarkerOptions> kmlLabels;
-    private ArrayList<String> kmlLabelsString;
-
-    private ArrayList<Integer> kmlHubIds;
-    private ArrayList<Polygon> kmlHubPolygons;
-
     private ReceiveZoneUpdate receiveZoneUpdate;
     private IntentFilter filterZones;
 
@@ -193,13 +186,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         //placemarkList= new ArrayList<>();
 
         hubConfigs= new ArrayList<>();
-
-        kmlHubs= new ArrayList<>();
-        kmlLabels= new ArrayList<>();
-        kmlLabelsString= new ArrayList<>();
-
-        kmlHubIds= new ArrayList<>();
-        kmlHubPolygons= new ArrayList<>();
 
         new SendNewTokenTask().execute(preferences.getFirebaseToken());
 
@@ -2568,7 +2554,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                         Location zoneLocation= BkoDataMaganer.getCurrentUserLocation(this);
                         if (zoneLocation!=null){
                             LatLng latLngLocation= new LatLng(zoneLocation.getLatitude(),zoneLocation.getLongitude());
-                            int hubId= DeliveryZoneCheck.getActualHubFromLocation(kmlHubPolygons,kmlHubIds,latLngLocation);
+                            // TODO: 27/07/2018 CAMBIAR!!!
+                            int hubId= DeliveryZoneCheck.getActualHubFromLocation(hubConfigs,latLngLocation);
+                            Log.d("Hub_Id",String.valueOf(hubId));
                             BkoDataMaganer.setActualDeliveryZoneId(BkoMainActivity.this,hubId);
                         }
                     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.blako.mensajero.R;
+import com.blako.mensajero.models.HubConfig;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
@@ -77,12 +78,11 @@ public class DeliveryZoneCheck {
         return context.getString(R.string.unknown_area);
     }
 
-    public static Integer getActualHubFromLocation(ArrayList<Polygon> hubs,ArrayList<Integer> hubIds, LatLng location){
-        for (int i=0;i<hubs.size();i++){
-            Polygon hub= hubs.get(i);
-            List<LatLng> boundaryCoordinates = hub.getPoints();
+    public static Integer getActualHubFromLocation(ArrayList<HubConfig> hubConfigs, LatLng location){
+        for (HubConfig hubConfig:hubConfigs){
+            List<LatLng> boundaryCoordinates = hubConfig.getPolygonOptions().getPoints();
             if (PolyUtil.containsLocation(location,boundaryCoordinates,true)){
-                return hubIds.get(i);
+                return hubConfig.getHubId();
             }
         }
         return 1;
