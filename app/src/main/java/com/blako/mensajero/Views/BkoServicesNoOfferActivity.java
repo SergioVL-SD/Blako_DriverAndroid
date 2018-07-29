@@ -350,7 +350,9 @@ public class BkoServicesNoOfferActivity extends BaseActivity implements TimePick
                             balanceRv.setAdapter(adapter);
                             //costTv.setText("$"+response.getTotal_cost());
                         } else {
-                            Toast.makeText(BkoServicesNoOfferActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                Toast.makeText(BkoServicesNoOfferActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
 

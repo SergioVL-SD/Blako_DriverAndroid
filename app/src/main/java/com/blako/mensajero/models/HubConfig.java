@@ -11,13 +11,15 @@ public class HubConfig {
     private double rate;
     private double rateExtra;
     private PolygonOptions polygonOptions;
+    private Integer regionId;
 
-    public HubConfig(Integer hubId, String label, double rate, double rateExtra, PolygonOptions polygonOptions) {
+    public HubConfig(Integer hubId, String label, double rate, double rateExtra, PolygonOptions polygonOptions, Integer regionId) {
         this.hubId = hubId;
         this.label = label;
         this.rate = rate;
         this.rateExtra = rateExtra;
         this.polygonOptions = polygonOptions;
+        this.regionId = regionId;
     }
 
     public Integer getHubId() {
@@ -58,5 +60,13 @@ public class HubConfig {
 
     public void setPolygonOptions(PolygonOptions polygonOptions) {
         this.polygonOptions = polygonOptions;
+    }
+
+    public Integer getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(Integer regionId) {
+        this.regionId = regionId;
     }
 }

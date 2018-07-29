@@ -11,6 +11,7 @@ public class AppPreferences {
     private final String HUBS_REVISION  = "hubsRevision";
     private final String SYNC_TIME  = "syncTime";
     private final String FIREBASE_TOKEN  = "firebaseToken";
+    private final String HUBS_REGION_ID  = "hubsRegionId";
 
     public AppPreferences(Context context) {
         sharedPreferences = context.getSharedPreferences("sharedData",Context.MODE_PRIVATE);
@@ -46,5 +47,13 @@ public class AppPreferences {
 
     public String getFirebaseToken(){
         return sharedPreferences.getString(FIREBASE_TOKEN,"");
+    }
+
+    public void setHubsRegionId(int id){
+        sharedPreferences.edit().putInt(HUBS_REGION_ID,id).apply();
+    }
+
+    public int getHubsRegionId(){
+        return sharedPreferences.getInt(HUBS_REGION_ID,0);
     }
 }

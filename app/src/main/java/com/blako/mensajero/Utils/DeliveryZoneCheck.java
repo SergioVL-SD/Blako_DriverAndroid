@@ -88,6 +88,16 @@ public class DeliveryZoneCheck {
         return 1;
     }
 
+    public static Integer getActualRegionFromLocation(ArrayList<HubConfig> hubConfigs, LatLng location){
+        for (HubConfig hubConfig:hubConfigs){
+            List<LatLng> boundaryCoordinates = hubConfig.getPolygonOptions().getPoints();
+            if (PolyUtil.containsLocation(location,boundaryCoordinates,true)){
+                return hubConfig.getRegionId();
+            }
+        }
+        return 0;
+    }
+
     public static KmlPlacemark getActualPlacemarkFromLocation(Context context, List<KmlPlacemark> placemarks, LatLng location){
         for (KmlPlacemark placemark:placemarks){
             KmlPolygon polygon= (KmlPolygon) placemark.getGeometry();

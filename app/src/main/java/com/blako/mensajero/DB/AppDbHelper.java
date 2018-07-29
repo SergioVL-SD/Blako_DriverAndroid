@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class AppDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME= "db_blako";
-    private static final int DATABASE_VERSION= 1;
+    private static final int DATABASE_VERSION= 2;
 
     public AppDbHelper(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -47,6 +47,18 @@ public class AppDbHelper extends SQLiteOpenHelper {
     public ArrayList<Hub> getAllHubs(){
         ArrayList<Hub> hubs= new ArrayList<>();
         Cursor cursor= getReadableDatabase().query(HubEntry.TABLE_NAME, null, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            hubs.add(new Hub(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return hubs;
+    }
+
+    public ArrayList<Hub> getAllHubsByRegionId(String regionId){
+        ArrayList<Hub> hubs= new ArrayList<>();
+        Cursor cursor= getReadableDatabase().query(HubEntry.TABLE_NAME, null, HubEntry.REGION_ID+" LIKE ?", new String[] {regionId}, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){
             hubs.add(new Hub(cursor));

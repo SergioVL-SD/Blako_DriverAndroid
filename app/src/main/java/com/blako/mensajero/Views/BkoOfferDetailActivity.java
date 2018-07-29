@@ -569,7 +569,9 @@ public class BkoOfferDetailActivity extends BaseActivity implements OnMapReadyCa
 
                             }
                         } else {
-                            Toast.makeText(BkoOfferDetailActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                Toast.makeText(BkoOfferDetailActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
 

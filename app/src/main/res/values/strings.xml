@@ -247,4 +247,7 @@
     <!--Request Activity (Zone Fee)-->
     <string name="label_base_fee">Tarifa</string>
     <string name="text_default_fee">$</string>
+
+    <!--Response-->
+    <string name="response_no_parameters">faltan parametros</string>
 </resources>

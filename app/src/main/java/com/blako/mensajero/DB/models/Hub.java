@@ -10,11 +10,13 @@ public class Hub {
     private String hubId;
     private String label;
     private Integer revision;
+    private Integer regionId;
 
-    public Hub(String hubId, String label, Integer revision) {
+    public Hub(String hubId, String label, Integer revision, Integer regionId) {
         this.hubId = hubId;
         this.label = label;
         this.revision = revision;
+        this.regionId = regionId;
     }
 
     public Hub(Cursor cursor) {
@@ -22,6 +24,7 @@ public class Hub {
         this.hubId = cursor.getString(cursor.getColumnIndexOrThrow(HubEntry.HUB_ID));
         this.label = cursor.getString(cursor.getColumnIndexOrThrow(HubEntry.LABEL));
         this.revision = cursor.getInt(cursor.getColumnIndexOrThrow(HubEntry.REVISION));
+        this.regionId = cursor.getInt(cursor.getColumnIndexOrThrow(HubEntry.REGION_ID));
     }
 
     public ContentValues toContentValues(){
@@ -29,6 +32,7 @@ public class Hub {
         values.put(HubEntry.HUB_ID,hubId);
         values.put(HubEntry.LABEL,label);
         values.put(HubEntry.REVISION,revision);
+        values.put(HubEntry.REGION_ID,regionId);
         return values;
     }
 
@@ -36,7 +40,8 @@ public class Hub {
         return "CREATE TABLE "+HubEntry.TABLE_NAME+" ("+HubEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
                 +HubEntry.HUB_ID+" TEXT,"
                 +HubEntry.LABEL+" TEXT,"
-                +HubEntry.REVISION+" INTEGER)";
+                +HubEntry.REVISION+" INTEGER,"
+                +HubEntry.REGION_ID+" INTEGER)";
     }
 
     public String getId() {
@@ -65,5 +70,13 @@ public class Hub {
 
     public void setRevision(Integer revision) {
         this.revision = revision;
+    }
+
+    public Integer getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(Integer regionId) {
+        this.regionId = regionId;
     }
 }

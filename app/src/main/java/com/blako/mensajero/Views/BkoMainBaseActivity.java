@@ -552,12 +552,14 @@ public class BkoMainBaseActivity extends BaseActivity {
                         BkoRequestResponse response = gson.fromJson(tokenServiceResponse, BkoRequestResponse.class);
                         if (response != null) {
                             if (response.isResponse()) {
-
-                                Toast.makeText(BkoMainBaseActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                    Toast.makeText(BkoMainBaseActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
 
                             } else {
-                                Toast.makeText(BkoMainBaseActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
-
+                                if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                    Toast.makeText(BkoMainBaseActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
 
                             }
                         } else {

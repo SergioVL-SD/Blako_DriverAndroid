@@ -186,7 +186,9 @@ public class BkoConfirmItemsActivity extends BaseActivity {
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         } else {
-                            Toast.makeText(BkoConfirmItemsActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                Toast.makeText(BkoConfirmItemsActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
 

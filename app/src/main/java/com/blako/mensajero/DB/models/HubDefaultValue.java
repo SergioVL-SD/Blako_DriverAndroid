@@ -10,11 +10,13 @@ public class HubDefaultValue {
     private String hubId;
     private Integer value;
     private Double rate;
+    private Integer regionId;
 
-    public HubDefaultValue(String hubId, Integer value, Double rate) {
+    public HubDefaultValue(String hubId, Integer value, Double rate, Integer regionId) {
         this.hubId = hubId;
         this.value = value;
         this.rate = rate;
+        this.regionId = regionId;
     }
 
     public HubDefaultValue(Cursor cursor) {
@@ -22,6 +24,7 @@ public class HubDefaultValue {
         this.hubId = cursor.getString(cursor.getColumnIndexOrThrow(DefaultValueEntry.HUB_ID));
         this.value = cursor.getInt(cursor.getColumnIndexOrThrow(DefaultValueEntry.VALUE));
         this.rate = cursor.getDouble(cursor.getColumnIndexOrThrow(DefaultValueEntry.RATE));
+        this.regionId = cursor.getInt(cursor.getColumnIndexOrThrow(DefaultValueEntry.REGION_ID));
     }
 
     public ContentValues toContentValues(){
@@ -29,6 +32,7 @@ public class HubDefaultValue {
         values.put(DefaultValueEntry.HUB_ID,hubId);
         values.put(DefaultValueEntry.VALUE,value);
         values.put(DefaultValueEntry.RATE,rate);
+        values.put(DefaultValueEntry.REGION_ID,regionId);
         return values;
     }
 
@@ -36,7 +40,8 @@ public class HubDefaultValue {
         return "CREATE TABLE "+DefaultValueEntry.TABLE_NAME+" ("+DefaultValueEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
                 +DefaultValueEntry.HUB_ID+" TEXT,"
                 +DefaultValueEntry.VALUE+" INTEGER,"
-                +DefaultValueEntry.RATE+" REAL)";
+                +DefaultValueEntry.RATE+" REAL,"
+                +DefaultValueEntry.REGION_ID+" INTEGER)";
     }
 
     public String getId() {
@@ -65,5 +70,13 @@ public class HubDefaultValue {
 
     public void setRate(Double rate) {
         this.rate = rate;
+    }
+
+    public Integer getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(Integer regionId) {
+        this.regionId = regionId;
     }
 }

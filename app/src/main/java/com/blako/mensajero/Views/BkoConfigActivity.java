@@ -43,8 +43,13 @@ public class BkoConfigActivity extends BaseActivity {
         preferences= App.getInstance().getPreferences();
         dbHelper= App.getInstance().getDbHelper();
 
+        if (dbHelper.getAllHubs().size()==0){
+            preferences.setHubsRevision(0);
+            preferences.setHubsLastCheck("");
+        }
+
         if (!preferences.getHubsLastCheck().equals(DateUtils.getActualDate())){
-            new GetHubsJSONFromServiceTask().execute();
+            new GetDefaultValuesJSONFromServiceTask().execute();
         }else {
             initApp();
         }
@@ -63,6 +68,63 @@ public class BkoConfigActivity extends BaseActivity {
 
         } catch (Exception e) {
             e.fillInStackTrace();
+        }
+    }
+
+    private class GetDefaultValuesJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(Void... voids) {
+            try{
+                Log.d("Hubs_Values_Url","http://manager.blako.com/api/v1/hubs");
+                String defaultValuesResponse = HttpRequest
+                        .post("http://manager.blako.com/api/v1/hubs")
+                        .connectTimeout(5000).readTimeout(5000).body();
+
+                if (defaultValuesResponse!=null){
+                    Log.d("Hubs_Values_Response",defaultValuesResponse);
+                    return new JSONObject(defaultValuesResponse);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            if (jsonObject!=null){
+                new GetDefaultValuesFromJSONTask().execute(jsonObject);
+            }else {
+                new GetDefaultValuesJSONFromServiceTask().execute();
+            }
+        }
+    }
+
+    private class GetDefaultValuesFromJSONTask extends AsyncTask<JSONObject,Void,Void>{
+
+        @Override
+        protected Void doInBackground(JSONObject... jsonObjects) {
+            try {
+                if (jsonObjects[0].getBoolean("success")){
+                    JSONObject dataObject= jsonObjects[0].getJSONObject("data");
+                    dbHelper.deleteAllHubDefaultValues();
+                    JSONArray hubsArray = dataObject.getJSONArray("hubs");
+                    for (int i=0;i<hubsArray.length();i++){
+                        JSONObject hubObject= hubsArray.getJSONObject(i);
+                        HubDefaultValue defaultValue= new HubDefaultValue(String.valueOf(hubObject.getInt("city_id")),hubObject.getInt("value"),hubObject.getDouble("rate"),hubObject.getInt("region_id"));
+                        dbHelper.saveHubDefaultValue(defaultValue);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            new GetHubsJSONFromServiceTask().execute();
         }
     }
 
@@ -112,71 +174,16 @@ public class BkoConfigActivity extends BaseActivity {
                         JSONArray hubsArray = zonesObject.getJSONArray("hubs");
                         for (int i=0;i<hubsArray.length();i++){
                             JSONObject hubObject= hubsArray.getJSONObject(i);
-                            Hub hub= new Hub(String.valueOf(hubObject.getInt("id")),hubObject.getString("label"),zonesObject.getInt("revision"));
+                            String hubId= String.valueOf(hubObject.getInt("id"));
+                            HubDefaultValue defaultValue= dbHelper.getHubDefaultValueByHubId(hubId);
+                            Hub hub= new Hub(hubId,hubObject.getString("label"),zonesObject.getInt("revision"),defaultValue.getRegionId());
                             dbHelper.saveHub(hub);
                             JSONArray latArray= hubObject.getJSONArray("lats");
                             JSONArray longArray= hubObject.getJSONArray("lons");
                             for (int j=0;j<latArray.length();j++){
-                                dbHelper.savePoint(new HubPoints(String.valueOf(hubObject.getInt("id")),latArray.getDouble(j),longArray.getDouble(j)));
+                                dbHelper.savePoint(new HubPoints(hubId,latArray.getDouble(j),longArray.getDouble(j)));
                             }
                         }
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            new GetDefaultValuesJSONFromServiceTask().execute();
-        }
-    }
-
-    private class GetDefaultValuesJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject> {
-
-        @Override
-        protected JSONObject doInBackground(Void... voids) {
-            try{
-                Log.d("Hubs_Values_Url","http://sandbox.manager.blako.com/api/v1/hubs");
-                String defaultValuesResponse = HttpRequest
-                        .post("http://manager.blako.com/api/v1/hubs")
-                        .connectTimeout(5000).readTimeout(5000).body();
-
-                if (defaultValuesResponse!=null){
-                    Log.d("Hubs_Values_Response",defaultValuesResponse);
-                    return new JSONObject(defaultValuesResponse);
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            if (jsonObject!=null){
-                new GetDefaultValuesFromJSONTask().execute(jsonObject);
-            }else {
-                new GetDefaultValuesJSONFromServiceTask().execute();
-            }
-        }
-    }
-
-    private class GetDefaultValuesFromJSONTask extends AsyncTask<JSONObject,Void,Void>{
-
-        @Override
-        protected Void doInBackground(JSONObject... jsonObjects) {
-            try {
-                if (jsonObjects[0].getBoolean("success")){
-                    JSONObject dataObject= jsonObjects[0].getJSONObject("data");
-                    dbHelper.deleteAllHubDefaultValues();
-                    JSONArray hubsArray = dataObject.getJSONArray("hubs");
-                    for (int i=0;i<hubsArray.length();i++){
-                        JSONObject hubObject= hubsArray.getJSONObject(i);
-                        HubDefaultValue defaultValue= new HubDefaultValue(String.valueOf(hubObject.getInt("city_id")),hubObject.getInt("value"),hubObject.getDouble("rate"));
-                        dbHelper.saveHubDefaultValue(defaultValue);
                     }
                 }
             } catch (JSONException e) {

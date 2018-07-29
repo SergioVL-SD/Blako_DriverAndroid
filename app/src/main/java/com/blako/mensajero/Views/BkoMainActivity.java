@@ -212,14 +212,14 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             @Override
             public void run() {
                 if (map!=null){
-                    if (hubConfigs.size()==0){
+                    new GetKmlFromDbTask().execute();
+                    /*if (hubConfigs.size()==0){
                         new GetKmlFromDbTask().execute();
                     }else {
                         if (!doomsday){
                             new GetKmlValuesFromServerTask().execute();
                         }
-                    }
-                    //new GetKmlJSONFromServiceTask().execute();
+                    }*/
                 }
             }
         };
@@ -231,14 +231,10 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 if (map!=null){
                     Log.d("Kml_Shown","OK");
                     map.clear();
-                    //new GetTextMarkerFromJSONTask().execute(kmlHubs);
                     new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
                     for (HubConfig hubConfig:hubConfigs){
                         map.addPolygon(hubConfig.getPolygonOptions());
                     }
-                    /*for (PolygonOptions kml:kmlHubs){
-                        kmlHubPolygons.add(map.addPolygon(kml));
-                    }*/
                 }
             }
         };
@@ -560,7 +556,19 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 for (HubPoints point:points){
                     kmlHubDefault.add(new LatLng(point.getLat(),point.getLon()));
                 }
-                hubConfigs.add(new HubConfig(Integer.parseInt(hub.getHubId()),hub.getLabel(),defaultValue.getRate(),0,kmlHubDefault));
+                hubConfigs.add(new HubConfig(Integer.parseInt(hub.getHubId()),hub.getLabel(),defaultValue.getRate(),0,kmlHubDefault,hub.getRegionId()));
+            }
+            Location location= BkoDataMaganer.getCurrentUserLocation(BkoMainActivity.this);
+            if (location!=null){
+                LatLng latLngLocation= new LatLng(location.getLatitude(),location.getLongitude());
+                int actualRegionId= DeliveryZoneCheck.getActualRegionFromLocation(hubConfigs,latLngLocation);
+                Log.d("Kml_Region_Local", String.valueOf(actualRegionId));
+                Log.d("Kml_Region_Push", String.valueOf(preferences.getHubsRegionId()));
+                if (actualRegionId!=0){
+                    hubConfigs= HubUtils.filterHubConfigsByRegion(hubConfigs,actualRegionId);
+                }else if (preferences.getHubsRegionId()!=0){
+                    hubConfigs= HubUtils.filterHubConfigsByRegion(hubConfigs, preferences.getHubsRegionId());
+                }
             }
             return null;
         }
@@ -628,8 +636,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         protected void onPostExecute(Void aVoid) {
             syncHandler.removeCallbacks(syncRunnable);
             if (sync==null){
-                /*Log.d("Kml_Sync","500");
-                syncHandler.postDelayed(syncRunnable,500);*/
                 if (map!=null){
                     Log.d("Kml_Shown","OK");
                     map.clear();
@@ -842,7 +848,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new GetKmlValuesFromServerTask().execute();
+                    new GetKmlFromDbTask().execute();
                 }
             },800);
         }
@@ -1073,7 +1079,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                             }
                             recoverAppStateifService();
                         } else {
-                            Toast.makeText(BkoMainActivity.this, recoverStatusVO.getMessage(), Toast.LENGTH_SHORT).show();
+                            if (!recoverStatusVO.getMessage().equals(getString(R.string.response_no_parameters))){
+                                Toast.makeText(BkoMainActivity.this, recoverStatusVO.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                             BkoDataMaganer.setStatusService(Constants.SERVICE_STATUS_FREE, BkoMainActivity.this);
                         }
                     } catch (Exception e) {
@@ -1410,7 +1418,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                                     BkoDataMaganer.setStatusService(Constants.SERVICE_STATUS_FREE, BkoMainActivity.this);
                                 }
                             } else {
-                                Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                    Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         } else {
                             Toast.makeText(BkoMainActivity.this, getString(R.string.blako_error), Toast.LENGTH_SHORT).show();
@@ -1776,10 +1786,14 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                         if (response != null) {
                             if (response.isResponse()) {
                                 getAnnoucements();
-                                Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                    Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
 
                             } else {
-                                Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                    Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         } else {
                             Toast.makeText(BkoMainActivity.this, getString(R.string.blako_error), Toast.LENGTH_SHORT).show();
@@ -1898,10 +1912,14 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                                     Intent intent = new Intent(BkoMainActivity.this, BkoMainActivity.class);
                                     startActivity(intent);
                                 }
-                                Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                    Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
 
                             } else {
-                                Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                    Toast.makeText(BkoMainActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                                 onwaySB.setProgress(10);
                                 checkInSB.setProgress(10);
                                 checktoutSB.setProgress(10);
@@ -2156,44 +2174,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             }
             recoverAppStateifService();
 
-            /*StorageReference kmlReference= firebaseStorage.getReference().child("kml-produccion/delivery-zones.kml");
-            try {
-                final File kmlFile= File.createTempFile("delivery-zones","kml");
-                kmlReference.getFile(kmlFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        Log.d("KmlDownload", "Success");
-                        try {
-                            final FileInputStream inputStream= new FileInputStream(kmlFile);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    kmlLayer= DeliveryZoneCheck.getLayerFromKml(BkoMainActivity.this, map, inputStream);
-                                    if (kmlLayer!=null){
-                                        placemarkList= DeliveryZoneCheck.getPlacemarks(DeliveryZoneCheck.getMainContainer(kmlLayer));
-                                    }
-                                }
-                            },2000);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e){
-                            e.printStackTrace();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("KmlDownload", e.getLocalizedMessage());
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    //new GetKmlJSONFromServiceTask().execute();
                     new GetKmlFromDbTask().execute();
                 }
             },4000);

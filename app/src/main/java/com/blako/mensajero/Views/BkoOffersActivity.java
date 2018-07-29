@@ -359,7 +359,9 @@ public class BkoOffersActivity extends  BaseActivity implements TimePickerDialog
                             balanceRv.setAdapter(adapter);
                             //costTv.setText("$"+response.getTotal_cost());
                         } else {
-                            Toast.makeText(BkoOffersActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            if (!response.getMessage().equals(getString(R.string.response_no_parameters))){
+                                Toast.makeText(BkoOffersActivity.this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
 

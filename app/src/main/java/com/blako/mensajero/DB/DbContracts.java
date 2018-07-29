@@ -10,6 +10,7 @@ public class DbContracts {
         public static final String HUB_ID= "hubId";
         public static final String LABEL= "label";
         public static final String REVISION= "revision";
+        public static final String REGION_ID= "regionId";
     }
 
     public static class PointEntry implements BaseColumns {
@@ -26,5 +27,6 @@ public class DbContracts {
         public static final String HUB_ID= "hubId";
         public static final String VALUE= "value";
         public static final String RATE= "rate";
+        public static final String REGION_ID= "regionId";
     }
 }

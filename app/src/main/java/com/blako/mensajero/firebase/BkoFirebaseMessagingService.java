@@ -157,11 +157,13 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                             Log.d("Geofence_JSON", jsonPushNotification.toString());
                             Intent localIntent= new Intent(Constants.ACTION_SERVICE_ZONES);
                             try{
-                                Integer jitter = Integer.valueOf((String) jsonPushNotification.get("jitter"));
+                                Integer jitter = jsonPushNotification.getInt("jitter");
                                 Long sync= jsonPushNotification.getLong("sync");
+                                Integer regionId= jsonPushNotification.getInt("region_id");
                                 localIntent.putExtra("jitter",jitter);
                                 localIntent.putExtra("sync",sync);
                                 preferences.setSycTime(sync);
+                                preferences.setHubsRegionId(regionId);
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
