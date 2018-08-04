@@ -248,6 +248,11 @@
     <string name="label_base_fee">Tarifa</string>
     <string name="text_default_fee">$</string>
 
+    <!--Demand Bar-->
+    <string name="tv_demand">Demanda</string>
+    <string name="tv_high">Alta</string>
+    <string name="tv_low">Baja</string>
+
     <!--Response-->
     <string name="response_no_parameters">faltan parametros</string>
 </resources>

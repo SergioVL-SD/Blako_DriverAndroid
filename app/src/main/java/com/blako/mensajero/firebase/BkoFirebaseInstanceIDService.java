@@ -1,18 +1,9 @@
 package com.blako.mensajero.firebase;
 
-import android.os.AsyncTask;
-import android.util.Log;
-
 import com.blako.mensajero.App;
-import com.blako.mensajero.BkoDataMaganer;
-import com.blako.mensajero.Constants;
 import com.blako.mensajero.Utils.AppPreferences;
-import com.blako.mensajero.Utils.HttpRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class BkoFirebaseInstanceIDService extends FirebaseInstanceIdService {

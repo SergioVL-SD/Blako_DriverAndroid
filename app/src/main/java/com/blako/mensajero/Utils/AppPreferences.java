@@ -9,6 +9,7 @@ public class AppPreferences {
 
     private final String HUBS_LAST_CHECK  = "hubsLastCheck";
     private final String HUBS_REVISION  = "hubsRevision";
+    private final String HUBS_UPDATE  = "hubsUpdate";
     private final String SYNC_TIME  = "syncTime";
     private final String FIREBASE_TOKEN  = "firebaseToken";
     private final String HUBS_REGION_ID  = "hubsRegionId";
@@ -31,6 +32,14 @@ public class AppPreferences {
 
     public int getHubsRevision(){
         return sharedPreferences.getInt(HUBS_REVISION,0);
+    }
+
+    public void setHubsUpdate(boolean value){
+        sharedPreferences.edit().putBoolean(HUBS_UPDATE,value).apply();
+    }
+
+    public boolean getHubsUpdate(){
+        return sharedPreferences.getBoolean(HUBS_UPDATE,true);
     }
 
     public void setSycTime(long value){

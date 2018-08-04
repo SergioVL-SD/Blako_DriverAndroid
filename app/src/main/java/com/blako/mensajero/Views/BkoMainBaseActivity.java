@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TabHost;
@@ -174,6 +175,7 @@ public class BkoMainBaseActivity extends BaseActivity {
     protected List<BkoPenaltyResponse> penaltys;
     protected boolean internetProblem;
     protected android.app.AlertDialog dialogNotAnnouncements;
+    protected LinearLayout llDemandButton, llDemandBar;
 
     private AppPreferences preferences;
 
@@ -277,6 +279,8 @@ public class BkoMainBaseActivity extends BaseActivity {
         okComfirmTv = (AppCompatImageView) findViewById(R.id.okComfirmTv);
         arrowComfirmTv = (AppCompatImageView) findViewById(R.id.arrowComfirmTv);
         phoneDeliveryTv = (TextView) findViewById(R.id.phoneDeliveryTv);
+        llDemandButton= (LinearLayout) findViewById(R.id.llDemandButton);
+        llDemandBar= (LinearLayout) findViewById(R.id.llDemandBar);
 
         preferences= App.getInstance().getPreferences();
 

@@ -44,8 +44,8 @@ public class BkoConfigActivity extends BaseActivity {
         dbHelper= App.getInstance().getDbHelper();
 
         if (dbHelper.getAllHubs().size()==0){
-            preferences.setHubsRevision(0);
             preferences.setHubsLastCheck("");
+            preferences.setHubsUpdate(true);
         }
 
         if (!preferences.getHubsLastCheck().equals(DateUtils.getActualDate())){
@@ -167,10 +167,10 @@ public class BkoConfigActivity extends BaseActivity {
             try {
                 if (jsonObjects[0].getBoolean("success")){
                     JSONObject zonesObject= jsonObjects[0].getJSONObject("zones");
-                    if (zonesObject.getInt("revision")!=preferences.getHubsRevision()){
+                    if (preferences.getHubsUpdate()){
+                        preferences.setHubsUpdate(false);
                         dbHelper.deleteAllHubs();
                         dbHelper.deleteAllPoints();
-                        preferences.setHubsRevision(zonesObject.getInt("revision"));
                         JSONArray hubsArray = zonesObject.getJSONArray("hubs");
                         for (int i=0;i<hubsArray.length();i++){
                             JSONObject hubObject= hubsArray.getJSONObject(i);

@@ -123,6 +123,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -250,6 +251,13 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         } catch (Exception e) {
             e.fillInStackTrace();
         }*/
+
+        llDemandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                llDemandBar.setVisibility(llDemandBar.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
+            }
+        });
 
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
@@ -600,10 +608,11 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 if (actualLocation!=null){
                     geoHash= LocationUtils.getGeoHash(actualLocation, 9);
                 }
-                String endpointValues= "/"+BkoDataMaganer.getWorkerId(BkoMainActivity.this)+"/"+geoHash;
-                Log.d("Kml_Url","https://zones-dot-blako-support.appspot.com/rates"+endpointValues);
+                String endpointValues= "/"+BkoDataMaganer.getWorkerId(BkoMainActivity.this)+"/"+String.valueOf(BkoDataMaganer.getActualDeliveryZoneId(BkoMainActivity.this))
+                        +"/"+geoHash+"/"+String.valueOf(BkoDataMaganer.getStatusService(BkoMainActivity.this));
+                Log.d("Kml_Url","https://zones-dot-blako-support.appspot.com/ratesf"+endpointValues);
                 String kmlResponse = HttpRequest
-                        .get("https://zones-dot-blako-support.appspot.com/rates"+endpointValues)
+                        .get("https://zones-dot-blako-support.appspot.com/ratesf"+endpointValues)
                         .connectTimeout(5000).readTimeout(5000).body();
 
                 if (kmlResponse!=null){
@@ -611,6 +620,10 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                     JSONObject responseObject= new JSONObject(kmlResponse);
                     if (responseObject.getBoolean("success")){
                         JSONObject zonesObject= responseObject.getJSONObject("zones");
+                        if (zonesObject.getInt("hubs_revision")!=preferences.getHubsRevision()){
+                            preferences.setHubsRevision(zonesObject.getInt("hubs_revision"));
+                            preferences.setHubsUpdate(true);
+                        }
                         JSONArray ratesArray= zonesObject.getJSONArray("rates");
                         for (int i=0;i<ratesArray.length();i++){
                             JSONObject rateObject= ratesArray.getJSONObject(i);
@@ -917,7 +930,8 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                     }
 
                 } else if (pushType.equals("withOutSended")) {
-                    Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    // TODO: 01/08/2018 notification commented
+                    /*Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(BkoMainActivity.this)
                             .setSmallIcon(R.drawable.motorcycle)
                             .setContentTitle("Blako")
@@ -937,7 +951,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                             vib.vibrate(1500);
                         }
                     }
-                    notificationManager.notify(0 /*     ID of notification */, notification);
+                    notificationManager.notify(0 *//*     ID of notification *//*, notification);*/
                 } else if (pushType.equals("finish")) {
                     finishAffinity();
                 }  else if (pushType.equals("finisoffer")) {
@@ -2442,9 +2456,13 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             map.clear();
 
         if (map!=null){
-            new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
-            for (HubConfig hubConfig:hubConfigs){
-                map.addPolygon(hubConfig.getPolygonOptions());
+            try{
+                new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
+                for (HubConfig hubConfig:hubConfigs){
+                    map.addPolygon(hubConfig.getPolygonOptions());
+                }
+            }catch (ConcurrentModificationException e){
+                e.printStackTrace();
             }
             /*try {
                 kmlLayer.addLayerToMap();

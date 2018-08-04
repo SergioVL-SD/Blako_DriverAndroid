@@ -193,6 +193,54 @@
 
                 </LinearLayout>
 
+                <!--todo Activar Demand Temp Bar-->
+                <LinearLayout
+                    android:id="@+id/llDemandButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="8dp"
+                    android:padding="8dp"
+                    android:gravity="center"
+                    android:background="@drawable/ll_demand_bar_bckg"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/s_tv_demand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/tv_demand"/>
+
+                    <LinearLayout
+                        android:id="@+id/llDemandBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            style="@style/s_tv_demand"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_high"/>
+
+                        <View
+                            android:layout_width="20dp"
+                            android:layout_height="150dp"
+                            android:background="@drawable/v_demand_bar"
+                            android:layout_margin="5dp"/>
+
+                        <TextView
+                            style="@style/s_tv_demand"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_low"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </RelativeLayout>
 
             <LinearLayout
