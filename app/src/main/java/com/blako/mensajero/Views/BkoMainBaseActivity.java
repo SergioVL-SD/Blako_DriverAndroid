@@ -179,6 +179,8 @@ public class BkoMainBaseActivity extends BaseActivity {
 
     private AppPreferences preferences;
 
+    private OnBaseActivityOptions onBaseActivityOptions;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -311,6 +313,8 @@ public class BkoMainBaseActivity extends BaseActivity {
         TextView versionTv = (TextView) view.findViewById(R.id.versionTv);
         versionTv.setText(version);
 
+        // TODO: 04/08/2018 opcion inhabilitada para actualizar tarifas de forma manual
+        //new SecondaryDrawerItem().withName(R.string.menu_refresh_kml_rates).withIdentifier(11).withSelectedTextColor(ContextCompat.getColor(this, R.color.blako_background)),
         drawerMenu = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(headerResult, false)
@@ -373,6 +377,8 @@ public class BkoMainBaseActivity extends BaseActivity {
                             startActivity(intent);
                         } else if (drawerItem != null && drawerItem.getIdentifier() == 10) {
                             updateToken();
+                        }else if (drawerItem != null && drawerItem.getIdentifier() == 11) {
+                            onBaseActivityOptions.refreshKmlAndRates();
                         }
                         drawerMenu.closeDrawer();
                         return true;
@@ -380,6 +386,14 @@ public class BkoMainBaseActivity extends BaseActivity {
                 })
                 .build();
 
+    }
+
+    public void setOnBaseActivityOptions(OnBaseActivityOptions onBaseActivityOptions) {
+        this.onBaseActivityOptions = onBaseActivityOptions;
+    }
+
+    public interface OnBaseActivityOptions{
+        void refreshKmlAndRates();
     }
 
     protected void loadBitmap(String url) {

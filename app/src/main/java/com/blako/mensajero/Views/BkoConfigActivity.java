@@ -1,5 +1,7 @@
 package com.blako.mensajero.Views;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -71,6 +73,20 @@ public class BkoConfigActivity extends BaseActivity {
         }
     }
 
+    private void chargeFailed(){
+        AlertDialog.Builder builder= new AlertDialog.Builder(BkoConfigActivity.this);
+        builder.setMessage(getString(R.string.dialog_charge_message));
+        builder.setPositiveButton(getString(R.string.dialog_charge_accept), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new GetDefaultValuesJSONFromServiceTask().execute();
+            }
+        });
+        AlertDialog alertDialog= builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
     private class GetDefaultValuesJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject> {
 
         @Override
@@ -96,7 +112,7 @@ public class BkoConfigActivity extends BaseActivity {
             if (jsonObject!=null){
                 new GetDefaultValuesFromJSONTask().execute(jsonObject);
             }else {
-                new GetDefaultValuesJSONFromServiceTask().execute();
+                chargeFailed();
             }
         }
     }
@@ -155,7 +171,7 @@ public class BkoConfigActivity extends BaseActivity {
             if (jsonObject!=null){
                 new GetHubsFromJSONTask().execute(jsonObject);
             }else {
-                new GetHubsJSONFromServiceTask().execute();
+                chargeFailed();
             }
         }
     }

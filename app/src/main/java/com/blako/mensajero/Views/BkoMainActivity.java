@@ -139,7 +139,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private String responseOrderStatus;
     private boolean disconecting = false;
     private FirebaseDatabase firebaseDatabase;
-    //private FirebaseStorage firebaseStorage;
 
     private DatabaseReference emergencyDatabaseReference;
     private ValueEventListener emergencyListener;
@@ -148,9 +147,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private int status=0;
     private int checkEvery= 15;
     private DecimalFormat decimalFormat;
-
-    /*private KmlLayer kmlLayer;
-    private List<KmlPlacemark> placemarkList;*/
 
     private AppDbHelper dbHelper;
     private AppPreferences preferences;
@@ -184,14 +180,12 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         decimalFormat= new DecimalFormat("#.##");
         dbHelper= App.getInstance().getDbHelper();
         preferences= App.getInstance().getPreferences();
-        //placemarkList= new ArrayList<>();
 
         hubConfigs= new ArrayList<>();
 
         new SendNewTokenTask().execute(preferences.getFirebaseToken());
 
         firebaseDatabase= BkoFirebaseDatabase.getDatabase();
-        //firebaseStorage= BkoFirebaseStorage.getStorage();
 
         emergencyDatabaseReference= firebaseDatabase.getReference().child("doomsday").child("activate");
         emergencyDatabaseReference.keepSynced(true);
@@ -199,11 +193,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         emergencyDatabaseReference.setValue(false);
 
         registerGpsStatusListener();
-
-        /*FirebaseMessaging.getInstance().subscribeToTopic("highScores");
-        FirebaseMessaging.getInstance().subscribeToTopic("use_cases");
-        FirebaseMessaging.getInstance().subscribeToTopic("config");
-        FirebaseMessaging.getInstance().subscribeToTopic("remote");*/
 
         filterZones= new IntentFilter(Constants.ACTION_SERVICE_ZONES);
         receiveZoneUpdate= new ReceiveZoneUpdate();
@@ -214,13 +203,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             public void run() {
                 if (map!=null){
                     new GetKmlFromDbTask().execute();
-                    /*if (hubConfigs.size()==0){
-                        new GetKmlFromDbTask().execute();
-                    }else {
-                        if (!doomsday){
-                            new GetKmlValuesFromServerTask().execute();
-                        }
-                    }*/
                 }
             }
         };
@@ -240,17 +222,12 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             }
         };
 
-        /*try {
-            BkoUser user = BkoUserDao.Consultar(this);
-            if (user!=null){
-                Log.d("FB_DB_User",user.getWorkerId());
-                locationDatabaseReference= firebaseDatabase.getReference().child("worker").child(user.getWorkerId());
-                locationDatabaseReference.keepSynced(true);
+        setOnBaseActivityOptions(new OnBaseActivityOptions() {
+            @Override
+            public void refreshKmlAndRates() {
+                new GetKmlFromDbTask().execute();
             }
-
-        } catch (Exception e) {
-            e.fillInStackTrace();
-        }*/
+        });
 
         llDemandButton.setOnClickListener(new View.OnClickListener() {
             @Override

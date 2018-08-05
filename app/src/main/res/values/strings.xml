@@ -253,6 +253,13 @@
     <string name="tv_high">Alta</string>
     <string name="tv_low">Baja</string>
 
+    <!--Dialog Kml Charge failed-->
+    <string name="dialog_charge_message">La descarga de zonas de cobertura y tarifas ha sido fallida.\nSe Reintentará la carga para continuar</string>
+    <string name="dialog_charge_accept">Aceptar</string>
+
+    <!--Drawer Options-->
+    <string name="menu_refresh_kml_rates">Actualizar zonas</string>
+
     <!--Response-->
     <string name="response_no_parameters">faltan parametros</string>
 </resources>
