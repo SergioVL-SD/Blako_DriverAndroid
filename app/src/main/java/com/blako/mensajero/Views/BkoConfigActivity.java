@@ -50,7 +50,7 @@ public class BkoConfigActivity extends BaseActivity {
             preferences.setHubsUpdate(true);
         }
 
-        if (!preferences.getHubsLastCheck().equals(DateUtils.getActualDate())){
+        if (!preferences.getHubsLastCheck().equals(DateUtils.getActualDate()) || preferences.getHubsUpdate()){
             new GetDefaultValuesJSONFromServiceTask().execute();
         }else {
             initApp();
@@ -192,12 +192,14 @@ public class BkoConfigActivity extends BaseActivity {
                             JSONObject hubObject= hubsArray.getJSONObject(i);
                             String hubId= String.valueOf(hubObject.getInt("id"));
                             HubDefaultValue defaultValue= dbHelper.getHubDefaultValueByHubId(hubId);
-                            Hub hub= new Hub(hubId,hubObject.getString("label"),zonesObject.getInt("revision"),defaultValue.getRegionId());
-                            dbHelper.saveHub(hub);
-                            JSONArray latArray= hubObject.getJSONArray("lats");
-                            JSONArray longArray= hubObject.getJSONArray("lons");
-                            for (int j=0;j<latArray.length();j++){
-                                dbHelper.savePoint(new HubPoints(hubId,latArray.getDouble(j),longArray.getDouble(j)));
+                            if (defaultValue!=null){
+                                Hub hub= new Hub(hubId,hubObject.getString("label"),zonesObject.getInt("revision"),defaultValue.getRegionId());
+                                dbHelper.saveHub(hub);
+                                JSONArray latArray= hubObject.getJSONArray("lats");
+                                JSONArray longArray= hubObject.getJSONArray("lons");
+                                for (int j=0;j<latArray.length();j++){
+                                    dbHelper.savePoint(new HubPoints(hubId,latArray.getDouble(j),longArray.getDouble(j)));
+                                }
                             }
                         }
                     }
