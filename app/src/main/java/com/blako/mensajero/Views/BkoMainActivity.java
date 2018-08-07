@@ -608,8 +608,8 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                                 if (hub.getHubId()==rateObject.getInt("id")){
                                     PolygonOptions options= hub.getPolygonOptions();
                                     HubUtils.changePolygonOptionsValues(BkoMainActivity.this,options,rateObject.getInt("value"));
-                                    hub.setRate(rateObject.getDouble("base"));
-                                    hub.setRateExtra(rateObject.getDouble("diff"));
+                                    hub.setRate(rateObject.getDouble("rate"));
+                                    hub.setRateExtra(rateObject.getDouble("incentive"));
                                     hub.setPolygonOptions(options);
                                 }
                             }
@@ -648,7 +648,11 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             for (HubConfig hub:hubs[0]){
                 PolygonOptions options= hub.getPolygonOptions();
                 LatLng markerLocation= KmlColorTempUtil.getCenterOfPolygon(options.getPoints());
-                markerOptions.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,markerLocation, FormatUtils.moneyFormat(hub.getRate()+hub.getRateExtra()),3,19));
+                if (hub.getRateExtra()!=0){
+                    markerOptions.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,markerLocation, FormatUtils.moneyFormat(hub.getRate()), FormatUtils.moneyFormat(hub.getRateExtra()),3,19));
+                }else {
+                    markerOptions.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,markerLocation, FormatUtils.moneyFormat(hub.getRate()),3,19));
+                }
             }
             return markerOptions;
         }

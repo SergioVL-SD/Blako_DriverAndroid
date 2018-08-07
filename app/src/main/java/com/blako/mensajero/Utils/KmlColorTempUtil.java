@@ -107,25 +107,25 @@ public class KmlColorTempUtil {
         return markerOptions;
     }
 
-    /*public static MarkerOptions createTextMarkerOptions(final Context context, final GoogleMap map,
-                                                        final LatLng location, final String text, final int padding,
+    public static MarkerOptions createTextMarkerOptions(final Context context, final GoogleMap map,
+                                                        final LatLng location, final String rate, final String extra, final int padding,
                                                         final int fontSize) {
         MarkerOptions marker = null;
 
-        if (context == null || map == null || location == null || text == null
+        if (context == null || map == null || location == null || rate == null || extra == null
                 || fontSize <= 0) {
             return marker;
         }
 
         final TextView tvBase = new TextView(context);
-        tvBase.setText(text);
+        tvBase.setText(rate);
         tvBase.setTextSize(fontSize);
         tvBase.setTypeface(null, Typeface.BOLD);
         tvBase.setShadowLayer(6,2,2,context.getResources().getColor(R.color.c_rate_shadow));
 
         final TextView tvExtra = new TextView(context);
-        tvExtra.setText(text);
-        tvExtra.setTextSize(fontSize);
+        tvExtra.setText(extra);
+        tvExtra.setTextSize(fontSize-2);
         tvExtra.setTypeface(null, Typeface.BOLD);
         tvExtra.setShadowLayer(6,2,2,context.getResources().getColor(R.color.c_rate_shadow));
 
@@ -133,10 +133,10 @@ public class KmlColorTempUtil {
         final Paint paintExtra = tvExtra.getPaint();
 
         final Rect boundsBase = new Rect();
-        paintBase.getTextBounds(text, 0, tvBase.length(), boundsBase);
+        paintBase.getTextBounds(rate, 0, tvBase.length(), boundsBase);
         paintBase.setTextAlign(Paint.Align.CENTER);
         final Rect boundsExtra = new Rect();
-        paintExtra.getTextBounds(text, 0, tvExtra.length(), boundsExtra);
+        paintExtra.getTextBounds(extra, 0, tvExtra.length(), boundsExtra);
         paintExtra.setTextAlign(Paint.Align.CENTER);
 
         final Bitmap.Config conf = Bitmap.Config.ARGB_8888;
@@ -147,10 +147,12 @@ public class KmlColorTempUtil {
         paintBase.setColor(context.getResources().getColor(R.color.c_rate));
         paintExtra.setColor(context.getResources().getColor(R.color.c_rate_extra));
 
-        canvasText.drawText("$ 35", canvasText.getWidth() / 2,
+        canvasText.drawText(rate, canvasText.getWidth() / 2,
                 (canvasText.getHeight()/2)-12, paintBase);
-        canvasText.drawText("+$ 15", canvasText.getWidth() / 2,
-                canvasText.getHeight()-9, paintExtra);
+        if (!extra.equals("$ 0")){
+            canvasText.drawText("+"+extra, canvasText.getWidth() / 2,
+                    canvasText.getHeight()-9, paintExtra);
+        }
 
         final MarkerOptions markerOptions = new MarkerOptions()
                 .position(location)
@@ -158,7 +160,7 @@ public class KmlColorTempUtil {
                 .anchor(0.5f, 1);
 
         return markerOptions;
-    }*/
+    }
 
     public static LatLng getCenterOfPolygon(List<LatLng> latLngList) {
         double[] centroid = {0.0, 0.0};
