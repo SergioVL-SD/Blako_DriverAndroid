@@ -32,6 +32,7 @@ import com.blako.mensajero.R;
 import com.blako.mensajero.Services.BkoSendLocationToServer;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
+import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.VO.BkoChildTripVO;
 import com.blako.mensajero.VO.BkoCompleteResponse;
 import com.blako.mensajero.VO.BkoItem;
@@ -220,7 +221,7 @@ public class BkoTicketActivity extends BaseActivity {
                         mapVisible.put("tripsType", currentTrip.getBko_orders_trips_type());
                         mapVisible.put("tripIdDestino", BkoDataMaganer.getCuurentTemporaryTrip().getDestino().get(0).getBko_orders_trips_id());
                         confirmItemsResponse = HttpRequest.get(Constants.GET_CONFIRM_ITEMS(BkoTicketActivity.this), mapVisible, true).connectTimeout(5000).readTimeout(5000).body();
-
+                        LogUtils.debug("Ticket_Response", confirmItemsResponse);
                         if (confirmItemsResponse != null && confirmItemsResponse.length() != 0) {
                             Gson gson = new Gson();
                             BkoRequestResponse response = gson.fromJson(confirmItemsResponse, BkoRequestResponse.class);
@@ -376,6 +377,7 @@ public class BkoTicketActivity extends BaseActivity {
             fos.close();
 
         } catch (IOException e) {
+            LogUtils.debug("File_Error",e.getLocalizedMessage());
 
             e.printStackTrace();
         }

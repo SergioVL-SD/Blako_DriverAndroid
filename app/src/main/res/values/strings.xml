@@ -37,7 +37,7 @@
     <string name="blako_cotrasenia">Contraseña</string>
     <string name="blako_entrar">INICIAR SESIÓN</string>
 
-    <string name="blako_registrar"><a href="https://materiales.sindelantal.mx/quiero_ser_repartidorsd">REGISTRARME</a></string>
+    <string name="blako_registrar"><a href="http://bit.ly/preregistrosd">REGISTRARME</a></string>
     <!-- VEHICLES -->
     <string name="blako_vehiculos_titulos">VEHICULOS</string>
     <string name="blako_vehiculos_selecciona">Seleccione Un Vehículo</string>

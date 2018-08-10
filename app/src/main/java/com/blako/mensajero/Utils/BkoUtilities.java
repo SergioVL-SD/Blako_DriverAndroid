@@ -402,7 +402,7 @@ public class BkoUtilities {
             else
                 return null;
         } catch (Exception e) {
-
+            LogUtils.debug("Ticket_Image_Error", e.toString());
         }
 
         return null;
@@ -553,6 +553,7 @@ public class BkoUtilities {
                         .get(Constants.GET_SEND_TICKET(context), map, true)
                         .connectTimeout(2500).url();
 
+                LogUtils.debug("Send_Ticket_Url", content.toString());
 
                 String path = BkoUtilities.pathSignature(context, currentTrip.getBko_orders_trips_id());
                 if (path == null)
@@ -561,6 +562,7 @@ public class BkoUtilities {
                 FileInputStream fis = new FileInputStream(path);
                 ticketReponse = BkoUtilities.thirdTry(content, fis, path);
 
+                LogUtils.debug("Send_Ticket_Response", ticketReponse);
 
                 if (ticketReponse != null) {
 
