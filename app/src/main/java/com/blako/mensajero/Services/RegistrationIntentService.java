@@ -62,7 +62,7 @@ public class RegistrationIntentService extends IntentService {
                 Map<String, String> mapVisible = new HashMap<String, String>();
                 mapVisible.put("workerId", user.getWorkerId());
                 mapVisible.put("token", refreshedToken);
-                String updateFirebaseToken = HttpRequest.get(Constants.GET_UPDATE_TOKEN(RegistrationIntentService.this), mapVisible, true).connectTimeout(5000).readTimeout(5000).body();
+                String updateFirebaseToken = HttpRequest.get(Constants.GET_UPDATE_TOKEN(RegistrationIntentService.this), mapVisible, true).connectTimeout(6000).readTimeout(6000).body();
 
                 if (updateFirebaseToken != null) {
 

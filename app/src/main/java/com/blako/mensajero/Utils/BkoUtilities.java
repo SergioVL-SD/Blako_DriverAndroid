@@ -512,7 +512,7 @@ public class BkoUtilities {
 
             URL contentPhoto = HttpRequest
                     .get(Constants.GET_UPLOAD_PHOTO_PROFILE(context), map, true)
-                    .connectTimeout(2500).url();
+                    .connectTimeout(5000).url();
             FileInputStream fisTxt = new FileInputStream(pathPhoto);
             String uploadPhoto = BkoUtilities.thirdTry(contentPhoto, fisTxt, pathPhoto);
             return uploadPhoto;
@@ -551,7 +551,7 @@ public class BkoUtilities {
                 //map.put("success","true");
                 URL content = HttpRequest
                         .get(Constants.GET_SEND_TICKET(context), map, true)
-                        .connectTimeout(2500).url();
+                        .connectTimeout(4000).url();
 
                 LogUtils.debug("Send_Ticket_Url", content.toString());
 
@@ -610,7 +610,7 @@ public class BkoUtilities {
                                     //map.put("success","true");
                                     URL contentTxt = HttpRequest
                                             .get(Constants.GET_SEND_TXT(context), mapCompleteTxt, true)
-                                            .connectTimeout(3000).url();
+                                            .connectTimeout(5000).url();
 
 
 
@@ -618,7 +618,7 @@ public class BkoUtilities {
                                                 //  mapComplete.put("typeFileTxt", "app");
                                                 completeResponse = HttpRequest
                                                         .get(Constants.GET_WORKER_COMPLETED_URL(context), mapComplete, true)
-                                                        .connectTimeout(3000).body();
+                                                        .connectTimeout(5000).body();
 
                                                 completeResponseVO = gson.fromJson(completeResponse, BkoCompleteResponse.class);
                                                 return completeResponseVO;

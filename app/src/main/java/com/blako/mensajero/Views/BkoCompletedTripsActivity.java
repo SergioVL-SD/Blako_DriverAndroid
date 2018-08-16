@@ -110,7 +110,7 @@ public class BkoCompletedTripsActivity extends BaseActivity {
                     BkoPushRequest statusRequest = BkoDataMaganer.getCurrentStatusRequest(BkoCompletedTripsActivity.this);
                     String tripsReponse = HttpRequest
                             .get(Constants.GET_GO_TRIPS(BkoCompletedTripsActivity.this) + "oId=" + statusRequest.getOid())
-                            .connectTimeout(5000).readTimeout(5000).body();
+                            .connectTimeout(6000).readTimeout(6000).body();
                     if (tripsReponse != null) {
                         tripsRespone = gson.fromJson(tripsReponse, BkoTrips.class);
 
@@ -119,7 +119,7 @@ public class BkoCompletedTripsActivity extends BaseActivity {
 
                         BkoUser user = BkoUserDao.Consultar(BkoCompletedTripsActivity.this);
                         responseOrderStatus = null;
-                        responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(BkoCompletedTripsActivity.this) + "connectToken=" + user.getConectToken() + "&oid=" + statusRequest.getOid()).connectTimeout(2500).body();
+                        responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(BkoCompletedTripsActivity.this) + "connectToken=" + user.getConectToken() + "&oid=" + statusRequest.getOid()).connectTimeout(3000).body();
 
                     }
 

@@ -117,9 +117,7 @@ public class BkoTripDetailActivity extends BaseActivity implements OnMapReadyCal
     private int status=0;
     private int checkEvery= 10;
 
-    //private FirebaseDatabase firebaseDatabase;
     private FirebaseStorage firebaseStorage;
-    //private DatabaseReference locationDatabaseReference;
     private KmlLayer kmlLayer;
     private List<KmlPlacemark> placemarkList;
     private Location originLocation;
@@ -178,21 +176,8 @@ public class BkoTripDetailActivity extends BaseActivity implements OnMapReadyCal
         receiveServiceLocation= new ReceiveServiceLocation();
 
         firebaseStorage= BkoFirebaseStorage.getStorage();
-        //firebaseDatabase= BkoFirebaseDatabase.getDatabase();
 
         placemarkList= new ArrayList<>();
-
-        /*try {
-            BkoUser user = BkoUserDao.Consultar(this);
-            if (user!=null){
-                Log.d("FB_DB_User",user.getWorkerId());
-                locationDatabaseReference= firebaseDatabase.getReference().child("worker").child(user.getWorkerId());
-                locationDatabaseReference.keepSynced(true);
-            }
-
-        } catch (Exception e) {
-            e.fillInStackTrace();
-        }*/
 
         phoneRestaurantIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -535,7 +520,7 @@ public class BkoTripDetailActivity extends BaseActivity implements OnMapReadyCal
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent!=null){
-                // TODO: 16/07/2018 location filter to enable btn
+                // TODO: 16/07/2018 location filter to enable/disable btn
                 Log.d("Location_received","Ok");
                 /*Location enableLocation= BkoDataMaganer.getCurrentUserLocation(BkoTripDetailActivity.this);
                 if (enableLocation!=null){
@@ -623,25 +608,20 @@ public class BkoTripDetailActivity extends BaseActivity implements OnMapReadyCal
                         timeTripTv.setText(hours + ":" + minutes + ":" + seconds + " hrs.");
 
                         if (hoursL > 0) {
-                            //holder.timeBackTv.setAlpha(0.1f);
                             timeTripTv.setBackgroundColor(ContextCompat.getColor(BkoTripDetailActivity.this,R.color.blako_red));
                         }
                         else if (minutesL < 45 &&minutesL>=30 ) {
                             timeTripTv.setBackgroundColor(ContextCompat.getColor(BkoTripDetailActivity.this,R.color.blako_orange));
                         }
                         else if (minutesL >= 45) {
-                            //holder.timeBackTv.setAlpha(0.1f);
                             timeTripTv.setBackgroundColor(ContextCompat.getColor(BkoTripDetailActivity.this,R.color.blako_red));
                         }
 
 
                     }catch (Exception e){
-
+                        e.printStackTrace();
                     }
 
-                    //  if(minutes>30){
-
-                    // }
                 }
 
                 public void onFinish() {
@@ -713,7 +693,6 @@ public class BkoTripDetailActivity extends BaseActivity implements OnMapReadyCal
                     /////2
                     if (trip.getBko_queuedtasks_receiver_betweenstreets() != null && trip.getBko_queuedtasks_receiver_betweenstreets().length() != 0)
                         addressOfferTv.setText(addressOfferTv.getText().toString().trim() + " (" + trip.getBko_queuedtasks_receiver_betweenstreets() + ")");
-                    //trip.setBko_customeraddress_telephone(trip);
                     seekALl.setVisibility(View.GONE);
                     onConfirmed();
                     if (trip.getBko_orders_trips_startdatetime() == null || trip.getBko_orders_trips_startdatetime().length() == 0) {
@@ -723,8 +702,6 @@ public class BkoTripDetailActivity extends BaseActivity implements OnMapReadyCal
                             mTitle.setText(BkoUtilities.ensureNotNullString(("TURNO/" + rangeTime) + " \n" + annoucement.getBko_announcementaddress_alias()));
                         }
 
-                        //phoneDeliveryTv.setText(trip.getBko_customeraddress_telephone());
-                        //phoneDeliveryIv.setVisibility(View.VISIBLE);
                         confirmTv.setText(getString(R.string.blako_destino_orden_confirmada));
                         okComfirmTv.setImageResource(R.drawable.circle_checkin_ok);
                         isDeliveryAddress = false;
@@ -739,7 +716,6 @@ public class BkoTripDetailActivity extends BaseActivity implements OnMapReadyCal
                         mTitle.setText(getString(R.string.blako_destino_orden_camino));
                         seekFLl.setVisibility(View.VISIBLE);
                         seekLl.setVisibility(View.INVISIBLE);
-                        //arrowComfirmTv.setColorFilter(R.color.blako_purple);
                         confirmTv.setText(getString(R.string.blako_confirmar_tarea));
                         phoneDeliveryIv.setVisibility(View.VISIBLE);
                         phoneRestaurantIv.setVisibility(View.GONE);
@@ -1115,9 +1091,6 @@ public class BkoTripDetailActivity extends BaseActivity implements OnMapReadyCal
             if (placemark!=null){
                 Log.d("Actual_Zone",placemark.getProperty("name"));
                 BkoDataMaganer.setActualDeliveryZone(BkoTripDetailActivity.this,placemark.getProperty("name"));
-                /*if (locationDatabaseReference!=null){
-                    locationDatabaseReference.child("currentLocation").child("zone").setValue(placemark.getProperty("name"));
-                }*/
             }
         }
     }

@@ -11,12 +11,14 @@ public class Hub {
     private String label;
     private Integer revision;
     private Integer regionId;
+    private Integer status;
 
-    public Hub(String hubId, String label, Integer revision, Integer regionId) {
+    public Hub(String hubId, String label, Integer revision, Integer regionId, Integer status) {
         this.hubId = hubId;
         this.label = label;
         this.revision = revision;
         this.regionId = regionId;
+        this.status = status;
     }
 
     public Hub(Cursor cursor) {
@@ -25,6 +27,7 @@ public class Hub {
         this.label = cursor.getString(cursor.getColumnIndexOrThrow(HubEntry.LABEL));
         this.revision = cursor.getInt(cursor.getColumnIndexOrThrow(HubEntry.REVISION));
         this.regionId = cursor.getInt(cursor.getColumnIndexOrThrow(HubEntry.REGION_ID));
+        this.status = cursor.getInt(cursor.getColumnIndexOrThrow(HubEntry.STATUS));
     }
 
     public ContentValues toContentValues(){
@@ -33,6 +36,7 @@ public class Hub {
         values.put(HubEntry.LABEL,label);
         values.put(HubEntry.REVISION,revision);
         values.put(HubEntry.REGION_ID,regionId);
+        values.put(HubEntry.STATUS,status);
         return values;
     }
 
@@ -41,7 +45,8 @@ public class Hub {
                 +HubEntry.HUB_ID+" TEXT,"
                 +HubEntry.LABEL+" TEXT,"
                 +HubEntry.REVISION+" INTEGER,"
-                +HubEntry.REGION_ID+" INTEGER)";
+                +HubEntry.REGION_ID+" INTEGER,"
+                +HubEntry.STATUS+" INTEGER)";
     }
 
     public String getId() {
@@ -78,5 +83,13 @@ public class Hub {
 
     public void setRegionId(Integer regionId) {
         this.regionId = regionId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

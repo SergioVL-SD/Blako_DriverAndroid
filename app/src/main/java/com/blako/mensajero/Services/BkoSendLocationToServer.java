@@ -64,8 +64,6 @@ public class BkoSendLocationToServer extends IntentService {
     }
 
     private boolean currentlyProcessingLocation = false;
-    //private FirebaseDatabase firebaseDatabase;
-    //private DatabaseReference locationDatabaseReference;
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -79,20 +77,6 @@ public class BkoSendLocationToServer extends IntentService {
 
         Location location = BkoDataMaganer.getCurrentUserLocation(this);
 
-        /*firebaseDatabase= BkoFirebaseDatabase.getDatabase();
-
-        try {
-            BkoUser user = BkoUserDao.Consultar(this);
-            if (user!=null){
-                Log.d("FB_DB_User",user.getWorkerId());
-                locationDatabaseReference= firebaseDatabase.getReference().child("worker").child(user.getWorkerId());
-                locationDatabaseReference.keepSynced(true);
-            }
-
-        } catch (Exception e) {
-            e.fillInStackTrace();
-        }*/
-
         if (location!=null){
             if (BkoDataMaganer.getOnDemand(this) || BkoDataMaganer.getCurrentOffer(this)!=null) {
                 Log.d(TAG, "SENDING: " + "(gps) BkoSendLocationToServer**");
@@ -104,39 +88,6 @@ public class BkoSendLocationToServer extends IntentService {
 
 
     protected void sendLocationDataToWebsite(final Location location) {
-
-        /*if (locationDatabaseReference!=null){
-            Log.d("FB_location","Ok");
-            String schema;
-            double lat= location.getLatitude();
-            double lng= location.getLongitude();
-            locationDatabaseReference.child("currentLocation").child("lat").setValue(lat);
-            locationDatabaseReference.child("currentLocation").child("lng").setValue(lng);
-            if(BkoDataMaganer.getCurrentOffer(this)!=null){
-                schema = "1";
-            }  else if(BkoDataMaganer.getOnDemand(this)){
-                schema = "2";
-            } else {
-                schema= "0";
-            }
-            locationDatabaseReference.child("currentLocation").child("schemaID").setValue(schema);
-            String ts = BkoUtilities.getTimeStamp().toString();
-            locationDatabaseReference.child("currentLocation").child("ts").setValue(ts);
-            locationDatabaseReference.child("locations").child(ts).child("lat").setValue(lat);
-            locationDatabaseReference.child("locations").child(ts).child("lng").setValue(lng);
-            String zone= BkoDataMaganer.getActualDeliveryZone(this);
-            if (!zone.equals("")){
-                locationDatabaseReference.child("locations").child(ts).child("zone").setValue(zone);
-            }
-            BkoRecoverStatusVO recoverStatusVO= BkoDataMaganer.getAllRecoverStatus(BkoSendLocationToServer.this);
-            if (recoverStatusVO!=null){
-                for (int i=0;i<recoverStatusVO.getOrder().size();i++){
-                    BkoOrderVO orderVO= recoverStatusVO.getOrder().get(i);
-                    locationDatabaseReference.child("currentLocation").child("orders").child(String.valueOf(i)).setValue(orderVO.getBko_orders_id());
-                    locationDatabaseReference.child("locations").child(ts).child("orders").child(String.valueOf(i)).setValue(orderVO.getBko_orders_id());
-                }
-            }
-        }*/
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getDefault());

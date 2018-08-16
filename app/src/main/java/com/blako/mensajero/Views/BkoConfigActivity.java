@@ -95,7 +95,7 @@ public class BkoConfigActivity extends BaseActivity {
                 Log.d("Hubs_Values_Url","http://manager.blako.com/api/v1/hubs");
                 String defaultValuesResponse = HttpRequest
                         .post("http://manager.blako.com/api/v1/hubs")
-                        .connectTimeout(5000).readTimeout(5000).body();
+                        .connectTimeout(6000).readTimeout(6000).body();
 
                 if (defaultValuesResponse!=null){
                     Log.d("Hubs_Values_Response",defaultValuesResponse);
@@ -154,7 +154,7 @@ public class BkoConfigActivity extends BaseActivity {
                 Log.d("Hubs_Url","https://zones-dot-blako-support.appspot.com/hubs"+endpointValues);
                 String kmlResponse = HttpRequest
                         .get("https://zones-dot-blako-support.appspot.com/hubs"+endpointValues)
-                        .connectTimeout(5000).readTimeout(5000).body();
+                        .connectTimeout(6000).readTimeout(6000).body();
 
                 if (kmlResponse!=null){
                     Log.d("Hubs_Response",kmlResponse);
@@ -193,7 +193,7 @@ public class BkoConfigActivity extends BaseActivity {
                             String hubId= String.valueOf(hubObject.getInt("id"));
                             HubDefaultValue defaultValue= dbHelper.getHubDefaultValueByHubId(hubId);
                             if (defaultValue!=null){
-                                Hub hub= new Hub(hubId,hubObject.getString("label"),zonesObject.getInt("revision"),defaultValue.getRegionId());
+                                Hub hub= new Hub(hubId,hubObject.getString("label"),zonesObject.getInt("revision"),defaultValue.getRegionId(),hubObject.getInt("status"));
                                 dbHelper.saveHub(hub);
                                 JSONArray latArray= hubObject.getJSONArray("lats");
                                 JSONArray longArray= hubObject.getJSONArray("lons");
@@ -232,7 +232,7 @@ public class BkoConfigActivity extends BaseActivity {
                                 try {
                                     responseOrderStatus = null;
                                     String requestId = BkoDataMaganer.getRequestId(BkoConfigActivity.this);
-                                    responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(BkoConfigActivity.this) + "connectToken=" + user.getConectToken() + "&oid=" + serviceClienteStatus.getOid()).connectTimeout(2500).body();
+                                    responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(BkoConfigActivity.this) + "connectToken=" + user.getConectToken() + "&oid=" + serviceClienteStatus.getOid()).connectTimeout(3000).body();
 
                                 } catch (Exception e) {
                                     e.printStackTrace();

@@ -241,6 +241,7 @@
     <string name="text_no_orders">Sin Ordenes</string>
     <string name="notification_dead">No te hemos podido localizar, ¿Deseas seguir conectado?</string>
     <string name="text_no_connection">Sin Conexión GPS</string>
+    <string name="text_out_of_hub">Fuera del Área de Cobertura</string>
     <string name="unknown_area">Fuera de cobertura</string>
     <string name="btn_reject_order">No lo quiero</string>
 

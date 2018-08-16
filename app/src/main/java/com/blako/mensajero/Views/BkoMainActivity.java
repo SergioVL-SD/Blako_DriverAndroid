@@ -136,7 +136,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     protected BkoMainActivity.InternetBroadCast internetBroadCast = new BkoMainActivity.InternetBroadCast();
     private BkoTrips tripsRespone;
     private BkoPushRequest statusRequest;
-    private String responseOrderStatus;
     private boolean disconecting = false;
     private FirebaseDatabase firebaseDatabase;
 
@@ -146,7 +145,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private static final long NO_CONECTION_TIME = 1000 * 60 * 4; //--> Minutes
     private int status=0;
     private int checkEvery= 15;
-    private DecimalFormat decimalFormat;
 
     private AppDbHelper dbHelper;
     private AppPreferences preferences;
@@ -177,7 +175,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         display.getSize(size);
         setupTabs();
         mLayout.setTouchEnabled(false);
-        decimalFormat= new DecimalFormat("#.##");
         dbHelper= App.getInstance().getDbHelper();
         preferences= App.getInstance().getPreferences();
 
@@ -216,7 +213,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                     map.clear();
                     new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
                     for (HubConfig hubConfig:hubConfigs){
-                        map.addPolygon(hubConfig.getPolygonOptions());
+                        if (hubConfig.getStatus()==1){
+                            map.addPolygon(hubConfig.getPolygonOptions());
+                        }
                     }
                 }
             }
@@ -470,18 +469,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         }
         checkForUpdates();
 
-        /*if(Build.VERSION.SDK_INT >= 23) {
-            if (!Settings.canDrawOverlays(BkoMainActivity.this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, 1234);
-            }
-        }
-        else
-        {
-            Intent intentOverlayButton= new Intent(BkoMainActivity.this, OverlayButtonService.class);
-            startService(intentOverlayButton);
-        }*/
     }
 
     private class SendNewTokenTask extends AsyncTask<String,Void,Void>{
@@ -541,7 +528,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 for (HubPoints point:points){
                     kmlHubDefault.add(new LatLng(point.getLat(),point.getLon()));
                 }
-                hubConfigs.add(new HubConfig(Integer.parseInt(hub.getHubId()),hub.getLabel(),defaultValue.getRate(),0,kmlHubDefault,hub.getRegionId()));
+                hubConfigs.add(new HubConfig(Integer.parseInt(hub.getHubId()),hub.getLabel(),defaultValue.getRate(),0,kmlHubDefault,hub.getRegionId(),hub.getStatus()));
             }
             Location location= BkoDataMaganer.getCurrentUserLocation(BkoMainActivity.this);
             if (location!=null){
@@ -566,7 +553,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                     map.clear();
                     new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
                     for (HubConfig hubConfig:hubConfigs){
-                        map.addPolygon(hubConfig.getPolygonOptions());
+                        if (hubConfig.getStatus()==1){
+                            map.addPolygon(hubConfig.getPolygonOptions());
+                        }
                     }
                 }
             }else {
@@ -631,7 +620,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                     map.clear();
                     new GetTextMarkerFromHubConfigTask().execute(hubConfigs);
                     for (HubConfig hubConfig:hubConfigs){
-                        map.addPolygon(hubConfig.getPolygonOptions());
+                        if (hubConfig.getStatus()==1){
+                            map.addPolygon(hubConfig.getPolygonOptions());
+                        }
                     }
                 }
             }else {
@@ -648,10 +639,12 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             for (HubConfig hub:hubs[0]){
                 PolygonOptions options= hub.getPolygonOptions();
                 LatLng markerLocation= KmlColorTempUtil.getCenterOfPolygon(options.getPoints());
-                if (hub.getRateExtra()!=0){
-                    markerOptions.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,markerLocation, FormatUtils.moneyFormat(hub.getRate()), FormatUtils.moneyFormat(hub.getRateExtra()),3,19));
-                }else {
-                    markerOptions.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,markerLocation, FormatUtils.moneyFormat(hub.getRate()),3,19));
+                if (hub.getStatus()==1){
+                    if (hub.getRateExtra()!=0){
+                        markerOptions.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,markerLocation, FormatUtils.moneyFormat(hub.getRate()), FormatUtils.moneyFormat(hub.getRateExtra()),3,19));
+                    }else {
+                        markerOptions.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,markerLocation, FormatUtils.moneyFormat(hub.getRate()),3,19));
+                    }
                 }
             }
             return markerOptions;
@@ -664,125 +657,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             }
         }
     }
-
-    /*private class GetKmlJSONFromServiceTask extends AsyncTask<Void,Void,JSONObject>{
-
-        @Override
-        protected JSONObject doInBackground(Void... voids) {
-            try{
-                String geoHash= "9g3qw";
-                Location actualLocation= BkoDataMaganer.getCurrentUserLocation(BkoMainActivity.this);
-                if (actualLocation!=null){
-                    geoHash= LocationUtils.getGeoHash(actualLocation, 9);
-                }
-                String endpointValues= "/"+BkoDataMaganer.getWorkerId(BkoMainActivity.this)+"/"+geoHash;
-                Log.d("Kml_Url","https://zones-dot-blako-support.appspot.com/zones"+endpointValues);
-                String kmlResponse = HttpRequest
-                        .get("https://zones-dot-blako-support.appspot.com/zones"+endpointValues)
-                        .connectTimeout(5000).readTimeout(5000).body();
-
-                if (kmlResponse!=null){
-                    Log.d("Kml_Response",kmlResponse);
-                    return new JSONObject(kmlResponse);
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            if (jsonObject!=null){
-                new GetKmlFromJSONTask().execute(jsonObject);
-            }
-        }
-    }*/
-
-    /*private class GetKmlFromJSONTask extends AsyncTask<JSONObject,Void,Void>{
-
-        @Override
-        protected void onPreExecute() {
-            kmlHubs.clear();
-            kmlLabelsString.clear();
-
-            kmlHubIds.clear();
-            kmlHubPolygons.clear();
-        }
-
-        @Override
-        protected Void doInBackground(JSONObject... jsonObjects) {
-            try {
-                if (jsonObjects[0].getBoolean("success")){
-                    JSONArray fencesArray= jsonObjects[0].getJSONObject("zones").getJSONArray("fences");
-                    for (int i=0;i<fencesArray.length();i++){
-                        JSONObject kmlObject= fencesArray.getJSONObject(i);
-                        JSONArray latArray= kmlObject.getJSONArray("lats");
-                        JSONArray longArray= kmlObject.getJSONArray("lons");
-                        PolygonOptions kmlHub= new PolygonOptions();
-                        int colorAlpha= 70; //< 0 - 255 >
-                        int temp= kmlObject.getInt("value");
-                        int colorStroke= KmlColorTempUtil.getColorByTempValue(BkoMainActivity.this,temp);
-                        int colorFill= Color.argb(colorAlpha,Color.red(colorStroke),Color.green(colorStroke),Color.blue(colorStroke));
-                        kmlHub.strokeColor(colorStroke).fillColor(colorFill);
-                        kmlHub.strokeWidth(5);
-                        for (int j=0;j<latArray.length();j++){
-                            kmlHub.add(new LatLng(latArray.getDouble(j),longArray.getDouble(j)));
-                        }
-                        kmlHubIds.add(kmlObject.getInt("id"));
-                        kmlHubs.add(kmlHub);
-                        String rate;
-                        try {
-                            rate= "$ "+decimalFormat.format(Double.parseDouble(kmlObject.getString("rate")));
-                        }catch (NumberFormatException e){
-                            e.printStackTrace();
-                            rate= "$ "+kmlObject.getString("rate");
-                        }
-                        kmlLabelsString.add(rate);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            syncHandler.removeCallbacks(syncRunnable);
-            if (sync==null){
-                Log.d("Kml_Sync","500");
-                syncHandler.postDelayed(syncRunnable,500);
-            }else {
-                syncHandler.postDelayed(syncRunnable,ZoneUpdate.delay(sync));
-            }
-        }
-    }*/
-
-    /*private class GetTextMarkerFromJSONTask extends AsyncTask<ArrayList<PolygonOptions>,Void,Void>{
-
-        @Override
-        protected void onPreExecute() {
-            kmlLabels.clear();
-        }
-
-        @Override
-        protected Void doInBackground(ArrayList<PolygonOptions>... arrayLists) {
-            for (int i=0;i<arrayLists[0].size();i++){
-                PolygonOptions hub= arrayLists[0].get(i);
-                LatLng labelLocation= KmlColorTempUtil.getCenterOfPolygon(hub.getPoints());
-                kmlLabels.add(KmlColorTempUtil.createTextMarkerOptions(BkoMainActivity.this,map,labelLocation,kmlLabelsString.get(i),3,19));
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            for (MarkerOptions marker:kmlLabels){
-                map.addMarker(marker);
-            }
-        }
-    }*/
 
     private void onSwitchChecked(boolean checked) {
         if(disconecting)
@@ -802,23 +676,12 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
                 onDemandOn();
 
-                //mTabHost.setCurrentTab(0);
-
-                /*if(BkoDataMaganer.getOnDemand(BkoMainActivity.this)){
-                    mTabHost.setCurrentTab(1);
-                    mTabHost.setCurrentTab(0);
-
-                } else {
-                    mTabHost.setCurrentTab(1);
-
-                    displayLocation(BkoDataMaganer.getCurrentUserLocation(BkoMainActivity.this), 17, null);
-                }*/
                 mTabHost.setCurrentTab(1);
                 displayLocation(BkoDataMaganer.getCurrentUserLocation(BkoMainActivity.this), Constants.DEFAULT_MAP_ZOOM, null);
 
                 BkoDataMaganer.setOnDemand( BkoMainActivity.this, true);
                 sendOneLodation();
-                //BkoSendLocationToServer.oneLocationDataToWebsite(BkoDataMaganer.getCurrentUserLocation(getApplicationContext()), getApplicationContext());
+
             }else  {
 
                 onDemandOff();
@@ -911,28 +774,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                     }
 
                 } else if (pushType.equals("withOutSended")) {
-                    // TODO: 01/08/2018 notification commented
-                    /*Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(BkoMainActivity.this)
-                            .setSmallIcon(R.drawable.motorcycle)
-                            .setContentTitle("Blako")
-                            .setContentText("SIN CONEXIÓN")
-                            .setAutoCancel(true);
-                    NotificationManager notificationManager =
-                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    Notification notification = notificationBuilder.build();
-                    if (!internetProblem) {
-                        if (BkoDataMaganer.getCurrentOffer(BkoMainActivity.this) != null) {
-                            notificationBuilder.setSound(defaultSoundUri);
-                            Toast.makeText(BkoMainActivity.this, "SIN ENVIAR POSICIÓN", Toast.LENGTH_LONG).show();
-                            statusTV.setText(getString(R.string.blako_sin_enviar));
-                            mToolbar.setBackgroundColor(ContextCompat.getColor(BkoMainActivity.this, R.color.blako_red_two));
-                            internetProblem = true;
-                            Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                            vib.vibrate(1500);
-                        }
-                    }
-                    notificationManager.notify(0 *//*     ID of notification *//*, notification);*/
+
                 } else if (pushType.equals("finish")) {
                     finishAffinity();
                 }  else if (pushType.equals("finisoffer")) {
@@ -1161,17 +1003,8 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             for (HubConfig hubConfig:hubConfigs){
                 map.addPolygon(hubConfig.getPolygonOptions());
             }
-            /*if (kmlLayer!=null && map!=null){
-                try {
-                    kmlLayer.addLayerToMap();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                }
-            }*/
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -2091,8 +1924,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         } else {
             Log.d("*******RUNNING SERVICE ", "LOCATION***");
         }
-        /*Intent service = new Intent(this, LocationService.class);
-        startService(service);*/
         setAlarmPushHeartBeat();
     }
 
@@ -2324,7 +2155,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     @Override
     public void onConnected(Bundle arg0) {
         Location location = BkoDataMaganer.getCurrentUserLocation(this);
-        //Location location= mLastLocation;
         boolean isMockLocation = checkMockLocation(this, location);
         if (isMockLocation) {
             location.setProvider("mock");
@@ -2397,25 +2227,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         }
     }
 
-    /*private class GetActualAreaTask extends AsyncTask<LatLng,Void,KmlPlacemark> {
-
-        @Override
-        protected KmlPlacemark doInBackground(LatLng... latLngs) {
-            return DeliveryZoneCheck.getActualPlacemarkFromLocation(BkoMainActivity.this,placemarkList,latLngs[0]);
-        }
-
-        @Override
-        protected void onPostExecute(KmlPlacemark placemark) {
-            if (placemark!=null){
-                Log.d("Actual_Zone",placemark.getProperty("name"));
-                BkoDataMaganer.setActualDeliveryZone(BkoMainActivity.this,placemark.getProperty("name"));
-                *//*if (locationDatabaseReference!=null){
-                    locationDatabaseReference.child("currentLocation").child("zone").setValue(placemark.getProperty("name"));
-                }*//*
-            }
-        }
-    }*/
-
     @Override
     public void onBackPressed() {
         if (checkOutView.getVisibility() == View.VISIBLE) {
@@ -2445,19 +2256,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             }catch (ConcurrentModificationException e){
                 e.printStackTrace();
             }
-            /*try {
-                kmlLayer.addLayerToMap();
-                for (PolygonOptions polygon:kmlHubs){
-                    map.addPolygon(polygon);
-                }
-                for (MarkerOptions marker:kmlLabels){
-                    map.addMarker(marker);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            }*/
         }
 
         BkoTrips trips = BkoDataMaganer.getCurrentTrips(this);
@@ -2536,9 +2334,9 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                         Location zoneLocation= BkoDataMaganer.getCurrentUserLocation(this);
                         if (zoneLocation!=null){
                             LatLng latLngLocation= new LatLng(zoneLocation.getLatitude(),zoneLocation.getLongitude());
-                            // TODO: 27/07/2018 CAMBIAR!!!
                             int hubId= DeliveryZoneCheck.getActualHubFromLocation(hubConfigs,latLngLocation);
                             Log.d("Hub_Id",String.valueOf(hubId));
+                            cvOutOfHub.setVisibility(hubId==1?View.VISIBLE:View.GONE);
                             BkoDataMaganer.setActualDeliveryZoneId(BkoMainActivity.this,hubId);
                         }
                     }

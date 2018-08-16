@@ -160,7 +160,7 @@ public class BkoConfirmItemsActivity extends BaseActivity {
                     mapVisible.put("orderId", trip.getBko_orders_id());
 
                     if(BkoSendLocationToServer.oneLocationDataToWebsite(BkoDataMaganer.getCurrentUserLocation(getApplicationContext()),getApplicationContext()))
-                    confirmItemsResponse = HttpRequest.get(Constants.GET_CONFIRM_ITEMS(BkoConfirmItemsActivity.this), mapVisible, true).connectTimeout(5000).readTimeout(5000).body();
+                    confirmItemsResponse = HttpRequest.get(Constants.GET_CONFIRM_ITEMS(BkoConfirmItemsActivity.this), mapVisible, true).connectTimeout(6000).readTimeout(6000).body();
 
                 } catch (Exception e) {
                     e.printStackTrace();

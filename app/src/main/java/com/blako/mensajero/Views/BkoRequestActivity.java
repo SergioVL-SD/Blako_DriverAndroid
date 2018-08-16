@@ -209,7 +209,7 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
             try{
                 String orderResponse = HttpRequest
                         .get(Constants.GET_TRIPS_ACTIVE(BkoRequestActivity.this) + "workerId=" + BkoDataMaganer.getWorkerId(BkoRequestActivity.this))
-                        .connectTimeout(4000).readTimeout(4000).body();
+                        .connectTimeout(5000).readTimeout(5000).body();
 
                 if (orderResponse!=null){
                     Log.d("Order_Response",orderResponse);
@@ -429,7 +429,7 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
 
 
                     if (BkoSendLocationToServer.oneLocationDataToWebsite(BkoDataMaganer.getCurrentUserLocation(BkoRequestActivity.this), BkoRequestActivity.this))
-                        awaiteServiceResponse = HttpRequest.get(request).connectTimeout(3000).readTimeout(3000).body();
+                        awaiteServiceResponse = HttpRequest.get(request).connectTimeout(4000).readTimeout(4000).body();
 
 
                 } catch (Exception e) {

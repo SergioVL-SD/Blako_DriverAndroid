@@ -23,8 +23,7 @@ public class LocationUtils {
        return GeoHash.withCharacterPrecision(location.getLatitude(), location.getLongitude(), 7).toBase32();
     }
 
-    public static String getGeoHash(Location location, int precision)
-    {
+    public static String getGeoHash(Location location, int precision) {
         return GeoHash.withCharacterPrecision(location.getLatitude(), location.getLongitude(), precision).toBase32();
     }
 }

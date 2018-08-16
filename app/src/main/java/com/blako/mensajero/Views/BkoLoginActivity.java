@@ -166,7 +166,7 @@ public class BkoLoginActivity extends BaseActivity {
                                     Gson gson = new Gson();
                                     versionResponse = HttpRequest
                                             .get(Constants.URL_VERSION + "versionCode=" + BkoUtilities.getVersionCode(BkoLoginActivity.this) + "&versionName=" + BkoUtilities.getVersionName(BkoLoginActivity.this))
-                                            .connectTimeout(3000).readTimeout(3000).body();
+                                            .connectTimeout(4000).readTimeout(4000).body();
 
                                     BkoDataMaganer.setStatusService(Constants.SERVICE_STATUS_FREE, BkoLoginActivity.this);
 
@@ -185,7 +185,7 @@ public class BkoLoginActivity extends BaseActivity {
 
                                     loginResponse = HttpRequest
                                             .get(Constants.URL_LOGIN + "email=" + emailEt.getText().toString() + "&pass=" + passwordEt.getText().toString() + "&token=" + token)
-                                            .connectTimeout(3000).readTimeout(3000).body();
+                                            .connectTimeout(4000).readTimeout(4000).body();
 
                                     Log.d("SVL_loginRes",loginResponse);
 

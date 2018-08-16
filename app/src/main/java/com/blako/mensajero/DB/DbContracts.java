@@ -11,6 +11,7 @@ public class DbContracts {
         public static final String LABEL= "label";
         public static final String REVISION= "revision";
         public static final String REGION_ID= "regionId";
+        public static final String STATUS= "status";
     }
 
     public static class PointEntry implements BaseColumns {
