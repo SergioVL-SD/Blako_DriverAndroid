@@ -119,7 +119,7 @@ public class BkoCompletedTripsActivity extends BaseActivity {
 
                         BkoUser user = BkoUserDao.Consultar(BkoCompletedTripsActivity.this);
                         responseOrderStatus = null;
-                        responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(BkoCompletedTripsActivity.this) + "connectToken=" + user.getConectToken() + "&oid=" + statusRequest.getOid()).connectTimeout(3000).body();
+                        responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(BkoCompletedTripsActivity.this) + "connectToken=" + user.getConectToken() + "&oid=" + statusRequest.getOid()).connectTimeout(5000).body();
 
                     }
 

@@ -1020,7 +1020,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                     BkoUser user = BkoUserDao.Consultar(BkoMainActivity.this);
                     statusResponse = HttpRequest
                             .get(Constants.GET_TRIPS_ACTIVE(BkoMainActivity.this) + "workerId=" + user.getWorkerId())
-                            .connectTimeout(4000).readTimeout(4000).body();
+                            .connectTimeout(5000).readTimeout(5000).body();
 
                     if (statusResponse != null) {
                         recoverStatusVO = gson.fromJson(statusResponse, BkoRecoverStatusVO.class);
@@ -1206,7 +1206,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                         String responseUploadPostion = HttpRequest.get(Constants.GET_UPLOAD_GPS_POSITION(BkoMainActivity.this) + "workerEmail=" + user.getEmail() + "&name="
                                 + user.getEmail() + "&lastname=" + user.getLastname() + "&status=" + "available" + "&file=" + "h" + "&Latitud=" + location.getLatitude()
                                 + "&Longitud=" + location.getLongitude() + "&oid=" + "0" + "&banderaEta=" + "0" + "&workerId=" + user.getWorkerId() + "&hasStarted=" + "0"
-                                + "&customerId=" + user.getWorkerId() + "&networkLocation=" + location.getProvider() + "&partnerId=" + partnerId + "&visibilityType=" + user.getVisibilitytype() + "").connectTimeout(2000).readTimeout(2000).body();
+                                + "&customerId=" + user.getWorkerId() + "&networkLocation=" + location.getProvider() + "&partnerId=" + partnerId + "&visibilityType=" + user.getVisibilitytype() + "").connectTimeout(5000).readTimeout(5000).body();
 
                         if (responseUploadPostion != null) {
 
@@ -1598,7 +1598,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                     cancelServiceResponse = null;
                     cancelServiceResponse = HttpRequest.get(Constants.GET_OFFER_REPORT(BkoMainActivity.this) +
                             "workerId=" + user.getWorkerId() +
-                            "&announcementId=" + idOffer + "&stage=4" + "&parentId=" + user.getWorkerParentId() + "&announcementWorkerId=" + announcementWorkerId).connectTimeout(3000).readTimeout(3000).body();
+                            "&announcementId=" + idOffer + "&stage=4" + "&parentId=" + user.getWorkerParentId() + "&announcementWorkerId=" + announcementWorkerId).connectTimeout(5000).readTimeout(5000).body();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1690,7 +1690,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                                     if (BkoSendLocationToServer.oneLocationDataToWebsite(BkoDataMaganer.getCurrentUserLocation(getApplicationContext()), getApplicationContext()))
                                         changeStatusOfferResponse = HttpRequest.get(Constants.GET_OFFER_REPORT(BkoMainActivity.this) +
                                                 "workerId=" + user.getWorkerId() +
-                                                "&announcementId=" + firstAnnounce.getBko_announcement_id() + "&stage=" + stateToReport + "&parentId=" + user.getWorkerParentId() + "&latitude=" + latitude + "&longitude=" + longitude + "&announcementWorkerId=" + firstAnnounce.getBko_announcementworker_id()).connectTimeout(3000).readTimeout(3000).body();
+                                                "&announcementId=" + firstAnnounce.getBko_announcement_id() + "&stage=" + stateToReport + "&parentId=" + user.getWorkerParentId() + "&latitude=" + latitude + "&longitude=" + longitude + "&announcementWorkerId=" + firstAnnounce.getBko_announcementworker_id()).connectTimeout(5000).readTimeout(5000).body();
 
 
                                 }

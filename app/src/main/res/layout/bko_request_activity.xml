@@ -71,7 +71,17 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textColor="@color/blako_background"
-                android:textSize="22sp" />
+                android:textSize="12sp" />
+
+            <TextView
+                android:focusable="false"
+                android:id="@+id/tvRestaurantInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/blako_background"
+                android:textSize="12sp" />
 
             <TextView
                 android:focusable="false"

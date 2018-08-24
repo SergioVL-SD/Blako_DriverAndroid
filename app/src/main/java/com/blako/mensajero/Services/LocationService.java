@@ -34,10 +34,15 @@ import com.blako.mensajero.Dao.BkoUserDao;
 import com.blako.mensajero.R;
 import com.blako.mensajero.Services.location.FusedLocationService;
 import com.blako.mensajero.Services.location.OnLocationServiceListener;
+import com.blako.mensajero.Services.mqtt.MqttService;
 import com.blako.mensajero.Utils.BkoUtilities;
+import com.blako.mensajero.Utils.LocationUtils;
+import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.VO.BkoUser;
 import com.blako.mensajero.Views.BkoMainActivity;
 import com.blako.mensajero.firebase.BkoFirebaseDatabase;
+import com.blako.mensajero.models.PingResponse;
+import com.blako.mensajero.models.RemoteCommand;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,6 +51,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -57,6 +63,7 @@ public class LocationService extends Service implements GpsStatus.Listener {
 
     private FusedLocationService fusedLocationService;
     private LocationManager locationManager;
+    private MqttService mqttService;
 
     private static final String TAG = "LocationService";
     private static final int DEAD_NOTIFICATION_ID = 78634;
@@ -69,12 +76,14 @@ public class LocationService extends Service implements GpsStatus.Listener {
     public void onCreate() {
         super.onCreate();
         fusedLocationService = App.getInstance().getLocationService();
+        mqttService= App.getInstance().getMqttService();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         generalSetup();
         registerGpsStatusListener();
+        //doMqttSetup();
         return START_STICKY;
     }
 
@@ -118,6 +127,9 @@ public class LocationService extends Service implements GpsStatus.Listener {
         if (locationManager!=null){
             locationManager.removeGpsStatusListener(this);
         }
+        /*if (mqttService!=null){
+            doMqttDestroy();
+        }*/
         stopSelf();
     }
 
@@ -215,7 +227,132 @@ public class LocationService extends Service implements GpsStatus.Listener {
         Notification notification = notificationBuilder.build();
         notification.flags |= Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(DEAD_NOTIFICATION_ID, notification);
+    }
 
+    public final static String mqttTopic1 = "hello";
+    public final static String mqttTopic2 = "colonia";
 
+    public void doMqttSetup() {
+        mqttService.setOnMqttConnectionListener(new MqttService.OnMqttConnectionListener() {
+            @Override
+            public void onConnectComplete(boolean complete) {
+
+            }
+
+            @Override
+            public void onConnectionLost() {
+
+            }
+
+            @Override
+            public void postConnectionSuccess() {
+                mqttService.subscribeToTopic(mqttTopic1);
+                mqttService.subscribeToTopic(mqttTopic2);
+            }
+
+            @Override
+            public void postConnectionFailure() {
+
+            }
+        });
+
+        mqttService.setOnMqttMessageListener(new MqttService.OnMqttMessageListener() {
+            @Override
+            public void onMessageArrived(String topic, String payload) {
+                LogUtils.debug("MQTT", "(mqtt) topic: " + topic + " message: " + payload);
+
+                Gson gson = new Gson();
+                RemoteCommand remoteCommand = gson.fromJson(payload, RemoteCommand.class);
+
+                LogUtils.debug("MQTT", "(mqtt) remote command: " + remoteCommand.getCommand());
+
+                switch(remoteCommand.getCommand())
+                {
+                    case "ping":
+                        PingResponse pingResponse = new PingResponse();
+                        pingResponse.setTopic("PingResponse");
+                        pingResponse.setVersion(Constants.VERSION_NAME);
+                        pingResponse.setTimestamp(System.currentTimeMillis());
+                        pingResponse.setUid(BkoDataMaganer.getWorkerId(LocationService.this));
+                        pingResponse.setConnected(BkoDataMaganer.getOnDemand(LocationService.this));
+                        if(BkoDataMaganer.getCurrentUserLocation(LocationService.this) != null) {
+                            pingResponse.setGeohash(LocationUtils.getGeoHash(BkoDataMaganer.getCurrentUserLocation(LocationService.this), 9));
+                        } else {
+                            pingResponse.setGeohash("s0000");
+                        }
+
+                        if(mqttService != null) {
+                            String outbound = gson.toJson(pingResponse);
+                            mqttService.publishToTopic(mqttTopic1, outbound, 0);
+                        }
+                        break;
+
+                    case "monitor":
+                        if(remoteCommand.getPar0() != null && remoteCommand.getPar1() != null) {
+                            Integer par0 = Integer.valueOf(remoteCommand.getPar0());
+                            if(par0 != null && remoteCommand.getPar1().contentEquals(BkoDataMaganer.getWorkerId(LocationService.this))) {
+                                LogUtils.debug("MQTT", "(monitor) monitor configured for " + String.valueOf(par0) + " occurrences");
+                            } else {
+                                LogUtils.error("MQTT", "(monitor) error parsing remote command, wrong uid?");
+                            }
+
+                        } else {
+                            LogUtils.error("MQTT", "(monitor) error parsing remote command, missing parameter?");
+                        }
+
+                        PingResponse monitorCommandResponse = new PingResponse();
+                        monitorCommandResponse.setTopic("MonitorMode");
+                        monitorCommandResponse.setVersion(Constants.VERSION_NAME);
+                        monitorCommandResponse.setTimestamp(System.currentTimeMillis());
+                        monitorCommandResponse.setUid(BkoDataMaganer.getWorkerId(LocationService.this));
+                        if(BkoDataMaganer.getCurrentUserLocation(LocationService.this) != null) {
+                            monitorCommandResponse.setGeohash(LocationUtils.getGeoHash(BkoDataMaganer.getCurrentUserLocation(LocationService.this), 9));
+                        } else {
+                            monitorCommandResponse.setGeohash("s0000");
+                        }
+
+                        if(mqttService != null) {
+                            String outbound = gson.toJson(monitorCommandResponse);
+                            mqttService.publishToTopic(mqttTopic1, outbound, 0);
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onDeliveryComplete(String mid) {
+
+            }
+        });
+
+        mqttService.setOnMqttSubscriptionsListener(new MqttService.OnMqttSubscriptionsListener() {
+            @Override
+            public void onSubscribeSuccess(String topic) {
+
+            }
+
+            @Override
+            public void onSubscribeFailure(String topic) {
+
+            }
+
+            @Override
+            public void onUnsubscribeSuccess(String topic) {
+
+            }
+
+            @Override
+            public void onUnsubscribeFailure(String topic) {
+
+            }
+        });
+
+        mqttService.connect();
+    }
+
+    public void doMqttDestroy()
+    {
+        mqttService.unsubscribeFromTopic(mqttTopic1);
+        mqttService.unsubscribeFromTopic(mqttTopic2);
     }
 }

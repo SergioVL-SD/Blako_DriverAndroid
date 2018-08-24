@@ -4,6 +4,9 @@ import android.content.Context;
 
 public class Constants {
 
+    public static final String VERSION_NAME = "20180821.1040";
+    public static final String MQTT_SERVER_URI = "tcp://35.164.88.192:1883";
+
     public static final String ACTION_SERVICE_LOCATION = "com.blako.mensajero.action.LOCATION";
     public static final String EXTRA_SERVICE_LOCATION = "com.blako.mensajero.extra.LOCATION";
 

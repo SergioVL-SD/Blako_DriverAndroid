@@ -640,7 +640,7 @@ public class BkoMainBaseActivity extends BaseActivity {
                         Gson gson = new Gson();
                         versionResponse = HttpRequest
                                 .get(Constants.URL_VERSION + "versionCode=" + BkoUtilities.getVersionCode(BkoMainBaseActivity.this) + "&versionName=" + BkoUtilities.getVersionName(BkoMainBaseActivity.this))
-                                .connectTimeout(3000).readTimeout(3000).body();
+                                .connectTimeout(5000).readTimeout(5000).body();
 
                         BkoDataMaganer.setStatusService(Constants.SERVICE_STATUS_FREE, BkoMainBaseActivity.this);
                         if (versionResponse == null)

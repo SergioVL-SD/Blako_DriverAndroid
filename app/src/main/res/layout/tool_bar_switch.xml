@@ -70,7 +70,6 @@
             android:layout_gravity="end"
             android:layout_marginEnd="25dp"
             android:layout_marginRight="25dp"
-            android:checked="false"
             android:minWidth="?attr/actionBarSize"
             android:gravity="center_vertical"
             android:thumbTextPadding="5dp"

@@ -28,6 +28,7 @@ import com.blako.mensajero.R;
 import com.blako.mensajero.Services.BkoSendLocationToServer;
 import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.HttpRequest;
+import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.VO.BkoCheckoutResponse;
 import com.blako.mensajero.VO.BkoChildTripVO;
 import com.blako.mensajero.VO.BkoOrderVO;
@@ -65,7 +66,7 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
     boolean  loaded = false;
     float actVolume, maxVolume, volume;
     AudioManager audioManager;
-    private TextView aliasBt, addressBt, tvTripDistance, tvBaseFee;
+    private TextView aliasBt, addressBt, tvTripDistance, tvRestaurantInfo, tvBaseFee;
     private SoundPool soundPool;
     private View touchAreaView;
     private int soundID;
@@ -95,6 +96,7 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
         aliasBt = (TextView) findViewById(R.id.aliasBt);
         addressBt = (TextView) findViewById(R.id.addressBt);
         tvTripDistance = (TextView) findViewById(R.id.tvTripDistance);
+        tvRestaurantInfo= (TextView) findViewById(R.id.tvRestaurantInfo);
         tvBaseFee = (TextView) findViewById(R.id.tvBaseFee);
         progressBarPb = (ProgressBar) findViewById(R.id.progressBarPb);
         touchAreaView= (View) findViewById(R.id.touchAreaView);
@@ -190,6 +192,8 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
             if (trip.getBko_customeraddress_numinterior() != null && trip.getBko_customeraddress_numinterior().length() > 0) {
                 numberIntExt = numberIntExt + " Int." + trip.getBko_customeraddress_numinterior();
             }
+            tvRestaurantInfo.setText(BkoUtilities.ensureNotNullString(trip.getBko_customeraddress_street() + numberIntExt + "|" + trip.getBko_customeraddress_colony() + "|" + trip.getBko_customeraddress_delegation()+"|"+trip.getBko_customeraddress_city()+"|"+trip.getBko_customeraddress_alias()+"|"+trip.getBko_customeraddress_telephone()));
+            LogUtils.debug("Restaurant_Info",tvRestaurantInfo.getText().toString());
             addressBt.setText(BkoUtilities.ensureNotNullString(trip.getBko_customeraddress_street() + numberIntExt + ", " + trip.getBko_customeraddress_colony() + ", " + trip.getBko_customeraddress_delegation()));
             new GetCostFromOrderTask().execute();
             //aliasOfferTv.setText(BkoUtilities.ensureNotNullString(trip.getBko_customeraddress_alias()));
@@ -300,7 +304,7 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
                     polylineResponse = HttpRequest.get("https://maps.googleapis.com/maps/api/directions/json?" +
                             "origin=" + latA + "," + lngA +
                             "&destination=" + latB + "," + lngB +
-                            "&sensor=false&key=AIzaSyD7sVTV3wFfBBZoaomK7Ncm81kYXB1jIYo ").connectTimeout(5000).readTimeout(5000).body();
+                            "&key=AIzaSyD7sVTV3wFfBBZoaomK7Ncm81kYXB1jIYo").connectTimeout(5000).readTimeout(5000).body();
 
                     Log.d("Poly_Response",polylineResponse);
 
@@ -429,7 +433,7 @@ public class BkoRequestActivity extends BaseActivity implements OnMapReadyCallba
 
 
                     if (BkoSendLocationToServer.oneLocationDataToWebsite(BkoDataMaganer.getCurrentUserLocation(BkoRequestActivity.this), BkoRequestActivity.this))
-                        awaiteServiceResponse = HttpRequest.get(request).connectTimeout(4000).readTimeout(4000).body();
+                        awaiteServiceResponse = HttpRequest.get(request).connectTimeout(5000).readTimeout(5000).body();
 
 
                 } catch (Exception e) {

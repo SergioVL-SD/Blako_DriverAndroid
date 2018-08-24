@@ -275,7 +275,7 @@ public class BkoSendLocationToServer extends IntentService {
 
                     responseUploadPostion = HttpRequest
                             .get(Constants.GET_UPLOAD_GPS_POSITION(BkoSendLocationToServer.this), mapComplete, true)
-                            .connectTimeout(3500).body();
+                            .connectTimeout(5000).body();
 
                     if (responseUploadPostion != null) {
                         BkoDataMaganer.setLastTimeSendedUserLocation(location.getTime(), this);
@@ -548,7 +548,7 @@ public class BkoSendLocationToServer extends IntentService {
 
                     responseUploadPostion = HttpRequest
                             .get(Constants.GET_UPLOAD_GPS_POSITION(context), mapComplete, true)
-                            .connectTimeout(3500).body();
+                            .connectTimeout(5000).body();
 
                     sended = true;
                     if (responseUploadPostion != null) {

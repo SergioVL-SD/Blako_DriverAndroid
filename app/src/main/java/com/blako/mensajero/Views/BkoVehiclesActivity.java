@@ -399,7 +399,7 @@ public class BkoVehiclesActivity extends BaseActivity {
                     Gson gson = new Gson();
                     versionResponse = HttpRequest
                             .get(Constants.URL_VERSION + "versionCode=" + BkoUtilities.getVersionCode(BkoVehiclesActivity.this) + "&versionName=" + BkoUtilities.getVersionName(BkoVehiclesActivity.this))
-                            .connectTimeout(3000).readTimeout(3000).body();
+                            .connectTimeout(5000).readTimeout(5000).body();
 
 
                     if (versionResponse == null)
@@ -416,7 +416,7 @@ public class BkoVehiclesActivity extends BaseActivity {
                     BkoUser user = BkoUserDao.Consultar(BkoVehiclesActivity.this);
                     statusResponse = HttpRequest
                             .get(BkoDataMaganer.getEnviromentUrl(BkoVehiclesActivity.this) + "/trips/getlastorderandtripsactive?workerId=" + user.getWorkerId())
-                            .connectTimeout(4000).body();
+                            .connectTimeout(5000).body();
 
 
                     if (statusResponse != null) {

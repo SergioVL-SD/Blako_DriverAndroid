@@ -551,7 +551,7 @@ public class BkoUtilities {
                 //map.put("success","true");
                 URL content = HttpRequest
                         .get(Constants.GET_SEND_TICKET(context), map, true)
-                        .connectTimeout(4000).url();
+                        .connectTimeout(5000).url();
 
                 LogUtils.debug("Send_Ticket_Url", content.toString());
 

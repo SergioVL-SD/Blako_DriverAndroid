@@ -183,7 +183,6 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                                 vib.vibrate(8000);
 
                                 if(BkoDataMaganer.getOnDemand(this)){
-                                    // TODO: 19/07/2018 If onDemand -> Present order to RequestActivity
                                     onDisconectedOnDemand();
                                 }
 
@@ -475,7 +474,7 @@ public class BkoFirebaseMessagingService extends FirebaseMessagingService {
                     }
                     statusResponse = HttpRequest
                             .get(Constants.GET_TRIPS_ACTIVE(this) + "workerId=" + user.getWorkerId())
-                            .connectTimeout(4000).readTimeout(4000).body();
+                            .connectTimeout(5000).readTimeout(5000).body();
 
                     if (statusResponse != null) {
                         recoverStatusVO = gson.fromJson(statusResponse, BkoRecoverStatusVO.class);

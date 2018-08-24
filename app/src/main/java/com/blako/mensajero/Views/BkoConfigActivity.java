@@ -232,7 +232,7 @@ public class BkoConfigActivity extends BaseActivity {
                                 try {
                                     responseOrderStatus = null;
                                     String requestId = BkoDataMaganer.getRequestId(BkoConfigActivity.this);
-                                    responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(BkoConfigActivity.this) + "connectToken=" + user.getConectToken() + "&oid=" + serviceClienteStatus.getOid()).connectTimeout(3000).body();
+                                    responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(BkoConfigActivity.this) + "connectToken=" + user.getConectToken() + "&oid=" + serviceClienteStatus.getOid()).connectTimeout(5000).body();
 
                                 } catch (Exception e) {
                                     e.printStackTrace();

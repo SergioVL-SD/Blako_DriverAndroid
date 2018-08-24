@@ -328,7 +328,7 @@ public class BkoTripsInProgressFragment extends BaseFragment implements BkoCore.
                     BkoUser user = BkoUserDao.Consultar(getActivity());
                     statusResponse = HttpRequest
                             .get(Constants.GET_TRIPS_ACTIVE(getActivity()) + "workerId=" + user.getWorkerId())
-                            .connectTimeout(4000).readTimeout(4000).body();
+                            .connectTimeout(5000).readTimeout(5000).body();
 
                     if (statusResponse != null) {
                         recoverStatusVO = gson.fromJson(statusResponse, BkoRecoverStatusVO.class);
@@ -349,14 +349,14 @@ public class BkoTripsInProgressFragment extends BaseFragment implements BkoCore.
                         if (BkoDataMaganer.getStatusService(getActivity()) == Constants.SERVICE_STATUS_TRIP_FINISHED || BkoDataMaganer.getStatusService(getActivity()) == Constants.SERVICE_STATUS_WORKER_ARRIVED) {
                             user = BkoUserDao.Consultar(getActivity());
                             responseOrderStatus = null;
-                            responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(getActivity()) + "connectToken=" + user.getConectToken() + "&oid=" + statusRequest.getOid() + "&workerId=" + user.getWorkerId()).connectTimeout(3000).body();
+                            responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(getActivity()) + "connectToken=" + user.getConectToken() + "&oid=" + statusRequest.getOid() + "&workerId=" + user.getWorkerId()).connectTimeout(5000).body();
 
                         }
 
 
                         else if (BkoDataMaganer.getOnDemand(getActivity()) ){
                             responseOrderStatus = null;
-                            responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(getActivity()) + "connectToken=" + user.getConectToken() + "&oid=" + statusRequest.getOid() + "&workerId=" + user.getWorkerId()).connectTimeout(3000).body();
+                            responseOrderStatus = HttpRequest.get(Constants.GET_STATUS_REQUEST_URL(getActivity()) + "connectToken=" + user.getConectToken() + "&oid=" + statusRequest.getOid() + "&workerId=" + user.getWorkerId()).connectTimeout(5000).body();
 
                         }
                     }
@@ -680,7 +680,7 @@ public class BkoTripsInProgressFragment extends BaseFragment implements BkoCore.
 
 
                     if (BkoSendLocationToServer.oneLocationDataToWebsite(BkoDataMaganer.getCurrentUserLocation(getActivity().getApplicationContext()), getActivity().getApplicationContext()))
-                        awaiteServiceResponse = HttpRequest.get(request).connectTimeout(4000).readTimeout(4000).body();
+                        awaiteServiceResponse = HttpRequest.get(request).connectTimeout(5000).readTimeout(5000).body();
 
 
                 } catch (Exception e) {
@@ -747,7 +747,7 @@ public class BkoTripsInProgressFragment extends BaseFragment implements BkoCore.
 
                     cancelServiceResponse = HttpRequest.get(Constants.GET_OFFER_REPORT(getActivity()) +
                             "workerId=" + user.getWorkerId() +
-                            "&announcementId=" + firstAnnounce.getBko_announcement_id() + "&stage=" + stage + "&parentId=" + user.getWorkerParentId() + "&latitude=" + latitude + "&longitude=" + longitude + "&announcementWorkerId=" + firstAnnounce.getBko_announcementworker_id()).connectTimeout(4000).readTimeout(4000).body();
+                            "&announcementId=" + firstAnnounce.getBko_announcement_id() + "&stage=" + stage + "&parentId=" + user.getWorkerParentId() + "&latitude=" + latitude + "&longitude=" + longitude + "&announcementWorkerId=" + firstAnnounce.getBko_announcementworker_id()).connectTimeout(5000).readTimeout(5000).body();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -825,7 +825,7 @@ public class BkoTripsInProgressFragment extends BaseFragment implements BkoCore.
                         String responseUploadPostion = HttpRequest.get(Constants.GET_UPLOAD_GPS_POSITION(getActivity()) + "workerEmail=" + user.getEmail() + "&name="
                                 + user.getEmail() + "&lastname=" + user.getLastname() + "&status=" + "available" + "&file=" + "h" + "&Latitud=" + location.getLatitude()
                                 + "&Longitud=" + location.getLongitude() + "&oid=" + "0" + "&banderaEta=" + "0" + "&workerId=" + user.getWorkerId() + "&hasStarted=" + "0"
-                                + "&customerId=" + user.getWorkerId() + "&networkLocation=" + location.getProvider() + "&partnerId=" + partnerId + "&visibilityType=" + user.getVisibilitytype() + "").connectTimeout(3000).readTimeout(3000).body();
+                                + "&customerId=" + user.getWorkerId() + "&networkLocation=" + location.getProvider() + "&partnerId=" + partnerId + "&visibilityType=" + user.getVisibilitytype() + "").connectTimeout(5000).readTimeout(5000).body();
 
                         if (responseUploadPostion != null) {
 

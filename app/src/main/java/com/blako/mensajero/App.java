@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.blako.mensajero.DB.AppDbHelper;
 import com.blako.mensajero.Services.location.FusedLocationService;
+import com.blako.mensajero.Services.mqtt.MqttService;
 import com.blako.mensajero.Utils.AppPreferences;
 import com.blako.mensajero.Utils.LogUtils;
 
@@ -16,6 +17,7 @@ public class App extends Application {
     private AppPreferences preferences;
     private AppDbHelper dbHelper;
     private FusedLocationService fusedLocationService;
+    private MqttService mqttService;
 
     @Override
     public void onCreate() {
@@ -52,5 +54,12 @@ public class App extends Application {
         }
 
         return fusedLocationService;
+    }
+
+    public MqttService getMqttService(){
+        if (mqttService==null){
+            mqttService= new MqttService(this);
+        }
+        return mqttService;
     }
 }

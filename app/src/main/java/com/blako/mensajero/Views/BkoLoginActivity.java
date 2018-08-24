@@ -166,7 +166,7 @@ public class BkoLoginActivity extends BaseActivity {
                                     Gson gson = new Gson();
                                     versionResponse = HttpRequest
                                             .get(Constants.URL_VERSION + "versionCode=" + BkoUtilities.getVersionCode(BkoLoginActivity.this) + "&versionName=" + BkoUtilities.getVersionName(BkoLoginActivity.this))
-                                            .connectTimeout(4000).readTimeout(4000).body();
+                                            .connectTimeout(5000).readTimeout(5000).body();
 
                                     BkoDataMaganer.setStatusService(Constants.SERVICE_STATUS_FREE, BkoLoginActivity.this);
 
@@ -185,7 +185,7 @@ public class BkoLoginActivity extends BaseActivity {
 
                                     loginResponse = HttpRequest
                                             .get(Constants.URL_LOGIN + "email=" + emailEt.getText().toString() + "&pass=" + passwordEt.getText().toString() + "&token=" + token)
-                                            .connectTimeout(4000).readTimeout(4000).body();
+                                            .connectTimeout(5000).readTimeout(5000).body();
 
                                     Log.d("SVL_loginRes",loginResponse);
 
@@ -203,7 +203,7 @@ public class BkoLoginActivity extends BaseActivity {
 
                                                         secondLogin = HttpRequest
                                                                 .get(userLoginResponse.getEnviromentUrl() + "/public/workers/login?" + "email=" + emailEt.getText().toString() + "&pass=" + passwordEt.getText().toString() + "&token=" + token)
-                                                                .connectTimeout(4000).body();
+                                                                .connectTimeout(5000).body();
 
                                                         if (secondLogin != null) {
                                                             BkoUserLoginResponse responseSecondLogin = gson.fromJson(secondLogin, BkoUserLoginResponse.class);
@@ -213,7 +213,7 @@ public class BkoLoginActivity extends BaseActivity {
 
                                                                 statusResponse = HttpRequest
                                                                         .get(userLoginResponse.getEnviromentUrl() + "/trips/getlastorderandtripsactive?workerId=" + userLoginResponse.getWorkerId())
-                                                                        .connectTimeout(4000).body();
+                                                                        .connectTimeout(5000).body();
 
 
                                                                 if (statusResponse != null) {
@@ -269,7 +269,7 @@ public class BkoLoginActivity extends BaseActivity {
 
                                                     statusResponse = HttpRequest
                                                             .get(userLoginResponse.getEnviromentUrl() + "/trips/getlastorderandtripsactive?workerId=" + userLoginResponse.getWorkerId())
-                                                            .connectTimeout(4000).body();
+                                                            .connectTimeout(5000).body();
 
                                                     Log.d("SVL_statusRes",statusResponse);
 
