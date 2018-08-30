@@ -102,6 +102,14 @@ public class BkoTripsInProgressFragment extends BaseFragment implements BkoCore.
     private boolean InternetProblem = false;
     public static boolean acepted  = false;
     private int lasPosition;
+    private Context context;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context= context;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -522,7 +530,7 @@ public class BkoTripsInProgressFragment extends BaseFragment implements BkoCore.
 
                 } else {
                     if(InternetProblem ){
-                        Toast.makeText(getActivity(), getString(R.string.blako_error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.blako_error), Toast.LENGTH_SHORT).show();
                     }
 
                     if (BkoTripsAdapter.mp != null && BkoTripsAdapter.mp.isPlaying())

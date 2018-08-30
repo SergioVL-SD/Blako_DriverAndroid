@@ -45,7 +45,7 @@ public class BaseFragment extends Fragment {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                dialogo.show();
+                /*dialogo.show();*/
             }
 
             @Override
@@ -55,7 +55,7 @@ public class BaseFragment extends Fragment {
                     if (task != null)
                         task.run();
                 } catch (Exception e) {
-                    dialogo.dismiss();
+                    /*dialogo.dismiss();*/
                     Log.e("doInBackground", "Excpetion" + e);
                     return e;
                 }
@@ -65,14 +65,14 @@ public class BaseFragment extends Fragment {
             @Override
             protected void onPostExecute(Throwable result) {
                 if (result != null) {
-                    dialogo.dismiss();
+                    /*dialogo.dismiss();*/
                     handleException(getActivity(), result);
                 } else if (completion != null) {
-                    dialogo.dismiss();
+                    /*dialogo.dismiss();*/
                     completion.run();
 
-                } else
-                    dialogo.dismiss();
+                } /*else
+                    dialogo.dismiss();*/
             }
         };
         asyncTask.execute();

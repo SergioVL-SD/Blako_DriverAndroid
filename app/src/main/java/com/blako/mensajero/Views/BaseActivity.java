@@ -64,8 +64,8 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                if (!dialogo.isShowing())
-                    dialogo.show();
+                /*if (!dialogo.isShowing())
+                    dialogo.show();*/
             }
 
             @Override
@@ -74,10 +74,10 @@ public class BaseActivity extends AppCompatActivity {
                     if (task != null)
                         task.run();
                 } catch (Exception e) {
-                    if ((dialogo != null) && dialogo.isShowing()) {
+                    /*if ((dialogo != null) && dialogo.isShowing()) {
 
                         dialogo.dismiss();
-                    }
+                    }*/
                     Log.e("doInBackground", "Excpetion" + e);
                     return e;
                 }
@@ -91,24 +91,24 @@ public class BaseActivity extends AppCompatActivity {
                     if (BaseActivity.this.isDestroyed()) { // or call isFinishing() if min sdk version < 17
                         return;
                     }
-                    dialogo.dismiss();
+                    /*dialogo.dismiss();*/
                     handleException(getApplicationContext(), result);
                 } else if (completion != null) {
-                    if ((dialogo != null) && dialogo.isShowing()) {
+                    /*if ((dialogo != null) && dialogo.isShowing()) {
                         if (BaseActivity.this.isDestroyed()) { // or call isFinishing() if min sdk version < 17
                             return;
                         }
                         dialogo.dismiss();
-                    }
+                    }*/
                     completion.run();
 
-                } else if ((dialogo != null) && dialogo.isShowing()) {
+                } /*else if ((dialogo != null) && dialogo.isShowing()) {
                     if (BaseActivity.this.isDestroyed()) { // or call isFinishing() if min sdk version < 17
                         return;
                     }
 
                     dialogo.dismiss();
-                }
+                }*/
             }
         };
         asyncTask.execute();
