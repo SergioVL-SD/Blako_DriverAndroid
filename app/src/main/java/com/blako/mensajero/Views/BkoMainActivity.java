@@ -144,7 +144,7 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     private static final long NO_CONECTION_TIME = 1000 * 60 * 4; //--> Minutes
     private int status=0;
-    private int checkEvery= 15;
+    private int checkEvery= 14;
 
     private AppDbHelper dbHelper;
     private AppPreferences preferences;
@@ -2336,8 +2336,8 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                             LatLng latLngLocation= new LatLng(zoneLocation.getLatitude(),zoneLocation.getLongitude());
                             int hubId= DeliveryZoneCheck.getActualHubFromLocation(hubConfigs,latLngLocation);
                             Log.d("Hub_Id",String.valueOf(hubId));
-                            cvOutOfHub.setVisibility(hubId==1?View.VISIBLE:View.GONE);
                             BkoDataMaganer.setActualDeliveryZoneId(BkoMainActivity.this,hubId);
+                            cvOutOfHub.setVisibility(BkoDataMaganer.getActualDeliveryZoneId(BkoMainActivity.this)==1?View.VISIBLE:View.GONE);
                         }
                     }
                 }
