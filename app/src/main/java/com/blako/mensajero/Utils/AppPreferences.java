@@ -13,6 +13,7 @@ public class AppPreferences {
     private final String SYNC_TIME  = "syncTime";
     private final String FIREBASE_TOKEN  = "firebaseToken";
     private final String HUBS_REGION_ID  = "hubsRegionId";
+    private final String LAST_HUB_TIMESTAMP = "lastHubTimestamp";
 
     public AppPreferences(Context context) {
         sharedPreferences = context.getSharedPreferences("sharedData",Context.MODE_PRIVATE);
@@ -64,5 +65,13 @@ public class AppPreferences {
 
     public int getHubsRegionId(){
         return sharedPreferences.getInt(HUBS_REGION_ID,0);
+    }
+
+    public void setLastHubTimestamp(Long timestamp){
+        sharedPreferences.edit().putLong(LAST_HUB_TIMESTAMP,timestamp).apply();
+    }
+
+    public Long getLastHubTimestamp(){
+        return sharedPreferences.getLong(LAST_HUB_TIMESTAMP,0);
     }
 }
