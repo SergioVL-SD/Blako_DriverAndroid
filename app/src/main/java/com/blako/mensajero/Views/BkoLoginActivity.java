@@ -179,6 +179,7 @@ public class BkoLoginActivity extends BaseActivity {
 
 
                                     String token = preferences.getFirebaseToken();
+                                    Log.d("SVL_firebase",token);
 
                                     if (token == null || token.length() == 0)
                                         return;
@@ -204,6 +205,8 @@ public class BkoLoginActivity extends BaseActivity {
                                                         secondLogin = HttpRequest
                                                                 .get(userLoginResponse.getEnviromentUrl() + "/public/workers/login?" + "email=" + emailEt.getText().toString() + "&pass=" + passwordEt.getText().toString() + "&token=" + token)
                                                                 .connectTimeout(5000).body();
+
+                                                        Log.d("SVL_secondLoginRes",secondLogin);
 
                                                         if (secondLogin != null) {
                                                             BkoUserLoginResponse responseSecondLogin = gson.fromJson(secondLogin, BkoUserLoginResponse.class);

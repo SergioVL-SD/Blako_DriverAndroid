@@ -42,6 +42,7 @@ import com.blako.mensajero.VO.BkoVehicleVO;
 import com.blako.mensajero.VO.BkoVehiclesResponse;
 import com.blako.mensajero.VO.BkoVersionVO;
 import com.google.gson.Gson;
+import com.mindorks.paracamera.Camera;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
@@ -74,7 +75,10 @@ public class BkoVehiclesActivity extends BaseActivity {
     private String photoFileName = "FOTO";
     private String uploadPhotoResponse;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private   Uri takenPhotoUri;
+    private String takenPhotoUri;
+
+    private final int TAKE_PHOTO_REQUEST= 106;
+    private Camera camera;
 
     private AppPreferences preferences= App.getInstance().getPreferences();
 
@@ -111,6 +115,22 @@ public class BkoVehiclesActivity extends BaseActivity {
         rotateBt = (ImageButton) findViewById(R.id.rotateBt);
         saveBt = (ImageButton) findViewById(R.id.saveBt);
 
+        BkoUser userInit = null;
+        try {
+            userInit = BkoUserDao.Consultar(BkoVehiclesActivity.this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        camera= new Camera.Builder()
+                .resetToCorrectOrientation(true)
+                .setTakePhotoRequestCode(TAKE_PHOTO_REQUEST)
+                .setDirectory("UserImages")
+                .setName(userInit.getWorkerId() + "_" + photoFileName)
+                .setImageFormat(Camera.IMAGE_JPG)
+                .setCompression(75)
+                .setImageHeight(1000)
+                .build(this);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -139,19 +159,25 @@ public class BkoVehiclesActivity extends BaseActivity {
 
             @Override
             public void onClick(View arg0) {
+
                 try {
+                    camera.takePicture();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                /*try {
 
                     if (!checkPermissions()){
                         return;
                     }
-
+                    // TODO: 26/10/2018 change photo intent
                     BkoUser user = BkoUserDao.Consultar(BkoVehiclesActivity.this);
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, BkoUtilities.getPhotoFileUri("" + user.getWorkerId() + "_" + photoFileName + ".jpg"));
                     startActivityForResult(takePictureIntent, 2);
                 } catch (Exception e) {
 
-                }
+                }*/
 
             }
 
@@ -187,11 +213,10 @@ public class BkoVehiclesActivity extends BaseActivity {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 try {
-
-
-                                    BkoUser user = BkoUserDao.Consultar(BkoVehiclesActivity.this);
-                                    Uri takenPhotoUri = BkoUtilities.getPhotoFileUri("" + user.getWorkerId() + "_" + photoFileName + ".jpg");
-                                    UploadPhoto(takenPhotoUri.getPath());
+                                    // TODO: 26/10/2018 change saved photo
+                                    /*BkoUser user = BkoUserDao.Consultar(BkoVehiclesActivity.this);
+                                    Uri takenPhotoUri = BkoUtilities.getPhotoFileUri("" + user.getWorkerId() + "_" + photoFileName + ".jpg");*/
+                                    UploadPhoto(takenPhotoUri);
                                 } catch (Exception e) {
 
                                 }
@@ -333,9 +358,25 @@ public class BkoVehiclesActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case TAKE_PHOTO_REQUEST:
+                if (camera.getCameraBitmap()!=null){
+                    messengerProfileIv.setImageBitmap(camera.getCameraBitmap());
+                    profileOptiosLl.setVisibility(View.VISIBLE);
+                    takenPhotoUri= camera.getCameraBitmapPath();
+                }
+                break;
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    vehiclesLv.setAdapter(null);
+                    setData();
+                } else if (resultCode == RESULT_CANCELED) {
 
+                }
+                break;
+        }
 
-        if (requestCode == Crop.REQUEST_CROP && resultCode == RESULT_OK) {
+        /*if (requestCode == Crop.REQUEST_CROP && resultCode == RESULT_OK) {
             profileOptiosLl.setVisibility(View.VISIBLE);
             rotateImageFile(false);
             //doSomethingWithCroppedImage(outputUri);
@@ -369,8 +410,8 @@ public class BkoVehiclesActivity extends BaseActivity {
 
             }
 
-        }
-        if (requestCode == 1) {
+        }*/
+       /* if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 vehiclesLv.setAdapter(null);
                 setData();
@@ -378,7 +419,7 @@ public class BkoVehiclesActivity extends BaseActivity {
 
             }
 
-        }
+        }*/
     }
 
 

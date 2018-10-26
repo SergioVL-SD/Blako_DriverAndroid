@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,23 +12,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -81,8 +74,6 @@ import com.blako.mensajero.VO.BkoTrips;
 import com.blako.mensajero.VO.BkoUser;
 import com.blako.mensajero.VO.BkoUserStatusResponse;
 import com.blako.mensajero.VO.BkoVehicleVO;
-import com.blako.mensajero.firebase.BkoFirebaseDatabase;
-import com.blako.mensajero.firebase.BkoFirebaseStorage;
 import com.blako.mensajero.models.HubConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -100,24 +91,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -137,10 +117,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
     private BkoTrips tripsRespone;
     private BkoPushRequest statusRequest;
     private boolean disconecting = false;
-    private FirebaseDatabase firebaseDatabase;
-
-    private DatabaseReference emergencyDatabaseReference;
-    private ValueEventListener emergencyListener;
 
     private static final long NO_CONECTION_TIME = 1000 * 60 * 4; //--> Minutes
     private static final long NO_HUB_TIME = 1000 * 60; //--> Seconds
@@ -182,13 +158,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
         hubConfigs= new ArrayList<>();
 
         new SendNewTokenTask().execute(preferences.getFirebaseToken());
-
-        firebaseDatabase= BkoFirebaseDatabase.getDatabase();
-
-        emergencyDatabaseReference= firebaseDatabase.getReference().child("doomsday").child("activate");
-        emergencyDatabaseReference.keepSynced(true);
-
-        emergencyDatabaseReference.setValue(false);
 
         registerGpsStatusListener();
 
@@ -710,7 +679,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
                 }
             },800);
         }
-        attachEmergencyListener();
         LocalBroadcastManager.getInstance(this).registerReceiver(receiveZoneUpdate,filterZones);
         BkoCore.setoffersInterfaceListener(this);
         if (mGoogleApiClient == null)
@@ -2059,7 +2027,6 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
 
     @Override
     protected void onPause() {
-        detachEmergencyListener();
         zoneHandler.removeCallbacks(zoneRunnable);
         syncHandler.removeCallbacks(syncRunnable);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiveZoneUpdate);
@@ -2366,33 +2333,5 @@ public class BkoMainActivity extends BkoMainBaseActivity implements OnMapReadyCa
             }
         }
         return false;
-    }
-
-    private void attachEmergencyListener(){
-        if (emergencyListener==null){
-            emergencyListener= new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    doomsday= (boolean) dataSnapshot.getValue();
-                    if (doomsday){
-                        new GetKmlFromDbTask().execute();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-
-            emergencyDatabaseReference.addValueEventListener(emergencyListener);
-        }
-    }
-
-    private void detachEmergencyListener(){
-        if (emergencyListener!=null){
-            emergencyDatabaseReference.removeEventListener(emergencyListener);
-            emergencyListener= null;
-        }
     }
 }

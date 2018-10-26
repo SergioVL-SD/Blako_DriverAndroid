@@ -4,26 +4,19 @@ package com.blako.mensajero.Services;
  * Created by franciscotrinidad on 1/28/16.
  */
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.GnssStatus;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.service.notification.StatusBarNotification;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -35,27 +28,16 @@ import com.blako.mensajero.R;
 import com.blako.mensajero.Services.location.FusedLocationService;
 import com.blako.mensajero.Services.location.OnLocationServiceListener;
 import com.blako.mensajero.Services.mqtt.MqttService;
-import com.blako.mensajero.Utils.BkoUtilities;
 import com.blako.mensajero.Utils.LocationUtils;
 import com.blako.mensajero.Utils.LogUtils;
 import com.blako.mensajero.VO.BkoUser;
 import com.blako.mensajero.Views.BkoMainActivity;
-import com.blako.mensajero.firebase.BkoFirebaseDatabase;
 import com.blako.mensajero.models.PingResponse;
 import com.blako.mensajero.models.RemoteCommand;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.TimeZone;
 
 
