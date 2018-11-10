@@ -315,6 +315,12 @@ public class BkoDataMaganer {
 
     }
 
+    public static String getEnviromentId(Context context) {
+        SharedPreferences sp = context.getSharedPreferences("blakoPreferences", Activity.MODE_PRIVATE);
+        enviromentUrl = sp.getString("enviromentId", "2");
+        return enviromentUrl;
+    }
+
     public static String getEnviromentUrl(Context context) {
         SharedPreferences sp = context.getSharedPreferences("blakoPreferences", Activity.MODE_PRIVATE);
         enviromentUrl = sp.getString("enviromentUrl", "");

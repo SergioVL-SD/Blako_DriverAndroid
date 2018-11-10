@@ -17,7 +17,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
@@ -107,15 +106,16 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/service_configuration" />
         </service>
-        <service android:name=".Services.LocationService"
+        <service
+            android:name=".Services.LocationService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
         <service android:name=".firebase.BkoFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".Services.RegistrationIntentService"></service>
+        <service android:name=".Services.RegistrationIntentService" />
         <service android:name=".firebase.BkoFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -123,7 +123,9 @@
         </service>
         <service
             android:name=".Services.OverlayButtonService"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <activity android:name=".Views.TermsConditionsActivity"></activity>
     </application>
 
 </manifest>

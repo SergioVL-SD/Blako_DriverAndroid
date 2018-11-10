@@ -14,6 +14,7 @@ public class AppPreferences {
     private final String FIREBASE_TOKEN  = "firebaseToken";
     private final String HUBS_REGION_ID  = "hubsRegionId";
     private final String LAST_HUB_TIMESTAMP = "lastHubTimestamp";
+    private final String TERMS_AND_CONDITIONS  = "termsAndConditions";
 
     public AppPreferences(Context context) {
         sharedPreferences = context.getSharedPreferences("sharedData",Context.MODE_PRIVATE);
@@ -73,5 +74,13 @@ public class AppPreferences {
 
     public Long getLastHubTimestamp(){
         return sharedPreferences.getLong(LAST_HUB_TIMESTAMP,0);
+    }
+
+    public void setTermsAndConditions(boolean status){
+        sharedPreferences.edit().putBoolean(TERMS_AND_CONDITIONS,status).apply();
+    }
+
+    public boolean getTermsAndConditions(){
+        return sharedPreferences.getBoolean(TERMS_AND_CONDITIONS,false);
     }
 }

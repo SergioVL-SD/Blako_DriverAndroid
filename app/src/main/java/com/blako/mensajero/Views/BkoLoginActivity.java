@@ -407,14 +407,27 @@ public class BkoLoginActivity extends BaseActivity {
                                                                 }
                                                             }
 
-                                                            Intent intent = new Intent(BkoLoginActivity.this, BkoMainActivity.class);
+                                                            Intent intent;
+                                                            if (preferences.getTermsAndConditions()){
+                                                                intent = new Intent(BkoLoginActivity.this, BkoMainActivity.class);
+                                                            }else {
+                                                                intent= new Intent(BkoLoginActivity.this,TermsConditionsActivity.class);
+                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                            }
+
                                                             finishAffinity();
                                                             startActivity(intent);
                                                         } else {
                                                             finish();
                                                             BkoDataMaganer.setPolicyReaded(false,BkoLoginActivity.this);
-                                                            Intent intent = new Intent(BkoLoginActivity.this, BkoPolicyActivity.class);
-                                                            intent.putExtra("onRecover", true);
+                                                            Intent intent;
+                                                            if (preferences.getTermsAndConditions()){
+                                                                intent = new Intent(BkoLoginActivity.this, BkoPolicyActivity.class);
+                                                                intent.putExtra("onRecover", true);
+                                                            }else {
+                                                                intent= new Intent(BkoLoginActivity.this,TermsConditionsActivity.class);
+                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                            }
                                                             startActivity(intent);
 
                                                         }

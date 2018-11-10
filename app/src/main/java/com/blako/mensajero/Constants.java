@@ -39,6 +39,10 @@ public class Constants {
         return url;
     }
 
+    public static String GET_BLAKO_2_ENVIRONMENT(Context context){
+        String url= BkoDataMaganer.getEnviromentId(context).equals("1")?"http://manager.blako.com/api/":"http://sandbox.manager.blako.com/api/";
+        return url;
+    }
 
     public static String GET_TRIPS_ACTIVE(Context context) {
         String url = BkoDataMaganer.getEnviromentUrl(context) + "/trips/getlastorderandtripsactive?";

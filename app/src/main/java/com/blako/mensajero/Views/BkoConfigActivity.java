@@ -63,7 +63,13 @@ public class BkoConfigActivity extends BaseActivity {
             BkoUser user = BkoUserDao.Consultar(BkoConfigActivity.this);
             if (user != null){
                 BkoDataMaganer.setWorkerId(this,user.getWorkerId());
-                startAppActivity();
+                if (preferences.getTermsAndConditions()){
+                    startAppActivity();
+                }else {
+                    Intent intent= new Intent(BkoConfigActivity.this,TermsConditionsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
             } else{
                 startLoginActivity();
             }

@@ -223,7 +223,6 @@
     </string-array>
 
 
-
     <!-- HISTORIAL-->
     <string name="blako_historial">HISTORIAL DE OFERTAS</string>
     <!-- SERVICIOS SIN OFFER-->
@@ -248,6 +247,15 @@
     <!--Request Activity (Zone Fee)-->
     <string name="label_base_fee">Tarifa</string>
     <string name="text_default_fee">$</string>
+
+    <!--Terms Conditions Activity-->
+    <string name="tv_terms_title">Términos y Condiciones</string>
+    <string name="tv_terms_default_message">Nuestros Términos y Condiciones han cambiado</string>
+    <string name="tv_terms_link">Leer terminos y condiciones</string>
+    <string name="cb_terms_accept">Acepto los Términos y Condiciones</string>
+    <string name="btn_terms_continue">Continuar</string>
+    <string name="error_terms">Ocurrió un error al enviar la respuesta, intente de nuevo</string>
+    <string name="error_terms_charge">Ocurrió un error al cargar los datos, intente de nuevo</string>
 
     <!--Demand Bar-->
     <string name="tv_demand">Demanda</string>

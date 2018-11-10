@@ -587,6 +587,7 @@ public class BkoVehiclesActivity extends BaseActivity {
 
             case R.id.logoutBt:
 
+                preferences.setTermsAndConditions(false);
                 BkoUserDao.Eliminar(this);
                 BkoDataMaganer.clearData(this);
                 Intent intent = new Intent(this, BkoLoginActivity.class);
