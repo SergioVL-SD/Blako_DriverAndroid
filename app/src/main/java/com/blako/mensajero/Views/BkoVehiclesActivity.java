@@ -697,11 +697,10 @@ public class BkoVehiclesActivity extends BaseActivity {
 
         try {
 
+            // TODO: 23/11/2018 Validación de foto
+            //BkoUser user = BkoUserDao.Consultar(BkoVehiclesActivity.this);
 
-
-            BkoUser user = BkoUserDao.Consultar(BkoVehiclesActivity.this);
-
-            if (user.getPicurl() == null || user.getPicurl().length() == 0||user.getPicurl().equals("false"))
+            /*if (user.getPicurl() == null || user.getPicurl().length() == 0||user.getPicurl().equals("false"))
             {
 
 
@@ -717,7 +716,7 @@ public class BkoVehiclesActivity extends BaseActivity {
 
 
                 return;
-            }
+            }*/
 
 
             if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {

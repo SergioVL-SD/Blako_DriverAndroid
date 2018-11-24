@@ -4,9 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +32,7 @@ import org.json.JSONObject;
 
 public class TermsConditionsActivity extends BaseActivity {
 
+    TextView tvTitle;
     TextView tvMessage;
     TextView tvLink;
     CheckBox cbAccept;
@@ -54,6 +54,7 @@ public class TermsConditionsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terms_conditions);
 
+        tvTitle= findViewById(R.id.tvTitle);
         tvMessage= findViewById(R.id.tvMessage);
         tvLink= findViewById(R.id.tvLink);
         cbAccept= findViewById(R.id.cbAccept);
@@ -158,7 +159,12 @@ public class TermsConditionsActivity extends BaseActivity {
                     btnContinue.setVisibility(View.VISIBLE);
                     Log.d("Term_Cond_Message",termsAndConditions.getString("message"));
                     Log.d("Term_Cond_Url",termsAndConditions.getString("url_file"));
+                    tvTitle.setText(termsAndConditions.getString("name"));
                     tvMessage.setText(termsAndConditions.getString("message"));
+                    String accept= getString(R.string.cb_terms_accept)+" "+termsAndConditions.getString("name");
+                    String read= getString(R.string.tv_terms_link)+" "+termsAndConditions.getString("name");
+                    cbAccept.setText(accept);
+                    tvLink.setText(read);
                     termsUrl= termsAndConditions.getString("url_file");
                 }else {
                     pbWait.setVisibility(View.GONE);
